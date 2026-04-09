@@ -12,7 +12,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   font-family: sans-serif;
 }
 
@@ -49,7 +49,7 @@ body {
   margin-top: 4px;
 }
 
-/* 上方控制 */
+/* 上方按鈕 */
 .top-controls {
   display: flex;
   justify-content: space-between;
@@ -75,7 +75,7 @@ body {
   background: linear-gradient(90deg,#00E5FF,#0066FF);
 }
 
-/* 播放控制 */
+/* 控制 */
 .controls {
   display: flex;
   justify-content: space-around;
@@ -119,7 +119,7 @@ button {
     <div class="artist">KAYON</div>
   </div>
 
-  <!-- 上方按鈕 -->
+  <!-- 上方 -->
   <div class="top-controls">
     <div>
       <button onclick="toggleLyrics()">☰</button>
@@ -130,7 +130,7 @@ button {
     </div>
   </div>
 
-  <!-- 進度條 -->
+  <!-- 進度 -->
   <div class="progress" onclick="seek(event)">
     <div class="progress-bar" id="bar"></div>
   </div>
@@ -146,14 +146,15 @@ button {
 
   <!-- 歌詞 -->
   <div class="lyrics" id="lyrics">
-    不完美的快樂  
-    是我們留下的痕跡  
-    在時間裡慢慢發光  
+    不完美的快樂<br>
+    是我們留下的痕跡<br>
+    在時間裡慢慢發光
   </div>
 
 </div>
 
-<audio id="audio" src="kayon.mp3"></audio>
+<!-- ⭐最重要：確定檔名完全一致 -->
+<audio id="audio" src="kayon.mp3" preload="auto"></audio>
 
 <script>
 const audio = document.getElementById("audio");
@@ -162,18 +163,23 @@ const lyrics = document.getElementById("lyrics");
 
 /* 播放 */
 function togglePlay() {
-  if (audio.paused) audio.play();
-  else audio.pause();
+  if (audio.paused) {
+    audio.play().catch(err => {
+      alert("點一下播放才能啟動（手機限制）");
+    });
+  } else {
+    audio.pause();
+  }
 }
 
-/* 進度條更新 */
+/* 更新進度 */
 audio.addEventListener("timeupdate", () => {
   if (audio.duration) {
     bar.style.width = (audio.currentTime / audio.duration) * 100 + "%";
   }
 });
 
-/* 點擊跳轉 */
+/* 點擊進度 */
 function seek(e) {
   const rect = e.currentTarget.getBoundingClientRect();
   const percent = (e.clientX - rect.left) / rect.width;
@@ -190,7 +196,7 @@ function end() {
   audio.currentTime = audio.duration;
 }
 
-/* 歌詞開關 */
+/* 歌詞 */
 function toggleLyrics() {
   lyrics.style.display =
     lyrics.style.display === "block" ? "none" : "block";
