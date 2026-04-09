@@ -84,6 +84,7 @@ body {
   font-size: 26px;
 }
 
+/* 播放鍵 */
 .play {
   font-size: 42px;
 }
@@ -98,10 +99,22 @@ body {
   line-height: 1.6;
 }
 
+/* 按鍵動畫 */
 button {
   background: none;
   border: none;
   color: white;
+  transition: all 0.15s ease;
+}
+
+button:active {
+  transform: scale(1.15);
+  filter: brightness(1.5);
+}
+
+.play:active {
+  transform: scale(1.25);
+  box-shadow: 0 0 20px rgba(0,229,255,0.6);
 }
 </style>
 </head>
@@ -160,10 +173,14 @@ const audio = document.getElementById("audio");
 const bar = document.getElementById("bar");
 const lyrics = document.getElementById("lyrics");
 
+/* 確保載入 */
+audio.load();
+
 /* 播放 */
 function togglePlay() {
   if (audio.paused) {
-    audio.play();
+    audio.currentTime = audio.currentTime || 0;
+    audio.play().catch(() => {});
   } else {
     audio.pause();
   }
