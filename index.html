@@ -19,41 +19,92 @@ body {
 .player {
   width: 90%;
   max-width: 380px;
+  background: #000;
+  border-radius: 30px;
   padding: 20px;
 }
 
 .cover {
   width: 100%;
   border-radius: 18px;
+  box-shadow: 0 0 20px rgba(0,229,255,0.4);
+}
+
+.info {
+  text-align: center;
+  margin-top: 12px;
 }
 
 .title {
   color: white;
-  text-align: center;
-  margin-top: 10px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .artist {
   color: #888;
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  color: white;
+  font-size: 22px;
+}
+
+.progress {
+  width: 100%;
+  height: 4px;
+  background: #111;
+  border-radius: 2px;
+  margin: 15px 0;
+  cursor: pointer;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#00E5FF,#0066FF);
 }
 
 .controls {
-  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  font-size: 26px;
 }
 
+.play {
+  font-size: 42px;
+}
+
+.lyrics {
+  display: none;
+  color: white;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* 按鍵動畫 */
 button {
   background: none;
   border: none;
   color: white;
-  font-size: 30px;
-  transition: 0.15s;
+  transition: all 0.15s ease;
 }
 
 button:active {
-  transform: scale(1.2);
+  transform: scale(1.15);
+  filter: brightness(1.5);
+}
+
+.play:active {
+  transform: scale(1.25);
+  box-shadow: 0 0 20px rgba(0,229,255,0.6);
 }
 </style>
 </head>
@@ -61,13 +112,40 @@ button:active {
 <body>
 
 <div class="player">
+
   <img id="cover" class="cover" src="">
-  <div id="title" class="title"></div>
-  <div id="artist" class="artist"></div>
+
+  <div class="info">
+    <div id="title" class="title"></div>
+    <div id="artist" class="artist"></div>
+  </div>
+
+  <div class="top-controls">
+    <div>
+      <button onclick="toggleLyrics()">☰</button>
+      <button onclick="share()">⤴</button>
+    </div>
+    <div>
+      <button onclick="volumeUp()">🔊</button>
+    </div>
+  </div>
+
+  <div class="progress" onclick="seek(event)">
+    <div class="progress-bar" id="bar"></div>
+  </div>
 
   <div class="controls">
-    <button onclick="togglePlay()">▶</button>
+    <button>🔁</button>
+    <button onclick="restart()">⏮</button>
+    <button class="play" onclick="togglePlay()">▶</button>
+    <button onclick="end()">⏭</button>
+    <button>🔀</button>
   </div>
+
+  <div class="lyrics" id="lyrics">
+    音樂播放中...
+  </div>
+
 </div>
 
 <audio id="audio" preload="auto"></audio>
@@ -75,7 +153,6 @@ button:active {
 <script>
 window.onload = function() {
 
-  /* 🔥 客戶資料 */
   const data = {
     yaochi: {
       title: "瑤池之光",
@@ -91,25 +168,18 @@ window.onload = function() {
     }
   };
 
-  /* 抓元素 */
   const audio = document.getElementById("audio");
   const cover = document.getElementById("cover");
   const title = document.getElementById("title");
   const artist = document.getElementById("artist");
 
-  /* 讀網址 */
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id") || "yaochi";
-
-  /* 防呆 */
+  const id = new URLSearchParams(window.location.search).get("id") || "yaochi";
   const current = data[id] || data["yaochi"];
 
-  /* 套資料 */
   title.innerText = current.title;
   artist.innerText = current.artist;
   cover.src = current.cover;
   audio.src = current.music;
-
 };
 
 /* 播放 */
@@ -119,6 +189,42 @@ function togglePlay() {
     audio.play().catch(() => {});
   } else {
     audio.pause();
+  }
+}
+
+/* 進度 */
+function seek(e) {
+  const audio = document.getElementById("audio");
+  const rect = e.currentTarget.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = percent * audio.duration;
+}
+
+function restart() {
+  document.getElementById("audio").currentTime = 0;
+}
+
+function end() {
+  const a = document.getElementById("audio");
+  a.currentTime = a.duration;
+}
+
+function toggleLyrics() {
+  const l = document.getElementById("lyrics");
+  l.style.display = l.style.display === "block" ? "none" : "block";
+}
+
+function volumeUp() {
+  const a = document.getElementById("audio");
+  a.volume = Math.min(a.volume + 0.1, 1);
+}
+
+function share() {
+  if (navigator.share) {
+    navigator.share({
+      title: document.getElementById("title").innerText,
+      url: window.location.href
+    });
   }
 }
 </script>
