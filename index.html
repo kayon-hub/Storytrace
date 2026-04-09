@@ -1,1 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memora Player</title>
 
+<style>
+body {
+  margin: 0;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+.player {
+  width: 340px;
+  background: #000;
+  border-radius: 30px;
+  padding: 20px;
+}
+
+/* 封面 */
+.cover {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 0 20px rgba(0,229,255,0.4);
+}
+
+/* 歌名 */
+.info {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.title {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.artist {
+  color: #888;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* 上方控制 */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  color: white;
+  font-size: 22px;
+}
+
+/* 進度條 */
+.progress {
+  width: 100%;
+  height: 4px;
+  background: #111;
+  border-radius: 2px;
+  margin: 15px 0;
+  position: relative;
+  cursor: pointer;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#00E5FF,#0066FF);
+}
+
+/* 播放控制 */
+.controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  font-size: 26px;
+}
+
+.play {
+  font-size: 42px;
+}
+
+/* 歌詞 */
+.lyrics {
+  display: none;
+  color: white;
+  font-size: 14px;
+  margin-top: 10px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+button {
+  background: none;
+  border: none;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="player">
+
+  <!-- 封面 -->
+  <img class="cover" src="cover.png">
+
+  <!-- 歌名 -->
+  <div class="info">
+    <div class="title">不完美的快樂</div>
+    <div class="artist">KAYON</div>
+  </div>
+
+  <!-- 上方按鈕 -->
+  <div class="top-controls">
+    <div>
+      <button onclick="toggleLyrics()">☰</button>
+      <button onclick="share()">⤴</button>
+    </div>
+    <div>
+      <button onclick="volumeUp()">🔊</button>
+    </div>
+  </div>
+
+  <!-- 進度條 -->
+  <div class="progress" onclick="seek(event)">
+    <div class="progress-bar" id="bar"></div>
+  </div>
+
+  <!-- 控制 -->
+  <div class="controls">
+    <button>🔁</button>
+    <button onclick="restart()">⏮</button>
+    <button class="play" onclick="togglePlay()">▶</button>
+    <button onclick="end()">⏭</button>
+    <button>🔀</button>
+  </div>
+
+  <!-- 歌詞 -->
+  <div class="lyrics" id="lyrics">
+    不完美的快樂  
+    是我們留下的痕跡  
+    在時間裡慢慢發光  
+  </div>
+
+</div>
+
+<audio id="audio" src="kayon.mp3"></audio>
+
+<script>
+const audio = document.getElementById("audio");
+const bar = document.getElementById("bar");
+const lyrics = document.getElementById("lyrics");
+
+/* 播放 */
+function togglePlay() {
+  if (audio.paused) audio.play();
+  else audio.pause();
+}
+
+/* 進度條更新 */
+audio.addEventListener("timeupdate", () => {
+  if (audio.duration) {
+    bar.style.width = (audio.currentTime / audio.duration) * 100 + "%";
+  }
+});
+
+/* 點擊跳轉 */
+function seek(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const percent = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = percent * audio.duration;
+}
+
+/* 重播 */
+function restart() {
+  audio.currentTime = 0;
+}
+
+/* 到結尾 */
+function end() {
+  audio.currentTime = audio.duration;
+}
+
+/* 歌詞開關 */
+function toggleLyrics() {
+  lyrics.style.display =
+    lyrics.style.display === "block" ? "none" : "block";
+}
+
+/* 音量 */
+function volumeUp() {
+  audio.volume = Math.min(audio.volume + 0.1, 1);
+}
+
+/* 分享 */
+function share() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Memora',
+      text: 'Listen to this',
+      url: window.location.href
+    });
+  } else {
+    alert("此裝置不支援分享");
+  }
+}
+</script>
+
+</body>
+</html>
