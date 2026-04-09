@@ -31,18 +31,29 @@ body {
   color: white;
   text-align: center;
   margin-top: 10px;
+  font-size: 18px;
 }
 
 .artist {
   color: #888;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.controls {
+  text-align: center;
 }
 
 button {
-  color: white;
   background: none;
   border: none;
-  font-size: 20px;
+  color: white;
+  font-size: 30px;
+  transition: 0.15s;
+}
+
+button:active {
+  transform: scale(1.2);
 }
 </style>
 </head>
@@ -54,51 +65,62 @@ button {
   <div id="title" class="title"></div>
   <div id="artist" class="artist"></div>
 
-  <button onclick="togglePlay()">▶ 播放</button>
+  <div class="controls">
+    <button onclick="togglePlay()">▶</button>
+  </div>
 </div>
 
-<audio id="audio"></audio>
+<audio id="audio" preload="auto"></audio>
 
 <script>
+window.onload = function() {
 
-/* 🔥 客戶資料（只放一筆也OK） */
-const data = {
-  yaochi: {
-    title: "瑤池之光",
-    artist: "KAYON × 瑤池金母",
-    cover: "yaochicover.png",
-    music: "yaochi.mp3"
-  }
+  /* 🔥 客戶資料 */
+  const data = {
+    yaochi: {
+      title: "瑤池之光",
+      artist: "KAYON × 瑤池金母",
+      cover: "yaochicover.png",
+      music: "yaochi.mp3"
+    },
+    test: {
+      title: "測試歌曲",
+      artist: "KAYON",
+      cover: "cover.png",
+      music: "kayon.mp3"
+    }
+  };
+
+  /* 抓元素 */
+  const audio = document.getElementById("audio");
+  const cover = document.getElementById("cover");
+  const title = document.getElementById("title");
+  const artist = document.getElementById("artist");
+
+  /* 讀網址 */
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id") || "yaochi";
+
+  /* 防呆 */
+  const current = data[id] || data["yaochi"];
+
+  /* 套資料 */
+  title.innerText = current.title;
+  artist.innerText = current.artist;
+  cover.src = current.cover;
+  audio.src = current.music;
+
 };
 
-/* 🔥 先抓 DOM（避免錯） */
-const audio = document.getElementById("audio");
-const cover = document.getElementById("cover");
-const title = document.getElementById("title");
-const artist = document.getElementById("artist");
-
-/* 🔥 讀網址 */
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id") || "yaochi";
-
-/* 🔥 防呆 */
-const current = data[id] ? data[id] : data["yaochi"];
-
-/* 🔥 套資料 */
-title.innerText = current.title;
-artist.innerText = current.artist;
-cover.src = current.cover;
-audio.src = current.music;
-
-/* 🔥 播放 */
+/* 播放 */
 function togglePlay() {
+  const audio = document.getElementById("audio");
   if (audio.paused) {
     audio.play().catch(() => {});
   } else {
     audio.pause();
   }
 }
-
 </script>
 
 </body>
