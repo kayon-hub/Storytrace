@@ -164,9 +164,7 @@ const lyrics = document.getElementById("lyrics");
 /* 播放 */
 function togglePlay() {
   if (audio.paused) {
-    audio.play().catch(err => {
-      alert("點一下播放才能啟動（手機限制）");
-    });
+    audio.play();
   } else {
     audio.pause();
   }
