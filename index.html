@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Storytrace | KAYON STUDIO</title>
 
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <style>
   :root {
     --accent: #00E5FF;
@@ -18,54 +22,54 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: -apple-system, system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: white;
     overflow: hidden;
   }
 
-  /* 磨砂玻璃容器 */
   .player {
-    width: 85%;
-    max-width: 360px;
+    width: 88%;
+    max-width: 380px;
     background: var(--glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 40px;
-    padding: 30px;
+    padding: 35px 30px;
     text-align: center;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
   }
 
   .cover-box {
     width: 100%;
     aspect-ratio: 1/1;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
   }
 
   .cover {
     width: 100%;
     height: 100%;
-    border-radius: 25px;
+    border-radius: 20px;
     object-fit: cover;
-    box-shadow: 0 10px 40px rgba(0, 229, 255, 0.2);
+    box-shadow: 0 15px 45px rgba(0, 229, 255, 0.2);
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  /* 播放時封面動態 */
   .playing .cover {
     transform: scale(1.05);
+    box-shadow: 0 20px 60px rgba(0, 229, 255, 0.4);
   }
 
-  .title { font-size: 20px; font-weight: 700; margin: 0; }
-  .artist { color: #888; font-size: 14px; margin: 8px 0 20px; }
+  .info { margin-bottom: 25px; }
+  .title { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: 0.5px; }
+  .artist { color: #888; font-size: 15px; margin: 8px 0 0; }
 
-  /* 進度條系統 */
-  .progress-area { width: 100%; cursor: pointer; margin-bottom: 5px; }
+  .progress-area { width: 100%; cursor: pointer; margin-top: 25px; }
   .bar-bg {
     width: 100%; height: 5px;
     background: rgba(255,255,255,0.1);
     border-radius: 10px;
+    overflow: hidden;
   }
   .bar-fill {
     width: 0%; height: 100%;
@@ -74,43 +78,47 @@
   }
   .time-labels {
     display: flex; justify-content: space-between;
-    font-size: 11px; color: #666; margin-top: 8px;
+    font-size: 11px; color: #555; margin-top: 8px;
   }
 
-  /* 控制鍵 */
   .controls {
     display: flex; justify-content: space-around; align-items: center;
-    margin-top: 20px;
+    margin-top: 25px;
   }
 
   button {
     background: none; border: none; color: white;
-    cursor: pointer; transition: 0.2s; font-size: 24px;
+    cursor: pointer; transition: 0.2s; font-size: 26px;
+    display: flex; align-items: center; justify-content: center;
   }
 
   .play-btn {
-    width: 65px; height: 65px;
+    width: 70px; height: 70px;
     background: white; color: black;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 28px;
+    border-radius: 50%;
+    font-size: 32px;
+    box-shadow: 0 10px 25px rgba(255,255,255,0.1);
   }
 
-  /* 歌詞面板 (滑出式) */
+  button:active { transform: scale(0.9); }
+
   .lyrics-panel {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95);
+    background: rgba(0,0,0,0.96);
     z-index: 100; display: none;
-    flex-direction: column; padding: 60px 40px;
+    flex-direction: column; padding: 80px 40px;
     box-sizing: border-box; overflow-y: auto;
+    text-align: left;
   }
 
   .lyrics-text {
-    font-size: 22px; line-height: 1.8; font-weight: 600;
-    color: #fff; text-align: left;
+    font-size: 26px; line-height: 1.8; font-weight: 600;
+    background: linear-gradient(180deg, #fff 0%, #666 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  .close-lyrics { position: absolute; top: 30px; right: 30px; font-size: 30px; color: #888; }
-
+  .close-lyrics { position: absolute; top: 35px; right: 30px; font-size: 35px; color: #555; }
 </style>
 </head>
 <body>
@@ -148,7 +156,7 @@
   <div id="lyricsContent" class="lyrics-text"></div>
 </div>
 
-<audio id="audioMain"></audio>
+<audio id="audioMain" preload="metadata"></audio>
 
 <script>
   const audio = document.getElementById("audioMain");
@@ -156,28 +164,20 @@
   const barFill = document.getElementById("barFill");
   const player = document.getElementById("mainPlayer");
 
-  // 1. 客戶資料管理區 (ID 務必唯一)
+  // 【根據你的截圖修正路徑】
   const projects = {
     "yaochi": {
       title: "瑤池之光",
       artist: "KAYON × 瑤池金母",
-      cover: "data/yaochicover.png",
-      music: "data/yaochi.mp3",
+      cover: "yaochicover.png", // 拿掉 data/
+      music: "yaochiv.MP3",    // 拿掉 data/
       lyrics: "在瑤池的光芒下<br>尋找失落的願望<br>萬物皆有靈<br>你是最美的那道光"
-    },
-    "wedding_demo": {
-      title: "愛的回憶錄",
-      artist: "小明 & 小美",
-      cover: "data/wedding_cover.jpg",
-      music: "data/wedding_song.mp3",
-      lyrics: "這是一段專屬於我們的旋律<br>謝謝你在這一天<br>見證我們的幸福"
     }
-    // 下一個客戶加在下面...
   };
 
-  // 2. 初始化載入
   window.onload = () => {
-    const id = new URLSearchParams(window.location.search).get("id") || "yaochi";
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id") || "yaochi";
     const data = projects[id] || projects["yaochi"];
 
     document.getElementById("trackTitle").innerText = data.title;
@@ -187,10 +187,9 @@
     audio.src = data.music;
   };
 
-  // 3. 播放器邏輯
   function togglePlay() {
     if (audio.paused) {
-      audio.play();
+      audio.play().catch(err => alert("點擊頁面任意處後再試一次！"));
       playBtn.innerText = "⏸";
       player.classList.add("playing");
     } else {
@@ -201,10 +200,10 @@
   }
 
   audio.ontimeupdate = () => {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    barFill.style.width = percent + "%";
-    document.getElementById("currentTime").innerText = formatTime(audio.currentTime);
-    if(audio.duration) {
+    if (audio.duration) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      barFill.style.width = percent + "%";
+      document.getElementById("currentTime").innerText = formatTime(audio.currentTime);
       document.getElementById("durationTime").innerText = formatTime(audio.duration);
     }
   };
@@ -222,12 +221,9 @@
   }
 
   function restart() { audio.currentTime = 0; }
-
-  // 4. 歌詞功能
   function openLyrics() { document.getElementById("lyricsPanel").style.display = "flex"; }
   function closeLyrics() { document.getElementById("lyricsPanel").style.display = "none"; }
 
-  // 5. 原生分享 (支援 iOS/Android)
   async function share() {
     try {
       if (navigator.share) {
@@ -236,8 +232,8 @@
           url: window.location.href
         });
       } else {
-        alert("網址已複製！");
         navigator.clipboard.writeText(window.location.href);
+        alert("連結已複製");
       }
     } catch (err) {}
   }
