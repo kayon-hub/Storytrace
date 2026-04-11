@@ -134,12 +134,20 @@
     padding: 30px 36px 80px;
   }
   .lyrics-body::-webkit-scrollbar { width: 0; }
-  .lyrics-text {
-    font-size: 20px;
+  .lyric-line {
+    font-size: 22px;
     line-height: 2.2;
     font-weight: 600;
-    color: rgba(255,255,255,0.85);
-    white-space: pre-wrap;
+    color: rgba(255,255,255,0.25);
+    transition: color 0.4s ease, font-size 0.3s ease;
+    cursor: pointer;
+  }
+  .lyric-line.active {
+    color: #fff;
+    font-size: 26px;
+  }
+  .lyric-line.passed {
+    color: rgba(255,255,255,0.45);
   }
   .close-lyrics {
     position: absolute;
@@ -186,8 +194,8 @@
     <p id="lyricsSongTitle" class="lyrics-song-title"></p>
     <p id="lyricsSongArtist" class="lyrics-song-artist"></p>
   </div>
-  <div class="lyrics-body">
-    <div id="lyricsContent" class="lyrics-text"></div>
+  <div class="lyrics-body" id="lyricsBody">
+    <div id="lyricsContent"></div>
   </div>
   <button class="close-lyrics" onclick="closeLyrics()">✕</button>
 </div>
@@ -200,6 +208,10 @@
   const barFill = document.getElementById("barFill");
   const player = document.getElementById("mainPlayer");
   const bgCover = document.getElementById("bgCover");
+  const lyricsBody = document.getElementById("lyricsBody");
+
+  let lyricsData = [];
+  let activeLine = -1;
 
   window.onload = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -213,11 +225,21 @@
       document.getElementById("trackTitle").innerText = data.title;
       document.getElementById("trackArtist").innerText = data.artist;
       document.getElementById("coverImg").src = data.cover;
-      document.getElementById("lyricsContent").innerText = data.lyrics;
       document.getElementById("lyricsSongTitle").innerText = data.title;
       document.getElementById("lyricsSongArtist").innerText = data.artist.replace(/\n/g, "　");
       bgCover.style.backgroundImage = `url(${data.cover})`;
       audio.src = data.music;
+
+      lyricsData = data.lyrics;
+      const container = document.getElementById("lyricsContent");
+      lyricsData.forEach((line, i) => {
+        const div = document.createElement("div");
+        div.className = "lyric-line";
+        div.id = "line-" + i;
+        div.innerText = line.text;
+        div.onclick = () => { audio.currentTime = line.time; };
+        container.appendChild(div);
+      });
     } catch (e) {
       console.error("載入資料失敗", e);
     }
@@ -240,8 +262,25 @@
       barFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
       document.getElementById("currentTime").innerText = fmt(audio.currentTime);
       document.getElementById("durationTime").innerText = fmt(audio.duration);
+      updateLyrics(audio.currentTime);
     }
   };
+
+  function updateLyrics(t) {
+    let newActive = -1;
+    for (let i = lyricsData.length - 1; i >= 0; i--) {
+      if (t >= lyricsData[i].time) { newActive = i; break; }
+    }
+    if (newActive === activeLine) return;
+    activeLine = newActive;
+    document.querySelectorAll(".lyric-line").forEach((el, i) => {
+      el.className = "lyric-line" + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
+    });
+    if (activeLine >= 0) {
+      const el = document.getElementById("line-" + activeLine);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
 
   audio.onended = () => {
     playBtn.innerText = "▶";
