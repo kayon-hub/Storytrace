@@ -92,8 +92,6 @@
     box-shadow: 0 8px 24px rgba(255,255,255,0.12);
   }
   button:active { transform: scale(0.92); }
-
-  /* 歌詞面板 */
   .lyrics-panel {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.94);
@@ -109,7 +107,6 @@
   .lyrics-song-artist { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
   .lyrics-body { flex: 1; overflow-y: auto; padding: 30px 36px 80px; }
   .lyrics-body::-webkit-scrollbar { width: 0; }
-
   .lyric-line {
     font-size: 20px; line-height: 2.4; font-weight: 600;
     color: rgba(255,255,255,0.25);
@@ -118,8 +115,6 @@
   }
   .lyric-line.active { color: #fff; font-size: 24px; }
   .lyric-line.passed { color: rgba(255,255,255,0.45); }
-
-  /* 呼吸圓圈 */
   .breath-line {
     display: flex; justify-content: center; align-items: center;
     height: 48px; cursor: pointer;
@@ -138,7 +133,6 @@
     background: rgba(255,255,255,0.4);
     transform: scale(1);
   }
-
   .close-lyrics {
     position: absolute; top: 48px; right: 28px;
     font-size: 28px; color: rgba(255,255,255,0.4); padding: 8px;
@@ -170,7 +164,21 @@
     <button onclick="openLyrics()" style="font-size:14px; letter-spacing:1px;">歌詞</button>
     <button onclick="restart()">⏮</button>
     <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-    <button onclick="share()">⤴</button>
+    <button onclick="toggleRepeat()" id="repeatBtn" title="重複播放">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="17 1 21 5 17 9"></polyline>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+        <polyline points="7 23 3 19 7 15"></polyline>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+      </svg>
+    </button>
+    <button onclick="share()" title="分享">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
+      </svg>
+    </button>
   </div>
 </div>
 
@@ -196,6 +204,7 @@
 
   let lyricsData = [];
   let activeLine = -1;
+  let isRepeat = false;
 
   window.onload = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -245,6 +254,12 @@
       playBtn.innerText = "▶";
       player.classList.remove("playing");
     }
+  }
+
+  function toggleRepeat() {
+    isRepeat = !isRepeat;
+    audio.loop = isRepeat;
+    document.getElementById("repeatBtn").style.color = isRepeat ? "#00E5FF" : "rgba(255,255,255,0.6)";
   }
 
   audio.ontimeupdate = () => {
