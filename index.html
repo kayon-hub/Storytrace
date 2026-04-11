@@ -12,7 +12,7 @@
 <style>
   :root {
     --accent: #00E5FF;
-    --glass: rgba(255, 255, 255, 0.08);
+    --glass: rgba(255, 255, 255, 0.1);
   }
 
   body {
@@ -27,13 +27,14 @@
     overflow: hidden;
   }
 
+  /* 播放器容器 */
   .player {
     width: 88%;
     max-width: 380px;
     background: var(--glass);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 40px;
     padding: 35px 30px;
     text-align: center;
@@ -43,7 +44,7 @@
   .cover-box {
     width: 100%;
     aspect-ratio: 1/1;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
   }
 
   .cover {
@@ -52,7 +53,7 @@
     border-radius: 20px;
     object-fit: cover;
     box-shadow: 0 15px 45px rgba(0, 229, 255, 0.2);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.5s ease;
   }
 
   .playing .cover {
@@ -61,10 +62,11 @@
   }
 
   .info { margin-bottom: 25px; }
-  .title { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: 0.5px; }
-  .artist { color: #888; font-size: 15px; margin: 8px 0 0; }
+  .title { font-size: 24px; font-weight: 700; margin: 0; letter-spacing: 1px; }
+  .artist { color: #aaa; font-size: 14px; margin-top: 10px; line-height: 1.6; white-space: pre-wrap; }
 
-  .progress-area { width: 100%; cursor: pointer; margin-top: 25px; }
+  /* 進度條系統 */
+  .progress-area { width: 100%; cursor: pointer; margin-top: 20px; }
   .bar-bg {
     width: 100%; height: 5px;
     background: rgba(255,255,255,0.1);
@@ -78,9 +80,10 @@
   }
   .time-labels {
     display: flex; justify-content: space-between;
-    font-size: 11px; color: #555; margin-top: 8px;
+    font-size: 11px; color: #666; margin-top: 8px;
   }
 
+  /* 控制鍵區 */
   .controls {
     display: flex; justify-content: space-around; align-items: center;
     margin-top: 25px;
@@ -97,11 +100,12 @@
     background: white; color: black;
     border-radius: 50%;
     font-size: 32px;
-    box-shadow: 0 10px 25px rgba(255,255,255,0.1);
+    box-shadow: 0 10px 25px rgba(255,255,255,0.15);
   }
 
   button:active { transform: scale(0.9); }
 
+  /* 歌詞面板 */
   .lyrics-panel {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.96);
@@ -112,13 +116,13 @@
   }
 
   .lyrics-text {
-    font-size: 26px; line-height: 1.8; font-weight: 600;
+    font-size: 24px; line-height: 1.8; font-weight: 600;
     background: linear-gradient(180deg, #fff 0%, #666 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  .close-lyrics { position: absolute; top: 35px; right: 30px; font-size: 35px; color: #555; }
+  .close-lyrics { position: absolute; top: 35px; right: 30px; font-size: 35px; color: #666; }
 </style>
 </head>
 <body>
@@ -164,13 +168,13 @@
   const barFill = document.getElementById("barFill");
   const player = document.getElementById("mainPlayer");
 
-  // 【根據你的截圖修正路徑】
+  // 【資料庫更新】路徑已根據截圖修正為同級目錄
   const projects = {
     "yaochi": {
       title: "瑤池之光",
-      artist: "KAYON × 瑤池金母",
-      cover: "yaochicover.png", // 拿掉 data/
-      music: "yaochiv.MP3",    // 拿掉 data/
+      artist: "曾子修/慧全、梁弘珉/慈泰\n黃芝亭/慧彤、田虹軒/妙毓",
+      cover: "yaochicover.png",
+      music: "yaochiv.MP3", 
       lyrics: "在瑤池的光芒下<br>尋找失落的願望<br>萬物皆有靈<br>你是最美的那道光"
     }
   };
@@ -189,7 +193,9 @@
 
   function togglePlay() {
     if (audio.paused) {
-      audio.play().catch(err => alert("點擊頁面任意處後再試一次！"));
+      audio.play().catch(err => {
+        alert("請先點擊頁面任意處後再點播放！");
+      });
       playBtn.innerText = "⏸";
       player.classList.add("playing");
     } else {
@@ -228,12 +234,12 @@
     try {
       if (navigator.share) {
         await navigator.share({
-          title: document.getElementById("trackTitle").innerText,
+          title: "瑤池之光 - Storytrace",
           url: window.location.href
         });
       } else {
         navigator.clipboard.writeText(window.location.href);
-        alert("連結已複製");
+        alert("網址已複製");
       }
     } catch (err) {}
   }
