@@ -231,4 +231,76 @@
         container.appendChild(div);
       });
     } catch (e) {
-      console.err
+      console.error("載入失敗", e);
+    }
+  };
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play().catch(() => alert("請先點擊頁面後再播放"));
+      playBtn.innerText = "⏸";
+      player.classList.add("playing");
+    } else {
+      audio.pause();
+      playBtn.innerText = "▶";
+      player.classList.remove("playing");
+    }
+  }
+
+  audio.ontimeupdate = () => {
+    if (audio.duration) {
+      barFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+      document.getElementById("currentTime").innerText = fmt(audio.currentTime);
+      document.getElementById("durationTime").innerText = fmt(audio.duration);
+      updateLyrics(audio.currentTime);
+    }
+  };
+
+  function updateLyrics(t) {
+    let newActive = -1;
+    for (let i = lyricsData.length - 1; i >= 0; i--) {
+      if (t >= lyricsData[i].time) { newActive = i; break; }
+    }
+    if (newActive === activeLine) return;
+    activeLine = newActive;
+    document.querySelectorAll(".lyric-line, .breath-line").forEach((el, i) => {
+      const base = lyricsData[i].type === "breath" ? "breath-line" : "lyric-line";
+      el.className = base + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
+    });
+    if (activeLine >= 0) {
+      const el = document.getElementById("line-" + activeLine);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  audio.onended = () => {
+    playBtn.innerText = "▶";
+    player.classList.remove("playing");
+  };
+
+  function fmt(sec) {
+    let m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function seek(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  }
+
+  function restart() { audio.currentTime = 0; }
+  function openLyrics() { document.getElementById("lyricsPanel").style.display = "flex"; }
+  function closeLyrics() { document.getElementById("lyricsPanel").style.display = "none"; }
+
+  async function share() {
+    const title = document.getElementById("trackTitle").innerText;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: title + " - Storytrace", url: window.location.href });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("網址已複製");
+      }
+    } catch(e) {}
+  }
+</scri
