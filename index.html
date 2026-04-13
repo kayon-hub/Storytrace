@@ -25,76 +25,57 @@
 <style>
   :root { --accent: #00E5FF; --glass: rgba(255,255,255,0.08); }
   * { box-sizing: border-box; }
-  body {
-    margin: 0; background: #000; min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: white;
-  }
+  body { margin: 0; background: #000; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: white; }
 
   /* ── 介紹頁 ── */
-  #landingPage {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 60px 32px;
-    text-align: center;
-  }
+  #landingPage { display: none; flex-direction: column; align-items: center; padding: 60px 32px; text-align: center; }
   .st-brand { font-size: 10px; letter-spacing: 4px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 48px; }
-  .st-icon {
-    width: 72px; height: 72px; border-radius: 20px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 36px; font-size: 28px;
-  }
-  .st-title {
-    font-size: 32px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px;
-    background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
+  .st-icon { width: 72px; height: 72px; border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 36px; font-size: 28px; }
+  .st-title { font-size: 32px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px; background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .st-tagline { font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 48px; }
   .st-divider { width: 1px; height: 40px; background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent); margin: 0 auto 48px; }
   .st-body { max-width: 320px; font-size: 15px; line-height: 2; color: rgba(255,255,255,0.65); margin-bottom: 56px; }
   .st-body strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+
+  /* ── NFC 動畫 ── */
+  .nfc-scene { position: relative; width: 280px; height: 200px; margin: 0 auto 56px; }
+  .nfc-phone { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 80px; height: 140px; background: #111; border: 2px solid rgba(255,255,255,0.12); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .nfc-phone-screen { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 10px; opacity: 0; transition: opacity 0.6s ease; }
+  .nfc-phone-screen.on { opacity: 1; }
+  .nfc-mini-cover { width: 44px; height: 44px; border-radius: 6px; background: linear-gradient(135deg, #0a3a4a, #0d5c7a); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .nfc-mini-song { font-size: 6px; color: rgba(255,255,255,0.8); font-weight: 600; letter-spacing: 0.5px; }
+  .nfc-mini-bar { width: 46px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .nfc-mini-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00E5FF, #0066FF); border-radius: 2px; transition: width 1.5s ease; }
+  .nfc-mini-fill.playing { width: 65%; }
+  .nfc-card { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 80px; height: 80px; animation: nfcTap 3s ease-in-out infinite; }
+  @keyframes nfcTap { 0%,40%{left:20px} 65%{left:110px} 80%{left:100px} 90%{left:110px} 100%{left:20px} }
+  .nfc-outer { width: 80px; height: 80px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15); animation: nfcFloat 3s ease-in-out infinite; }
+  @keyframes nfcFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+  .nfc-inner { width: 64px; height: 64px; background: linear-gradient(135deg,#0a0a1a,#1a1a3e,#0a0a1a); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+  .nfc-text { font-size: 7px; color: rgba(255,255,255,0.6); letter-spacing: 1px; font-weight: 600; }
+  .nfc-sub { font-size: 5px; color: rgba(255,255,255,0.3); letter-spacing: 0.5px; }
+  .nfc-ripple { position: absolute; right: 48px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; pointer-events: none; }
+  .nfc-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); border: 1px solid rgba(0,229,255,0.6); border-radius: 50%; width: 20px; height: 20px; opacity: 0; }
+  .nfc-ring.r1 { animation: rippleOut 3s ease-out infinite; }
+  .nfc-ring.r2 { animation: rippleOut 3s ease-out infinite; animation-delay: 0.3s; }
+  .nfc-ring.r3 { animation: rippleOut 3s ease-out infinite; animation-delay: 0.6s; }
+  @keyframes rippleOut { 0%,60%{transform:translate(-50%,-50%) scale(0);opacity:0} 70%{transform:translate(-50%,-50%) scale(1);opacity:0.8} 100%{transform:translate(-50%,-50%) scale(4);opacity:0} }
+  .nfc-label-l { position: absolute; left: 20px; bottom: 0; font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; width: 80px; text-align: center; }
+  .nfc-label-r { position: absolute; right: 20px; bottom: 0; font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; width: 80px; text-align: center; }
+
   .st-steps { display: flex; flex-direction: column; gap: 20px; max-width: 300px; margin: 0 auto 56px; text-align: left; }
   .st-step { display: flex; align-items: flex-start; gap: 16px; }
-  .st-step-num {
-    width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid rgba(0,229,255,0.3); color: #00E5FF;
-    font-size: 11px; font-weight: 600;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
-  }
+  .st-step-num { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(0,229,255,0.3); color: #00E5FF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
   .st-step-text { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.55); }
   .st-step-text strong { color: rgba(255,255,255,0.85); font-weight: 600; display: block; font-size: 14px; margin-bottom: 2px; }
   .st-divider2 { width: 40px; height: 1px; background: rgba(255,255,255,0.1); margin: 0 auto 40px; }
   .st-memory { max-width: 300px; font-size: 13px; line-height: 2; color: rgba(255,255,255,0.35); font-style: italic; margin-bottom: 56px; }
-  .st-footer { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.2); text-transform: uppercase; }
+  .st-footer { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.2); text-transform: uppercase; padding-bottom: 48px; }
 
   /* ── 播放器 ── */
-  #playerPage {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-  }
-  .bg-cover {
-    position: fixed; inset: 0;
-    background-size: cover; background-position: center;
-    filter: blur(60px) brightness(0.3) saturate(1.5);
-    transform: scale(1.1); z-index: 0;
-  }
-  .player {
-    width: 88%; max-width: 380px;
-    background: var(--glass);
-    backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 40px; padding: 35px 30px;
-    text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-    z-index: 1; position: relative;
-  }
+  #playerPage { display: none; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+  .bg-cover { position: fixed; inset: 0; background-size: cover; background-position: center; filter: blur(60px) brightness(0.3) saturate(1.5); transform: scale(1.1); z-index: 0; }
+  .player { width: 88%; max-width: 380px; background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 35px 30px; text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8); z-index: 1; position: relative; }
   .brand-p { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.3); margin-bottom: 20px; text-transform: uppercase; }
   .cover-box { width: 100%; aspect-ratio: 1/1; margin-bottom: 25px; }
   .cover { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; box-shadow: 0 15px 45px rgba(0,229,255,0.15); transition: transform 0.5s ease, box-shadow 0.5s ease; }
@@ -144,6 +125,33 @@
     再把這首歌變成一張 <strong>NFC 迷你專輯</strong><br>
     讓每個人都有個入口，有個歸屬
   </div>
+
+  <!-- NFC 動畫 -->
+  <div class="nfc-scene">
+    <div class="nfc-card">
+      <div class="nfc-outer">
+        <div class="nfc-inner">
+          <div class="nfc-text">NFC</div>
+          <div class="nfc-sub">MINI ALBUM</div>
+        </div>
+      </div>
+    </div>
+    <div class="nfc-ripple">
+      <div class="nfc-ring r1"></div>
+      <div class="nfc-ring r2"></div>
+      <div class="nfc-ring r3"></div>
+    </div>
+    <div class="nfc-phone">
+      <div class="nfc-phone-screen" id="nfcScreen">
+        <div class="nfc-mini-cover">♪</div>
+        <div class="nfc-mini-song">STORYTRACE</div>
+        <div class="nfc-mini-bar"><div class="nfc-mini-fill" id="nfcFill"></div></div>
+      </div>
+    </div>
+    <div class="nfc-label-l">迷你專輯</div>
+    <div class="nfc-label-r">播放器</div>
+  </div>
+
   <div class="st-steps">
     <div class="st-step">
       <div class="st-step-num">01</div>
@@ -197,7 +205,7 @@
     </div>
     <div class="controls">
       <button onclick="openLyrics()" style="font-size:14px; letter-spacing:1px;">歌詞</button>
-      <button onclick="restart()" title="重新開始">
+      <button onclick="restart()">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="19 20 9 12 19 4 19 20"></polygon>
           <line x1="5" y1="19" x2="5" y2="5"></line>
@@ -242,6 +250,18 @@
     initPlayer(id);
   } else {
     document.getElementById("landingPage").style.display = "flex";
+    initNfcAnim();
+  }
+
+  function initNfcAnim() {
+    const screen = document.getElementById('nfcScreen');
+    const fill = document.getElementById('nfcFill');
+    function cycle() {
+      setTimeout(() => { screen.classList.add('on'); fill.classList.add('playing'); }, 1950);
+      setTimeout(() => { screen.classList.remove('on'); fill.classList.remove('playing'); }, 2700);
+    }
+    cycle();
+    setInterval(cycle, 3000);
   }
 
   async function initPlayer(id) {
@@ -258,7 +278,6 @@
       const res = await fetch("projects.json?v=" + Date.now());
       const projects = await res.json();
       const data = projects[id] || projects[Object.keys(projects)[0]];
-
       document.getElementById("trackTitle").innerText = data.title;
       document.getElementById("trackArtist").innerText = data.artist;
       document.getElementById("coverImg").src = data.cover;
@@ -267,7 +286,6 @@
       bgCover.style.backgroundImage = `url(${data.cover})`;
       audio.src = data.music;
       lyricsData = data.lyrics;
-
       const container = document.getElementById("lyricsContent");
       lyricsData.forEach((line, i) => {
         const div = document.createElement("div");
@@ -297,13 +315,11 @@
         player.classList.remove("playing");
       }
     };
-
     window.toggleRepeat = function() {
       isRepeat = !isRepeat;
       audio.loop = isRepeat;
       document.getElementById("repeatBtn").style.color = isRepeat ? "#00E5FF" : "rgba(255,255,255,0.6)";
     };
-
     audio.ontimeupdate = () => {
       if (audio.duration) {
         barFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
@@ -312,7 +328,6 @@
         updateLyrics(audio.currentTime);
       }
     };
-
     function updateLyrics(t) {
       let newActive = -1;
       for (let i = lyricsData.length - 1; i >= 0; i--) {
@@ -329,18 +344,14 @@
         if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
-
     audio.onended = () => { playBtn.innerText = "▶"; player.classList.remove("playing"); };
-
     window.seek = function(e) {
       const rect = e.currentTarget.getBoundingClientRect();
       audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
     };
-
     window.restart = function() { audio.currentTime = 0; };
     window.openLyrics = function() { document.getElementById("lyricsPanel").style.display = "flex"; };
     window.closeLyrics = function() { document.getElementById("lyricsPanel").style.display = "none"; };
-
     window.share = async function() {
       const title = document.getElementById("trackTitle").innerText;
       try {
@@ -352,7 +363,6 @@
         }
       } catch(e) {}
     };
-
     function fmt(sec) {
       let m = Math.floor(sec / 60), s = Math.floor(sec % 60);
       return m + ":" + (s < 10 ? "0" : "") + s;
