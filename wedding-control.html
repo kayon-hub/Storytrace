@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>婚禮控台 | Storytrace</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0a;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
+  .header p { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 6px; letter-spacing: 2px; text-transform: uppercase; }
+
+  .status-bar {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ff4444;
+  }
+  .status-dot.connected { background: #00E5A0; }
+  #statusText { flex: 1; }
+  #guestCount { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+  .section-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* 場景按鈕 */
+  .scenes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
+  .scene-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: white;
+  }
+  .scene-btn:active { transform: scale(0.96); }
+  .scene-btn.active { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1); }
+  .scene-icon { font-size: 28px; margin-bottom: 8px; }
+  .scene-name { font-size: 13px; font-weight: 600; }
+  .scene-desc { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  /* 顏色選擇 */
+  .colors { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+  .color-btn {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .color-btn.active { border-color: white; transform: scale(1.1); }
+
+  /* 抽獎 */
+  .lottery-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .lottery-result {
+    font-size: 32px;
+    font-weight: 800;
+    color: #FFD700;
+    min-height: 48px;
+    margin: 16px 0;
+    letter-spacing: 2px;
+  }
+  .lottery-name {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+  }
+
+  /* 按鈕 */
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: white; color: black; }
+  .btn-danger { background: #ff4444; color: white; }
+  .btn-gold { background: linear-gradient(135deg, #FFD700, #FFA500); color: black; }
+
+  /* 賓客名單 */
+  .guest-list {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .guest-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+  .guest-item:last-child { border-bottom: none; }
+  .guest-dot { width: 6px; height: 6px; border-radius: 50%; background: #00E5A0; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>婚禮控台</h1>
+  <p>Storytrace × KAYON STUDIO</p>
+</div>
+
+<div class="status-bar">
+  <div class="status-dot" id="statusDot"></div>
+  <span id="statusText">連線中...</span>
+  <span id="guestCount">賓客 0 人在線</span>
+</div>
+
+<div class="section-title">場景切換</div>
+<div class="scenes">
+  <div class="scene-btn" onclick="setScene('entrance', this)">
+    <div class="scene-icon">💍</div>
+    <div class="scene-name">新人入場</div>
+    <div class="scene-desc">玫瑰金光海</div>
+  </div>
+  <div class="scene-btn" onclick="setScene('cake', this)">
+    <div class="scene-icon">🎂</div>
+    <div class="scene-name">切蛋糕</div>
+    <div class="scene-desc">香檳金閃耀</div>
+  </div>
+  <div class="scene-btn" onclick="setScene('dance', this)">
+    <div class="scene-icon">🕊️</div>
+    <div class="scene-name">第一支舞</div>
+    <div class="scene-desc">純白浪漫</div>
+  </div>
+  <div class="scene-btn" onclick="setScene('farewell', this)">
+    <div class="scene-icon">✨</div>
+    <div class="scene-name">送客</div>
+    <div class="scene-desc">彩虹感謝</div>
+  </div>
+</div>
+
+<div class="section-title">手動選色</div>
+<div class="colors">
+  <div class="color-btn" style="background:#FF6B9D;" onclick="setColor('#FF6B9D', this)" title="玫瑰粉"></div>
+  <div class="color-btn" style="background:#FFD700;" onclick="setColor('#FFD700', this)" title="香檳金"></div>
+  <div class="color-btn" style="background:#ffffff;" onclick="setColor('#ffffff', this)" title="純白"></div>
+  <div class="color-btn" style="background:#00E5FF;" onclick="setColor('#00E5FF', this)" title="天藍"></div>
+  <div class="color-btn" style="background:#B8A9FF;" onclick="setColor('#B8A9FF', this)" title="薰衣草"></div>
+  <div class="color-btn" style="background:#FF4444;" onclick="setColor('#FF4444', this)" title="熱情紅"></div>
+  <div class="color-btn" style="background:#00E5A0;" onclick="setColor('#00E5A0', this)" title="薄荷綠"></div>
+</div>
+
+<div class="section-title">抽獎</div>
+<div class="lottery-box">
+  <div class="lottery-result" id="lotteryResult">—</div>
+  <div class="lottery-name" id="lotteryName">按下抽獎開始</div>
+  <button class="btn btn-gold" onclick="runLottery()">🎰 開始抽獎</button>
+  <button class="btn btn-danger" onclick="resetLottery()" style="margin-top:8px;">重置抽獎</button>
+</div>
+
+<div class="section-title">賓客名單（<span id="onlineCount">0</span> 人在線）</div>
+<div class="guest-list" id="guestList">
+  <div style="text-align:center; color:rgba(255,255,255,0.2); font-size:12px; padding:20px;">等待賓客加入...</div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
+    authDomain: "storytrace-wedding.firebaseapp.com",
+    databaseURL: "https://storytrace-wedding-default-rtdb.firebaseio.com",
+    projectId: "storytrace-wedding",
+    storageBucket: "storytrace-wedding.firebasestorage.app",
+    messagingSenderId: "865058497448",
+    appId: "1:865058497448:web:f604e62c4c7407f464b39d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const scenes = {
+    entrance: { color: '#FF6B9D', bg: 'linear-gradient(135deg, #FF6B9D, #FF1493)', message: '💍 新人入場' },
+    cake:     { color: '#FFD700', bg: 'linear-gradient(135deg, #FFD700, #FFA500)', message: '🎂 切蛋糕囉！' },
+    dance:    { color: '#ffffff', bg: 'linear-gradient(135deg, #ffffff, #e0e0e0)', message: '🕊️ 第一支舞' },
+    farewell: { color: '#B8A9FF', bg: 'linear-gradient(135deg, #FF6B9D, #FFD700, #00E5FF)', message: '✨ 謝謝大家！' }
+  };
+
+  // 連線狀態
+  document.getElementById('statusDot').classList.add('connected');
+  document.getElementById('statusText').innerText = '已連線';
+
+  // 監聽賓客
+  let guests = {};
+  onValue(ref(db, 'guests'), (snap) => {
+    guests = snap.val() || {};
+    const count = Object.keys(guests).length;
+    document.getElementById('guestCount').innerText = `賓客 ${count} 人在線`;
+    document.getElementById('onlineCount').innerText = count;
+    const list = document.getElementById('guestList');
+    if (count === 0) {
+      list.innerHTML = '<div style="text-align:center; color:rgba(255,255,255,0.2); font-size:12px; padding:20px;">等待賓客加入...</div>';
+    } else {
+      list.innerHTML = Object.entries(guests).map(([k, v]) =>
+        `<div class="guest-item"><div class="guest-dot"></div>${v.name || '賓客'} #${k.slice(-4)}</div>`
+      ).join('');
+    }
+  });
+
+  // 場景切換
+  window.setScene = function(scene, el) {
+    document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    const s = scenes[scene];
+    set(ref(db, 'control'), { type: 'scene', scene, color: s.color, bg: s.bg, message: s.message, ts: Date.now() });
+  };
+
+  // 顏色選擇
+  window.setColor = function(color, el) {
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    set(ref(db, 'control'), { type: 'color', color, bg: color, message: '', ts: Date.now() });
+  };
+
+  // 抽獎
+  window.runLottery = function() {
+    const keys = Object.keys(guests);
+    if (keys.length === 0) { alert('目前沒有賓客在線！'); return; }
+    const winner = keys[Math.floor(Math.random() * keys.length)];
+    const winnerData = guests[winner];
+    const num = winner.slice(-4).toUpperCase();
+    document.getElementById('lotteryResult').innerText = `#${num}`;
+    document.getElementById('lotteryName').innerText = winnerData.name || '幸運賓客';
+    set(ref(db, 'control'), { type: 'lottery', winner, ts: Date.now() });
+  };
+
+  window.resetLottery = function() {
+    document.getElementById('lotteryResult').innerText = '—';
+    document.getElementById('lotteryName').innerText = '按下抽獎開始';
+    set(ref(db, 'control'), { type: 'idle', ts: Date.now() });
+  };
+</script>
+</body>
+</html>
