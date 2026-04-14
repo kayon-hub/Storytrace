@@ -18,15 +18,13 @@
     overflow: hidden;
     transition: background 1.5s ease;
   }
-
   .bg-glow {
     position: fixed;
     inset: 0;
     opacity: 0;
-    transition: opacity 1.5s ease, background 1.5s ease;
+    transition: opacity 1s ease, background 1s ease;
     z-index: 0;
   }
-
   .content {
     position: relative;
     z-index: 1;
@@ -35,8 +33,6 @@
     width: 100%;
     max-width: 380px;
   }
-
-  /* 入場畫面 */
   #joinScreen { display: flex; flex-direction: column; align-items: center; }
   .logo { font-size: 48px; margin-bottom: 24px; }
   .join-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
@@ -67,10 +63,7 @@
     letter-spacing: 1px;
   }
   .join-btn:active { transform: scale(0.97); }
-
-  /* 主畫面 */
   #mainScreen { display: none; flex-direction: column; align-items: center; width: 100%; }
-
   .wedding-photo {
     width: 160px; height: 160px;
     border-radius: 50%;
@@ -82,8 +75,6 @@
     transition: box-shadow 1s ease;
     overflow: hidden;
   }
-  .wedding-photo img { width: 100%; height: 100%; object-fit: cover; }
-
   .couple-name {
     font-size: 26px;
     font-weight: 800;
@@ -97,19 +88,17 @@
     letter-spacing: 2px;
     margin-bottom: 40px;
   }
-
   .scene-message {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     min-height: 32px;
     margin-bottom: 32px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.5s ease, transform 0.5s ease;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5);
   }
   .scene-message.show { opacity: 1; transform: translateY(0); }
-
-  /* 光海效果 */
   .light-orbs {
     position: fixed;
     inset: 0;
@@ -121,19 +110,17 @@
   .orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(40px);
+    filter: blur(50px);
     animation: float 4s ease-in-out infinite;
   }
   @keyframes float {
     0%,100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-20px) scale(1.05); }
+    50% { transform: translateY(-20px) scale(1.08); }
   }
-
-  /* 中獎特效 */
   .winner-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0,0,0,0.92);
     z-index: 200;
     display: none;
     flex-direction: column;
@@ -145,21 +132,8 @@
   @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.1); } }
   .winner-text { font-size: 32px; font-weight: 800; color: #FFD700; margin-bottom: 12px; }
   .winner-sub { font-size: 16px; color: rgba(255,255,255,0.6); }
-
-  .my-id {
-    font-size: 11px;
-    color: rgba(255,255,255,0.2);
-    margin-top: 40px;
-    letter-spacing: 1px;
-  }
-
-  .brand {
-    font-size: 9px;
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.15);
-    text-transform: uppercase;
-    margin-top: 8px;
-  }
+  .my-id { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 40px; letter-spacing: 1px; }
+  .brand { font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,0.15); text-transform: uppercase; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -174,7 +148,6 @@
 </div>
 
 <div class="content">
-  <!-- 入場畫面 -->
   <div id="joinScreen">
     <div class="logo">💍</div>
     <div class="join-title">歡迎來到婚禮</div>
@@ -183,7 +156,6 @@
     <button class="join-btn" onclick="joinWedding()">加入婚禮 ✨</button>
   </div>
 
-  <!-- 主畫面 -->
   <div id="mainScreen">
     <div class="wedding-photo" id="weddingPhoto">💍</div>
     <div class="couple-name" id="coupleName">新郎 ♥ 新娘</div>
@@ -210,7 +182,6 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
   let myKey = null;
 
   window.joinWedding = function() {
@@ -219,11 +190,9 @@
     myKey = guestRef.key;
     set(guestRef, { name, joinedAt: Date.now() });
     onDisconnect(guestRef).remove();
-
     document.getElementById('joinScreen').style.display = 'none';
     document.getElementById('mainScreen').style.display = 'flex';
     document.getElementById('myId').innerText = `我的序號：#${myKey.slice(-4).toUpperCase()}`;
-
     listenControl();
   };
 
@@ -231,7 +200,6 @@
     onValue(ref(db, 'control'), (snap) => {
       const data = snap.val();
       if (!data) return;
-
       if (data.type === 'scene' || data.type === 'color') {
         applyColor(data.color, data.bg, data.message);
       } else if (data.type === 'lottery') {
@@ -250,14 +218,14 @@
   function applyColor(color, bg, message) {
     const glow = document.getElementById('bgGlow');
     glow.style.background = bg || color;
-    glow.style.opacity = '0.25';
+    glow.style.opacity = '0.7';
 
     const orbs = document.getElementById('lightOrbs');
     orbs.style.opacity = '1';
     orbs.innerHTML = `
-      <div class="orb" style="width:200px;height:200px;background:${color};opacity:0.3;top:10%;left:10%;animation-delay:0s;"></div>
-      <div class="orb" style="width:150px;height:150px;background:${color};opacity:0.2;top:60%;right:10%;animation-delay:1s;"></div>
-      <div class="orb" style="width:100px;height:100px;background:${color};opacity:0.25;bottom:20%;left:30%;animation-delay:2s;"></div>
+      <div class="orb" style="width:280px;height:280px;background:${color};opacity:0.6;top:5%;left:5%;animation-delay:0s;"></div>
+      <div class="orb" style="width:220px;height:220px;background:${color};opacity:0.5;top:50%;right:5%;animation-delay:1s;"></div>
+      <div class="orb" style="width:180px;height:180px;background:${color};opacity:0.55;bottom:10%;left:25%;animation-delay:2s;"></div>
     `;
 
     const msg = document.getElementById('sceneMessage');
@@ -267,13 +235,14 @@
       if (message) msg.classList.add('show');
     }, 300);
 
-    document.querySelector('.wedding-photo').style.boxShadow = `0 0 40px ${color}60`;
+    document.querySelector('.wedding-photo').style.boxShadow = `0 0 60px ${color}`;
   }
 
   function resetColors() {
     document.getElementById('bgGlow').style.opacity = '0';
     document.getElementById('lightOrbs').style.opacity = '0';
     document.getElementById('sceneMessage').classList.remove('show');
+    document.querySelector('.wedding-photo').style.boxShadow = 'none';
   }
 
   function showWinner() {
