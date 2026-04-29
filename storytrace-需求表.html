@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storytrace 活動需求表</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --black: #0D0D0D;
+    --surface: #141414;
+    --surface2: #1C1C1C;
+    --border: rgba(201,168,76,0.2);
+    --text: #F0EBE0;
+    --muted: rgba(240,235,224,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 60px 24px 80px;
+  }
+
+  /* ── 背景紋理 ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrap { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 56px; }
+
+  .logo-line {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin-bottom: 32px;
+  }
+  .logo-line::before, .logo-line::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .logo-line::after { background: linear-gradient(to left, transparent, var(--gold)); }
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 8vw, 56px);
+    font-weight: 300; line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .header h1 em { font-style: italic; color: var(--gold-light); }
+
+  .header p {
+    font-size: 14px; color: var(--muted); letter-spacing: 0.5px; line-height: 1.7;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.3s; }
+  .section:nth-child(4) { animation-delay: 0.4s; }
+  .section:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .section-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--gold); font-weight: 500; letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 400; letter-spacing: 1px;
+  }
+  .section-body { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
+
+  /* ── Form elements ── */
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); font-weight: 500;
+  }
+  label span { color: var(--muted); font-weight: 300; letter-spacing: 0; text-transform: none; font-size: 11px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="date"],
+  textarea,
+  select {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 300;
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+  }
+  input::placeholder, textarea::placeholder { color: rgba(240,235,224,0.2); }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  select { cursor: pointer; }
+  select option { background: #1C1C1C; }
+
+  /* ── 活動類型 chips ── */
+  .type-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    padding: 9px 18px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 2px;
+    font-size: 13px; cursor: pointer;
+    transition: all 0.2s; color: var(--muted);
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--gold); color: var(--text); }
+  .chip.selected {
+    border-color: var(--gold); background: rgba(201,168,76,0.12);
+    color: var(--gold-light);
+  }
+
+  /* ── 顏色選擇 ── */
+  .color-section { display: flex; flex-direction: column; gap: 12px; }
+  .color-hint { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .color-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .color-preset {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid transparent; cursor: pointer;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .color-preset:hover, .color-preset.picked { border-color: white; transform: scale(1.15); }
+  .color-custom-wrap { display: flex; align-items: center; gap: 10px; }
+  input[type="color"] {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2); cursor: pointer;
+    padding: 0; background: none;
+  }
+  .color-custom-label { font-size: 12px; color: var(--muted); }
+  #colorCodeDisplay {
+    font-size: 12px; color: var(--gold);
+    font-family: monospace; letter-spacing: 1px;
+  }
+
+  /* ── Scale (1-5) ── */
+  .scale-wrap { display: flex; gap: 8px; }
+  .scale-btn {
+    flex: 1; padding: 12px 4px; text-align: center;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 2px;
+    cursor: pointer; font-size: 13px; color: var(--muted);
+    transition: all 0.2s; user-select: none;
+  }
+  .scale-btn:hover { border-color: var(--gold); color: var(--text); }
+  .scale-btn.selected { border-color: var(--gold); background: rgba(201,168,76,0.12); color: var(--gold-light); }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 6px; letter-spacing: 0.5px; }
+
+  /* ── Checkbox list ── */
+  .check-list { display: flex; flex-direction: column; gap: 10px; }
+  .check-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 2px; cursor: pointer;
+    transition: all 0.2s; user-select: none;
+  }
+  .check-item:hover { border-color: rgba(201,168,76,0.3); }
+  .check-item.checked { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  .check-box {
+    width: 18px; height: 18px; border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; font-size: 11px;
+  }
+  .check-item.checked .check-box { background: var(--gold); border-color: var(--gold); color: #000; }
+  .check-label { font-size: 13px; color: var(--muted); transition: color 0.2s; }
+  .check-item.checked .check-label { color: var(--text); }
+
+  /* ── Submit ── */
+  .submit-wrap { text-align: center; margin-top: 48px; }
+  .submit-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 18px 48px;
+    background: var(--gold);
+    color: #000; border: none; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .submit-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-note { font-size: 12px; color: var(--muted); margin-top: 16px; line-height: 1.6; }
+
+  /* ── 成功訊息 ── */
+  .success-screen {
+    display: none; text-align: center; padding: 60px 24px;
+    animation: fadeUp 0.5s ease;
+  }
+  .success-icon { font-size: 56px; margin-bottom: 24px; }
+  .success-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; margin-bottom: 12px; }
+  .success-sub { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* ── Footer ── */
+  .footer { text-align: center; margin-top: 60px; font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 3px; text-transform: uppercase; }
+
+  @media (max-width: 480px) {
+    .field-row { grid-template-columns: 1fr; }
+    .scale-btn { font-size: 11px; padding: 10px 2px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-line"><span class="logo-text">Storytrace × KAYON STUDIO</span></div>
+    <h1>活動<em>需求表</em></h1>
+    <p>請填寫以下資訊，我們將根據您的需求<br>為您規劃最適合的互動燈光體驗方案</p>
+  </div>
+
+  <div id="formContent">
+
+    <!-- 01 聯絡資訊 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title">聯絡資訊</div>
+      </div>
+      <div class="section-body">
+        <div class="field-row">
+          <div class="field">
+            <label>姓名 / 負責人 <span>*必填</span></label>
+            <input type="text" id="f_name" placeholder="王小明">
+          </div>
+          <div class="field">
+            <label>公司 / 單位名稱</label>
+            <input type="text" id="f_company" placeholder="KAYON STUDIO">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>聯絡電話 <span>*必填</span></label>
+            <input type="tel" id="f_phone" placeholder="0912-345-678">
+          </div>
+          <div class="field">
+            <label>Email <span>*必填</span></label>
+            <input type="email" id="f_email" placeholder="hello@example.com">
+          </div>
+        </div>
+        <div class="field">
+          <label>LINE ID <span>方便後續溝通</span></label>
+          <input type="text" id="f_line" placeholder="your_line_id">
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 活動資訊 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title">活動資訊</div>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>活動名稱 <span>*必填</span></label>
+          <input type="text" id="f_event_name" placeholder="例如：台積電 2026 年度尾牙">
+        </div>
+        <div class="field">
+          <label>活動類型 <span>可複選</span></label>
+          <div class="type-chips" id="typeChips">
+            <div class="chip" data-val="wedding">💍 婚禮</div>
+            <div class="chip" data-val="corporate">🏢 企業尾牙 / 年會</div>
+            <div class="chip" data-val="concert">🎤 演唱會 / 表演</div>
+            <div class="chip" data-val="party">🎉 派對 / 慶典</div>
+            <div class="chip" data-val="product">🚀 產品發表</div>
+            <div class="chip" data-val="other">✏️ 其他</div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>活動日期 <span>*必填</span></label>
+            <input type="date" id="f_date">
+          </div>
+          <div class="field">
+            <label>活動地點</label>
+            <input type="text" id="f_venue" placeholder="例如：台北君悅酒店">
+          </div>
+        </div>
+        <div class="field">
+          <label>預計賓客人數</label>
+          <div class="scale-wrap" id="scaleGuests">
+            <div class="scale-btn" data-val="50">50以下</div>
+            <div class="scale-btn" data-val="100">50-100</div>
+            <div class="scale-btn" data-val="300">100-300</div>
+            <div class="scale-btn" data-val="500">300-500</div>
+            <div class="scale-btn" data-val="500+">500+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 品牌視覺 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title">品牌 / 活動視覺</div>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>活動主題色 <span>選擇或輸入品牌色</span></label>
+          <div class="color-section">
+            <div class="color-hint">選擇預設色票，或使用右側色盤輸入品牌專屬色碼</div>
+            <div class="color-row">
+              <div class="color-preset" style="background:#C9284D;" data-color="#C9284D" title="品牌紅"></div>
+              <div class="color-preset" style="background:#E8A020;" data-color="#E8A020" title="企業金"></div>
+              <div class="color-preset" style="background:#1A6FE8;" data-color="#1A6FE8" title="科技藍"></div>
+              <div class="color-preset" style="background:#2EC47A;" data-color="#2EC47A" title="活力綠"></div>
+              <div class="color-preset" style="background:#9B45E8;" data-color="#9B45E8" title="典雅紫"></div>
+              <div class="color-preset" style="background:#F06060;" data-color="#F06060" title="珊瑚粉"></div>
+              <div class="color-preset" style="background:#FFFFFF;" data-color="#FFFFFF" title="純白"></div>
+              <div class="color-custom-wrap">
+                <input type="color" id="customColorPicker" value="#C9A84C">
+                <span class="color-custom-label">自訂 <span id="colorCodeDisplay">#C9A84C</span></span>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="f_color" value="">
+        </div>
+        <div class="field">
+          <label>活動標語 / 副標題 <span>會顯示在賓客手機上</span></label>
+          <input type="text" id="f_subtitle" placeholder="例如：感謝有你 · 2026">
+        </div>
+        <div class="field">
+          <label>是否有 Logo 或視覺素材 <span>要放入互動頁面</span></label>
+          <div class="type-chips" id="logoChips">
+            <div class="chip" data-val="yes_logo">有 Logo（可提供檔案）</div>
+            <div class="chip" data-val="yes_video">有宣傳影片</div>
+            <div class="chip" data-val="yes_photo">有活動主視覺圖</div>
+            <div class="chip" data-val="no">暫無，使用預設</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 功能需求 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title">功能需求</div>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>需要哪些互動功能 <span>可複選</span></label>
+          <div class="check-list" id="featureList">
+            <div class="check-item" data-val="light">
+              <div class="check-box"></div>
+              <div class="check-label">🌈 全場手機同步燈光（基本功能）</div>
+            </div>
+            <div class="check-item" data-val="scene">
+              <div class="check-box"></div>
+              <div class="check-label">🎬 多場景切換（入場 / 高潮 / 謝幕等）</div>
+            </div>
+            <div class="check-item" data-val="lottery">
+              <div class="check-box"></div>
+              <div class="check-label">🎰 幸運抽獎（中獎者手機震動通知）</div>
+            </div>
+            <div class="check-item" data-val="message">
+              <div class="check-box"></div>
+              <div class="check-label">📢 即時廣播訊息推送</div>
+            </div>
+            <div class="check-item" data-val="video">
+              <div class="check-box"></div>
+              <div class="check-label">🎥 開場宣傳影片播放</div>
+            </div>
+            <div class="check-item" data-val="nfc">
+              <div class="check-box"></div>
+              <div class="check-label">📲 感應式數位紀念專輯（NFC）</div>
+            </div>
+            <div class="check-item" data-val="song">
+              <div class="check-box"></div>
+              <div class="check-label">🎵 專屬活動主題曲製作</div>
+            </div>
+            <div class="check-item" data-val="onsite">
+              <div class="check-box"></div>
+              <div class="check-label">🧑‍💻 活動當天現場技術支援</div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>預算規模 <span>幫助我們提供最適合的方案</span></label>
+          <div class="scale-wrap" id="scaleBudget">
+            <div class="scale-btn" data-val="30k">3萬以下</div>
+            <div class="scale-btn" data-val="50k">3-5萬</div>
+            <div class="scale-btn" data-val="100k">5-10萬</div>
+            <div class="scale-btn" data-val="100k+">10萬+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 其他需求 -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-title">其他需求 / 備註</div>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>特殊需求或想法 <span>越詳細越好</span></label>
+          <textarea id="f_notes" placeholder="例如：希望入場時播放特定音樂、場地燈光設備說明、想要的互動效果、預計使用幾個場景切換…"></textarea>
+        </div>
+        <div class="field">
+          <label>如何得知 Storytrace</label>
+          <select id="f_source">
+            <option value="">請選擇</option>
+            <option value="friend">朋友介紹</option>
+            <option value="hotel">飯店 / 婚顧推薦</option>
+            <option value="ig">Instagram</option>
+            <option value="fb">Facebook</option>
+            <option value="google">Google 搜尋</option>
+            <option value="other">其他</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrap">
+      <button class="submit-btn" onclick="submitForm()">
+        <span>送出需求表</span>
+        <span>→</span>
+      </button>
+      <div class="submit-note">
+        送出後我們將在 1-2 個工作天內與您聯繫<br>
+        如有緊急需求請直接 LINE：kayon_studio
+      </div>
+    </div>
+
+  </div><!-- /formContent -->
+
+  <!-- 成功畫面 -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✨</div>
+    <div class="success-title">需求表已送出</div>
+    <div class="success-sub">
+      感謝您的填寫！<br>
+      我們將在 1-2 個工作天內與您聯繫<br><br>
+      如有緊急需求請直接 LINE：<strong style="color:var(--gold-light)">kayon_studio</strong>
+    </div>
+  </div>
+
+  <div class="footer">© 2026 KAYON STUDIO · Storytrace · 版權所有</div>
+</div>
+
+<script>
+  // ── Chips（單選/複選）──
+  document.querySelectorAll('#typeChips .chip, #logoChips .chip').forEach(chip => {
+    chip.addEventListener('click', () => chip.classList.toggle('selected'));
+  });
+
+  // ── Scale 按鈕（單選）──
+  ['scaleGuests', 'scaleBudget'].forEach(id => {
+    document.getElementById(id).querySelectorAll('.scale-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById(id).querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+  });
+
+  // ── Checkbox list ──
+  document.querySelectorAll('.check-item').forEach(item => {
+    item.addEventListener('click', () => item.classList.toggle('checked'));
+  });
+
+  // ── 顏色預設 ──
+  document.querySelectorAll('.color-preset').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('.color-preset').forEach(x => x.classList.remove('picked'));
+      p.classList.add('picked');
+      document.getElementById('f_color').value = p.dataset.color;
+      document.getElementById('customColorPicker').value = p.dataset.color;
+      document.getElementById('colorCodeDisplay').textContent = p.dataset.color;
+    });
+  });
+
+  // ── 自訂色盤 ──
+  document.getElementById('customColorPicker').addEventListener('input', function() {
+    document.getElementById('f_color').value = this.value;
+    document.getElementById('colorCodeDisplay').textContent = this.value;
+    document.querySelectorAll('.color-preset').forEach(x => x.classList.remove('picked'));
+  });
+
+  // ── 送出 ──
+  function submitForm() {
+    const name  = document.getElementById('f_name').value.trim();
+    const phone = document.getElementById('f_phone').value.trim();
+    const email = document.getElementById('f_email').value.trim();
+    const event = document.getElementById('f_event_name').value.trim();
+
+    if (!name || !phone || !email || !event) {
+      // 標記必填
+      ['f_name','f_phone','f_email','f_event_name'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) el.style.borderColor = '#E05555';
+        else el.style.borderColor = '';
+      });
+      alert('請填寫必填欄位（姓名、電話、Email、活動名稱）');
+      return;
+    }
+
+    // 收集資料
+    const types    = [...document.querySelectorAll('#typeChips .chip.selected')].map(c => c.textContent.trim()).join('、');
+    const logos    = [...document.querySelectorAll('#logoChips .chip.selected')].map(c => c.textContent.trim()).join('、');
+    const features = [...document.querySelectorAll('.check-item.checked .check-label')].map(c => c.textContent.trim()).join('\n');
+    const guests   = document.querySelector('#scaleGuests .scale-btn.selected')?.dataset.val || '未選擇';
+    const budget   = document.querySelector('#scaleBudget .scale-btn.selected')?.dataset.val || '未選擇';
+    const color    = document.getElementById('f_color').value || document.getElementById('customColorPicker').value;
+
+    const summary = `
+【Storytrace 活動需求表】
+
+▌ 聯絡資訊
+姓名：${name}
+公司：${document.getElementById('f_company').value}
+電話：${phone}
+Email：${email}
+LINE：${document.getElementById('f_line').value}
+
+▌ 活動資訊
+活動名稱：${event}
+活動類型：${types || '未選擇'}
+活動日期：${document.getElementById('f_date').value}
+活動地點：${document.getElementById('f_venue').value}
+預計人數：${guests}
+
+▌ 品牌視覺
+主題色：${color}
+活動標語：${document.getElementById('f_subtitle').value}
+素材：${logos || '未選擇'}
+
+▌ 功能需求
+${features || '未選擇'}
+
+▌ 預算規模：${budget}
+
+▌ 備註：
+${document.getElementById('f_notes').value}
+
+▌ 來源：${document.getElementById('f_source').value}
+    `.trim();
+
+    // 複製到剪貼簿
+    navigator.clipboard.writeText(summary).then(() => {
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+    }).catch(() => {
+      // fallback
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+    });
+
+    console.log('STORYTRACE_FORM_SUBMIT:', summary);
+  }
+</script>
+</body>
+</html>
