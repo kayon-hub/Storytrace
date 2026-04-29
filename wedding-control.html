@@ -13,10 +13,7 @@
     min-height: 100vh;
     padding: 32px 24px;
   }
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
+  .header { text-align: center; margin-bottom: 40px; }
   .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
   .header p { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 6px; letter-spacing: 2px; text-transform: uppercase; }
 
@@ -32,11 +29,7 @@
     font-size: 13px;
     color: rgba(255,255,255,0.5);
   }
-  .status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #ff4444;
-  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff4444; }
   .status-dot.connected { background: #00E5A0; }
   #statusText { flex: 1; }
   #guestCount { font-size: 12px; color: rgba(255,255,255,0.3); }
@@ -49,7 +42,6 @@
     margin-bottom: 14px;
   }
 
-  /* 場景按鈕 */
   .scenes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
   .scene-btn {
     background: rgba(255,255,255,0.05);
@@ -67,18 +59,46 @@
   .scene-name { font-size: 13px; font-weight: 600; }
   .scene-desc { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; }
 
-  /* 顏色選擇 */
-  .colors { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+  /* 顏色按鈕 — 加大方便現場操作 */
+  .colors { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
   .color-btn {
-    width: 48px; height: 48px;
+    width: 56px; height: 56px;
     border-radius: 50%;
     border: 3px solid transparent;
     cursor: pointer;
     transition: all 0.2s;
+    position: relative;
   }
-  .color-btn.active { border-color: white; transform: scale(1.1); }
+  .color-btn.active { border-color: white; transform: scale(1.15); }
+  .color-btn::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+  }
+  .colors-row { margin-bottom: 36px; }
 
-  /* 抽獎 */
+  /* 燈關掉按鈕 */
+  .btn-off {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    transition: all 0.2s;
+  }
+  .btn-off:active { transform: scale(0.97); background: rgba(255,255,255,0.15); }
+
   .lottery-box {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
@@ -87,39 +107,15 @@
     margin-bottom: 32px;
     text-align: center;
   }
-  .lottery-result {
-    font-size: 32px;
-    font-weight: 800;
-    color: #FFD700;
-    min-height: 48px;
-    margin: 16px 0;
-    letter-spacing: 2px;
-  }
-  .lottery-name {
-    font-size: 14px;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 20px;
-  }
+  .lottery-result { font-size: 32px; font-weight: 800; color: #FFD700; min-height: 48px; margin: 16px 0; letter-spacing: 2px; }
+  .lottery-name { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
 
-  /* 按鈕 */
-  .btn {
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-    margin-bottom: 10px;
-  }
+  .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; margin-bottom: 10px; }
   .btn:active { transform: scale(0.97); }
   .btn-primary { background: white; color: black; }
   .btn-danger { background: #ff4444; color: white; }
   .btn-gold { background: linear-gradient(135deg, #FFD700, #FFA500); color: black; }
 
-  /* 賓客名單 */
   .guest-list {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
@@ -128,15 +124,7 @@
     max-height: 200px;
     overflow-y: auto;
   }
-  .guest-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-  }
+  .guest-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: rgba(255,255,255,0.6); }
   .guest-item:last-child { border-bottom: none; }
   .guest-dot { width: 6px; height: 6px; border-radius: 50%; background: #00E5A0; flex-shrink: 0; }
 </style>
@@ -178,16 +166,20 @@
   </div>
 </div>
 
-<div class="section-title">手動選色</div>
-<div class="colors">
-  <div class="color-btn" style="background:#FF6B9D;" onclick="setColor('#FF6B9D', this)" title="玫瑰粉"></div>
-  <div class="color-btn" style="background:#FFD700;" onclick="setColor('#FFD700', this)" title="香檳金"></div>
-  <div class="color-btn" style="background:#ffffff;" onclick="setColor('#ffffff', this)" title="純白"></div>
-  <div class="color-btn" style="background:#00E5FF;" onclick="setColor('#00E5FF', this)" title="天藍"></div>
-  <div class="color-btn" style="background:#B8A9FF;" onclick="setColor('#B8A9FF', this)" title="薰衣草"></div>
-  <div class="color-btn" style="background:#FF4444;" onclick="setColor('#FF4444', this)" title="熱情紅"></div>
-  <div class="color-btn" style="background:#00E5A0;" onclick="setColor('#00E5A0', this)" title="薄荷綠"></div>
+<div class="section-title">手動選色（高飽和版）</div>
+<div class="colors colors-row">
+  <!-- 所有顏色換成最高飽和度版本 -->
+  <div class="color-btn" style="background:hsl(340,100%,50%);" onclick="setColor('hsl(340,100%,50%)', this)" title="玫瑰紅"></div>
+  <div class="color-btn" style="background:hsl(325,100%,55%);" onclick="setColor('hsl(325,100%,55%)', this)" title="粉紅"></div>
+  <div class="color-btn" style="background:hsl(45,100%,50%);"  onclick="setColor('hsl(45,100%,50%)', this)"  title="金色"></div>
+  <div class="color-btn" style="background:hsl(0,0%,100%);"   onclick="setColor('hsl(0,0%,100%)', this)"   title="純白"></div>
+  <div class="color-btn" style="background:hsl(195,100%,50%);" onclick="setColor('hsl(195,100%,50%)', this)" title="天藍"></div>
+  <div class="color-btn" style="background:hsl(270,100%,65%);" onclick="setColor('hsl(270,100%,65%)', this)" title="紫色"></div>
+  <div class="color-btn" style="background:hsl(0,100%,50%);"  onclick="setColor('hsl(0,100%,50%)', this)"  title="正紅"></div>
+  <div class="color-btn" style="background:hsl(150,100%,40%);" onclick="setColor('hsl(150,100%,40%)', this)" title="翠綠"></div>
 </div>
+
+<button class="btn-off" onclick="lightsOff()">⬛ 關燈</button>
 
 <div class="section-title">抽獎</div>
 <div class="lottery-box">
@@ -204,7 +196,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
@@ -219,11 +211,24 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+  // ── 場景定義（高飽和色版本）──
   const scenes = {
-    entrance: { color: '#FF6B9D', bg: 'linear-gradient(135deg, #FF6B9D, #FF1493)', message: '💍 新人入場' },
-    cake:     { color: '#FFD700', bg: 'linear-gradient(135deg, #FFD700, #FFA500)', message: '🎂 切蛋糕囉！' },
-    dance:    { color: '#ffffff', bg: 'linear-gradient(135deg, #ffffff, #e0e0e0)', message: '🕊️ 第一支舞' },
-    farewell: { color: '#B8A9FF', bg: 'linear-gradient(135deg, #FF6B9D, #FFD700, #00E5FF)', message: '✨ 謝謝大家！' }
+    entrance: {
+      color: 'hsl(340,100%,50%)',
+      message: '💍 新人入場'
+    },
+    cake: {
+      color: 'hsl(45,100%,50%)',
+      message: '🎂 切蛋糕囉！'
+    },
+    dance: {
+      color: 'hsl(0,0%,100%)',
+      message: '🕊️ 第一支舞'
+    },
+    farewell: {
+      color: 'hsl(325,100%,55%)',
+      message: '✨ 謝謝大家！'
+    }
   };
 
   // 連線狀態
@@ -252,14 +257,31 @@
     document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
     const s = scenes[scene];
-    set(ref(db, 'control'), { type: 'scene', scene, color: s.color, bg: s.bg, message: s.message, ts: Date.now() });
+    // 送出 color + message，賓客端統一用 color 欄位
+    set(ref(db, 'control'), {
+      type: 'color',
+      color: s.color,
+      message: s.message,
+      ts: Date.now()
+    });
   };
 
   // 顏色選擇
   window.setColor = function(color, el) {
     document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
-    set(ref(db, 'control'), { type: 'color', color, bg: color, message: '', ts: Date.now() });
+    set(ref(db, 'control'), {
+      type: 'color',
+      color: color,
+      message: '',
+      ts: Date.now()
+    });
+  };
+
+  // 關燈
+  window.lightsOff = function() {
+    document.querySelectorAll('.scene-btn, .color-btn').forEach(b => b.classList.remove('active'));
+    set(ref(db, 'control'), { type: 'off', ts: Date.now() });
   };
 
   // 抽獎
