@@ -3,55 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>婚禮控台 | Storytrace</title>
+<title>活動控台 | Storytrace</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: #0a0a0a;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-height: 100vh;
-    padding: 32px 24px;
-  }
-  .header { text-align: center; margin-bottom: 40px; }
+  body { background: #0a0a0a; color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; min-height: 100vh; padding: 32px 24px; }
+  .header { text-align: center; margin-bottom: 24px; }
   .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
   .header p { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 6px; letter-spacing: 2px; text-transform: uppercase; }
 
+  /* ── Room 選擇器 ── */
+  .room-bar {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 14px 20px; margin-bottom: 16px;
+  }
+  .room-label { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 8px; }
+  .room-row { display: flex; gap: 8px; align-items: center; }
+  .room-input {
+    flex: 1; padding: 10px 14px; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
+    color: white; font-size: 14px; outline: none;
+  }
+  .room-input::placeholder { color: rgba(255,255,255,0.3); }
+  .room-btn {
+    padding: 10px 16px; background: white; color: black;
+    border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .room-btn:active { transform: scale(0.97); }
+
+  /* ── 活動類型 ── */
+  .type-row { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .type-btn {
+    flex: 1; min-width: 80px; padding: 10px 8px; text-align: center;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; cursor: pointer; color: rgba(255,255,255,0.5);
+    font-size: 12px; transition: all 0.2s;
+  }
+  .type-btn.active { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); color: white; }
+  .type-icon { font-size: 20px; margin-bottom: 4px; }
+
   .status-bar {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 32px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 14px 20px; display: flex; align-items: center;
+    gap: 10px; margin-bottom: 32px; font-size: 13px; color: rgba(255,255,255,0.5);
   }
   .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff4444; }
   .status-dot.connected { background: #00E5A0; }
   #statusText { flex: 1; }
   #guestCount { font-size: 12px; color: rgba(255,255,255,0.3); }
 
-  .section-title {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.3);
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
+  .section-title { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 14px; }
 
+  /* ── 場景 ── */
   .scenes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
   .scene-btn {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 20px 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: white;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 20px 16px; text-align: center;
+    cursor: pointer; transition: all 0.2s; color: white;
   }
   .scene-btn:active { transform: scale(0.96); }
   .scene-btn.active { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1); }
@@ -59,81 +66,115 @@
   .scene-name { font-size: 13px; font-weight: 600; }
   .scene-desc { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; }
 
-  /* 顏色按鈕 — 加大方便現場操作 */
-  .colors { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+  /* ── 顏色 ── */
+  .colors { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
   .color-btn {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
+    width: 52px; height: 52px; border-radius: 50%; border: 3px solid transparent;
+    cursor: pointer; transition: all 0.2s; position: relative;
   }
   .color-btn.active { border-color: white; transform: scale(1.15); }
   .color-btn::after {
-    content: attr(title);
-    position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 9px;
-    color: rgba(255,255,255,0.4);
-    white-space: nowrap;
+    content: attr(title); position: absolute; bottom: -18px; left: 50%;
+    transform: translateX(-50%); font-size: 9px; color: rgba(255,255,255,0.4); white-space: nowrap;
   }
-  .colors-row { margin-bottom: 36px; }
+  .colors-wrap { margin-bottom: 36px; }
 
-  /* 燈關掉按鈕 */
+  /* 自訂顏色 */
+  .custom-color-row { display: flex; gap: 10px; align-items: center; margin-bottom: 32px; }
+  .custom-color-input { width: 52px; height: 52px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.2); cursor: pointer; padding: 0; background: none; }
+  .custom-color-label { font-size: 12px; color: rgba(255,255,255,0.4); }
+
   .btn-off {
-    width: 100%;
-    padding: 14px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 12px;
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 1px;
-    margin-bottom: 32px;
-    transition: all 0.2s;
+    width: 100%; padding: 14px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: white; font-size: 14px; font-weight: 600;
+    cursor: pointer; letter-spacing: 1px; margin-bottom: 32px; transition: all 0.2s;
   }
   .btn-off:active { transform: scale(0.97); background: rgba(255,255,255,0.15); }
 
+  /* ── 廣播訊息 ── */
+  .broadcast-box { margin-bottom: 32px; }
+  .broadcast-row { display: flex; gap: 8px; }
+  .broadcast-input {
+    flex: 1; padding: 14px 16px; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+    color: white; font-size: 14px; outline: none;
+  }
+  .broadcast-input::placeholder { color: rgba(255,255,255,0.3); }
+  .broadcast-btn {
+    padding: 14px 20px; background: white; color: black;
+    border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .broadcast-btn:active { transform: scale(0.97); }
+
+  /* ── 抽獎 ── */
   .lottery-box {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 32px;
-    text-align: center;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 24px; margin-bottom: 32px; text-align: center;
   }
   .lottery-result { font-size: 32px; font-weight: 800; color: #FFD700; min-height: 48px; margin: 16px 0; letter-spacing: 2px; }
   .lottery-name { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
-
   .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; margin-bottom: 10px; }
   .btn:active { transform: scale(0.97); }
-  .btn-primary { background: white; color: black; }
-  .btn-danger { background: #ff4444; color: white; }
   .btn-gold { background: linear-gradient(135deg, #FFD700, #FFA500); color: black; }
+  .btn-danger { background: #ff4444; color: white; }
 
+  /* ── 賓客名單 ── */
   .guest-list {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    padding: 16px;
-    max-height: 200px;
-    overflow-y: auto;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 16px; max-height: 200px; overflow-y: auto; margin-bottom: 40px;
   }
-  .guest-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: rgba(255,255,255,0.6); }
+  .guest-item {
+    display: flex; align-items: center; gap: 10px; padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: rgba(255,255,255,0.6);
+  }
   .guest-item:last-child { border-bottom: none; }
   .guest-dot { width: 6px; height: 6px; border-radius: 50%; background: #00E5A0; flex-shrink: 0; }
+
+  /* ── 賓客端連結 ── */
+  .link-box {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 16px; margin-bottom: 32px;
+  }
+  .link-url { font-size: 11px; color: rgba(255,255,255,0.5); word-break: break-all; margin-bottom: 10px; line-height: 1.6; }
+  .btn-copy {
+    width: 100%; padding: 12px; background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+    color: white; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .btn-copy:active { transform: scale(0.97); }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>婚禮控台</h1>
+  <h1 id="headerTitle">活動控台</h1>
   <p>Storytrace × KAYON STUDIO</p>
+</div>
+
+<!-- Room 設定 -->
+<div class="room-bar">
+  <div class="room-label">場次 ID（Room）</div>
+  <div class="room-row">
+    <input type="text" id="roomInput" class="room-input" placeholder="輸入場次 ID，例如：wedding_0510" value="default">
+    <button class="room-btn" onclick="setRoom()">確認</button>
+  </div>
+</div>
+
+<!-- 活動類型 -->
+<div class="type-row" id="typeRow">
+  <div class="type-btn active" onclick="setEventType('wedding', this)">
+    <div class="type-icon">💍</div>婚禮
+  </div>
+  <div class="type-btn" onclick="setEventType('corporate', this)">
+    <div class="type-icon">🏢</div>企業
+  </div>
+  <div class="type-btn" onclick="setEventType('concert', this)">
+    <div class="type-icon">🎤</div>演唱會
+  </div>
+  <div class="type-btn" onclick="setEventType('party', this)">
+    <div class="type-icon">🎉</div>派對
+  </div>
 </div>
 
 <div class="status-bar">
@@ -142,45 +183,48 @@
   <span id="guestCount">賓客 0 人在線</span>
 </div>
 
-<div class="section-title">場景切換</div>
-<div class="scenes">
-  <div class="scene-btn" onclick="setScene('entrance', this)">
-    <div class="scene-icon">💍</div>
-    <div class="scene-name">新人入場</div>
-    <div class="scene-desc">玫瑰金光海</div>
-  </div>
-  <div class="scene-btn" onclick="setScene('cake', this)">
-    <div class="scene-icon">🎂</div>
-    <div class="scene-name">切蛋糕</div>
-    <div class="scene-desc">香檳金閃耀</div>
-  </div>
-  <div class="scene-btn" onclick="setScene('dance', this)">
-    <div class="scene-icon">🕊️</div>
-    <div class="scene-name">第一支舞</div>
-    <div class="scene-desc">純白浪漫</div>
-  </div>
-  <div class="scene-btn" onclick="setScene('farewell', this)">
-    <div class="scene-icon">✨</div>
-    <div class="scene-name">送客</div>
-    <div class="scene-desc">彩虹感謝</div>
-  </div>
+<!-- 賓客端連結 -->
+<div class="section-title">賓客掃碼連結</div>
+<div class="link-box">
+  <div class="link-url" id="guestLink">—</div>
+  <button class="btn-copy" onclick="copyLink()">📋 複製連結</button>
 </div>
 
-<div class="section-title">手動選色（高飽和版）</div>
-<div class="colors colors-row">
-  <!-- 所有顏色換成最高飽和度版本 -->
-  <div class="color-btn" style="background:hsl(340,100%,50%);" onclick="setColor('hsl(340,100%,50%)', this)" title="玫瑰紅"></div>
-  <div class="color-btn" style="background:hsl(325,100%,55%);" onclick="setColor('hsl(325,100%,55%)', this)" title="粉紅"></div>
-  <div class="color-btn" style="background:hsl(45,100%,50%);"  onclick="setColor('hsl(45,100%,50%)', this)"  title="金色"></div>
-  <div class="color-btn" style="background:hsl(0,0%,100%);"   onclick="setColor('hsl(0,0%,100%)', this)"   title="純白"></div>
-  <div class="color-btn" style="background:hsl(195,100%,50%);" onclick="setColor('hsl(195,100%,50%)', this)" title="天藍"></div>
-  <div class="color-btn" style="background:hsl(270,100%,65%);" onclick="setColor('hsl(270,100%,65%)', this)" title="紫色"></div>
-  <div class="color-btn" style="background:hsl(0,100%,50%);"  onclick="setColor('hsl(0,100%,50%)', this)"  title="正紅"></div>
-  <div class="color-btn" style="background:hsl(150,100%,40%);" onclick="setColor('hsl(150,100%,40%)', this)" title="翠綠"></div>
+<!-- 場景 -->
+<div class="section-title" id="sceneLabel">場景切換</div>
+<div class="scenes" id="scenesGrid"></div>
+
+<!-- 顏色 -->
+<div class="section-title">手動選色</div>
+<div class="colors-wrap">
+  <div class="colors" id="colorsGrid">
+    <div class="color-btn" style="background:hsl(340,100%,50%);" onclick="setColor('hsl(340,100%,50%)', this)" title="玫瑰紅"></div>
+    <div class="color-btn" style="background:hsl(325,100%,55%);" onclick="setColor('hsl(325,100%,55%)', this)" title="粉紅"></div>
+    <div class="color-btn" style="background:hsl(45,100%,50%);"  onclick="setColor('hsl(45,100%,50%)', this)"  title="金色"></div>
+    <div class="color-btn" style="background:hsl(0,0%,100%);"   onclick="setColor('hsl(0,0%,100%)', this)"   title="純白"></div>
+    <div class="color-btn" style="background:hsl(195,100%,50%);" onclick="setColor('hsl(195,100%,50%)', this)" title="天藍"></div>
+    <div class="color-btn" style="background:hsl(270,100%,65%);" onclick="setColor('hsl(270,100%,65%)', this)" title="紫色"></div>
+    <div class="color-btn" style="background:hsl(0,100%,50%);"   onclick="setColor('hsl(0,100%,50%)', this)"  title="正紅"></div>
+    <div class="color-btn" style="background:hsl(150,100%,40%);" onclick="setColor('hsl(150,100%,40%)', this)" title="翠綠"></div>
+  </div>
+  <div class="custom-color-row">
+    <input type="color" id="customColor" class="custom-color-input" value="#ff00ff">
+    <span class="custom-color-label">自訂顏色 → <button onclick="useCustomColor()" style="background:none;border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:12px;text-decoration:underline;">套用</button></span>
+  </div>
 </div>
 
 <button class="btn-off" onclick="lightsOff()">⬛ 關燈</button>
 
+<!-- 廣播訊息 -->
+<div class="section-title">廣播訊息</div>
+<div class="broadcast-box">
+  <div class="broadcast-row">
+    <input type="text" id="broadcastMsg" class="broadcast-input" placeholder="輸入要顯示給所有賓客的訊息">
+    <button class="broadcast-btn" onclick="sendMessage()">送出</button>
+  </div>
+</div>
+
+<!-- 抽獎 -->
 <div class="section-title">抽獎</div>
 <div class="lottery-box">
   <div class="lottery-result" id="lotteryResult">—</div>
@@ -189,6 +233,7 @@
   <button class="btn btn-danger" onclick="resetLottery()" style="margin-top:8px;">重置抽獎</button>
 </div>
 
+<!-- 賓客名單 -->
 <div class="section-title">賓客名單（<span id="onlineCount">0</span> 人在線）</div>
 <div class="guest-list" id="guestList">
   <div style="text-align:center; color:rgba(255,255,255,0.2); font-size:12px; padding:20px;">等待賓客加入...</div>
@@ -196,7 +241,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getDatabase, ref, set, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
@@ -211,96 +256,168 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // ── 場景定義（高飽和色版本）──
-  const scenes = {
-    entrance: {
-      color: 'hsl(340,100%,50%)',
-      message: '💍 新人入場'
-    },
-    cake: {
-      color: 'hsl(45,100%,50%)',
-      message: '🎂 切蛋糕囉！'
-    },
-    dance: {
-      color: 'hsl(0,0%,100%)',
-      message: '🕊️ 第一支舞'
-    },
-    farewell: {
-      color: 'hsl(325,100%,55%)',
-      message: '✨ 謝謝大家！'
-    }
+  // ── 狀態 ──
+  let currentRoom = 'default';
+  let currentEventType = 'wedding';
+  let guests = {};
+  let guestListener = null;
+
+  // ── 場景定義（每種活動類型） ──
+  const scenesByType = {
+    wedding: [
+      { key: 'entrance', icon: '💍', name: '新人入場',   desc: '玫瑰金光海',  color: 'hsl(340,100%,50%)', message: '💍 新人入場' },
+      { key: 'cake',     icon: '🎂', name: '切蛋糕',     desc: '香檳金閃耀',  color: 'hsl(45,100%,50%)',  message: '🎂 切蛋糕囉！' },
+      { key: 'dance',    icon: '🕊️', name: '第一支舞',   desc: '純白浪漫',    color: 'hsl(0,0%,100%)',    message: '🕊️ 第一支舞' },
+      { key: 'farewell', icon: '✨', name: '送客',        desc: '感謝光',      color: 'hsl(325,100%,55%)', message: '✨ 謝謝大家！' },
+    ],
+    corporate: [
+      { key: 'open',    icon: '🚀', name: '開場',     desc: '藍光啟動',    color: 'hsl(220,100%,55%)', message: '🚀 活動開始！' },
+      { key: 'award',   icon: '🏆', name: '頒獎',     desc: '金光閃耀',    color: 'hsl(45,100%,50%)',  message: '🏆 頒獎時刻' },
+      { key: 'cheer',   icon: '🎉', name: '歡呼',     desc: '彩色狂歡',    color: 'hsl(270,100%,65%)', message: '🎉 掌聲鼓勵！' },
+      { key: 'close',   icon: '🙏', name: '感謝',     desc: '溫暖橘光',    color: 'hsl(30,100%,55%)',  message: '🙏 感謝參與！' },
+    ],
+    concert: [
+      { key: 'intro',   icon: '🎵', name: '開場',     desc: '紫光震撼',    color: 'hsl(270,100%,55%)', message: '🎵 演出開始！' },
+      { key: 'peak',    icon: '🔥', name: '高潮',     desc: '紅光燃燒',    color: 'hsl(0,100%,50%)',   message: '🔥 HIGH 起來！' },
+      { key: 'slow',    icon: '🌙', name: '慢歌',     desc: '藍白浪漫',    color: 'hsl(0,0%,95%)',     message: '🌙 搖擺起來' },
+      { key: 'encore',  icon: '⭐', name: 'ENCORE',   desc: '金光謝幕',    color: 'hsl(45,100%,50%)',  message: '⭐ 安可！' },
+    ],
+    party: [
+      { key: 'start',   icon: '🎊', name: '開趴',     desc: '彩色狂歡',    color: 'hsl(325,100%,55%)', message: '🎊 開始囉！' },
+      { key: 'game',    icon: '🎮', name: '遊戲',     desc: '藍光競技',    color: 'hsl(195,100%,50%)', message: '🎮 遊戲時間！' },
+      { key: 'dance',   icon: '💃', name: '舞池',     desc: '紫光搖擺',    color: 'hsl(270,100%,65%)', message: '💃 一起跳！' },
+      { key: 'cheer',   icon: '🥂', name: '乾杯',     desc: '金光閃耀',    color: 'hsl(45,100%,50%)',  message: '🥂 乾杯！' },
+    ],
   };
 
-  // 連線狀態
+  // ── 渲染場景按鈕 ──
+  function renderScenes() {
+    const grid = document.getElementById('scenesGrid');
+    const scenes = scenesByType[currentEventType] || scenesByType.wedding;
+    grid.innerHTML = scenes.map(s => `
+      <div class="scene-btn" onclick="sendScene('${s.key}', this)" data-key="${s.key}">
+        <div class="scene-icon">${s.icon}</div>
+        <div class="scene-name">${s.name}</div>
+        <div class="scene-desc">${s.desc}</div>
+      </div>
+    `).join('');
+  }
+
+  // ── 活動類型切換 ──
+  window.setEventType = function(type, el) {
+    currentEventType = type;
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    renderScenes();
+    updateGuestLink();
+  };
+
+  // ── Room 設定 ──
+  window.setRoom = function() {
+    const val = document.getElementById('roomInput').value.trim().replace(/\s+/g, '_') || 'default';
+    currentRoom = val;
+    document.getElementById('roomInput').value = val;
+    updateGuestLink();
+    // 重新監聽新 room 的賓客
+    if (guestListener) off(guestListener);
+    listenGuests();
+  };
+
+  // ── 賓客端連結 ──
+  const BASE = 'https://storytrace.karbonxgaiaentertainment.com/wedding-guest.html';
+  function updateGuestLink() {
+    const url = `${BASE}?event=${currentEventType}&room=${currentRoom}`;
+    document.getElementById('guestLink').textContent = url;
+  }
+  window.copyLink = function() {
+    const url = document.getElementById('guestLink').textContent;
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.querySelector('.btn-copy');
+      btn.textContent = '✅ 已複製！';
+      setTimeout(() => btn.textContent = '📋 複製連結', 2000);
+    });
+  };
+
+  // ── Firebase 連線 ──
   document.getElementById('statusDot').classList.add('connected');
   document.getElementById('statusText').innerText = '已連線';
 
-  // 監聽賓客
-  let guests = {};
-  onValue(ref(db, 'guests'), (snap) => {
-    guests = snap.val() || {};
-    const count = Object.keys(guests).length;
-    document.getElementById('guestCount').innerText = `賓客 ${count} 人在線`;
-    document.getElementById('onlineCount').innerText = count;
-    const list = document.getElementById('guestList');
-    if (count === 0) {
-      list.innerHTML = '<div style="text-align:center; color:rgba(255,255,255,0.2); font-size:12px; padding:20px;">等待賓客加入...</div>';
-    } else {
-      list.innerHTML = Object.entries(guests).map(([k, v]) =>
-        `<div class="guest-item"><div class="guest-dot"></div>${v.name || '賓客'} #${k.slice(-4)}</div>`
-      ).join('');
-    }
-  });
+  function listenGuests() {
+    onValue(ref(db, `rooms/${currentRoom}/guests`), (snap) => {
+      guests = snap.val() || {};
+      const count = Object.keys(guests).length;
+      document.getElementById('guestCount').innerText = `賓客 ${count} 人在線`;
+      document.getElementById('onlineCount').innerText = count;
+      const list = document.getElementById('guestList');
+      if (count === 0) {
+        list.innerHTML = '<div style="text-align:center; color:rgba(255,255,255,0.2); font-size:12px; padding:20px;">等待賓客加入...</div>';
+      } else {
+        list.innerHTML = Object.entries(guests).map(([k, v]) =>
+          `<div class="guest-item"><div class="guest-dot"></div>${v.name || '賓客'} #${k.slice(-4)}</div>`
+        ).join('');
+      }
+    });
+  }
 
-  // 場景切換
-  window.setScene = function(scene, el) {
+  // ── 場景送出 ──
+  window.sendScene = function(key, el) {
     document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
-    const s = scenes[scene];
-    // 送出 color + message，賓客端統一用 color 欄位
-    set(ref(db, 'control'), {
-      type: 'color',
-      color: s.color,
-      message: s.message,
-      ts: Date.now()
+    const scene = (scenesByType[currentEventType] || []).find(s => s.key === key);
+    if (!scene) return;
+    set(ref(db, `rooms/${currentRoom}/control`), {
+      type: 'color', color: scene.color, message: scene.message, ts: Date.now()
     });
   };
 
-  // 顏色選擇
+  // ── 顏色 ──
   window.setColor = function(color, el) {
     document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
-    set(ref(db, 'control'), {
-      type: 'color',
-      color: color,
-      message: '',
-      ts: Date.now()
-    });
+    set(ref(db, `rooms/${currentRoom}/control`), { type: 'color', color, message: '', ts: Date.now() });
   };
 
-  // 關燈
+  window.useCustomColor = function() {
+    const color = document.getElementById('customColor').value;
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    set(ref(db, `rooms/${currentRoom}/control`), { type: 'color', color, message: '', ts: Date.now() });
+  };
+
+  // ── 關燈 ──
   window.lightsOff = function() {
     document.querySelectorAll('.scene-btn, .color-btn').forEach(b => b.classList.remove('active'));
-    set(ref(db, 'control'), { type: 'off', ts: Date.now() });
+    set(ref(db, `rooms/${currentRoom}/control`), { type: 'off', ts: Date.now() });
   };
 
-  // 抽獎
+  // ── 廣播訊息 ──
+  window.sendMessage = function() {
+    const msg = document.getElementById('broadcastMsg').value.trim();
+    if (!msg) return;
+    set(ref(db, `rooms/${currentRoom}/control`), { type: 'message', message: msg, ts: Date.now() });
+    document.getElementById('broadcastMsg').value = '';
+  };
+
+  // ── 抽獎 ──
   window.runLottery = function() {
     const keys = Object.keys(guests);
     if (keys.length === 0) { alert('目前沒有賓客在線！'); return; }
     const winner = keys[Math.floor(Math.random() * keys.length)];
     const winnerData = guests[winner];
-    const num = winner.slice(-4).toUpperCase();
-    document.getElementById('lotteryResult').innerText = `#${num}`;
+    document.getElementById('lotteryResult').innerText = `#${winner.slice(-4).toUpperCase()}`;
     document.getElementById('lotteryName').innerText = winnerData.name || '幸運賓客';
-    set(ref(db, 'control'), { type: 'lottery', winner, ts: Date.now() });
+    set(ref(db, `rooms/${currentRoom}/control`), { type: 'lottery', winner, ts: Date.now() });
   };
 
   window.resetLottery = function() {
     document.getElementById('lotteryResult').innerText = '—';
     document.getElementById('lotteryName').innerText = '按下抽獎開始';
-    set(ref(db, 'control'), { type: 'idle', ts: Date.now() });
+    set(ref(db, `rooms/${currentRoom}/control`), { type: 'idle', ts: Date.now() });
   };
+
+  // ── 初始化 ──
+  renderScenes();
+  updateGuestLink();
+  listenGuests();
 </script>
 </body>
 </html>

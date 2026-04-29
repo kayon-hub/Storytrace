@@ -3,35 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>婚禮 | Storytrace</title>
+<title>活動燈光 | Storytrace</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: #000;
-    color: white;
+    background: #000; color: white;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
+    min-height: 100vh; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    overflow: hidden;
-    transition: background 1.2s ease;
+    overflow: hidden; transition: background 1.2s ease;
   }
   #bgGlow {
     position: fixed; inset: 0; opacity: 0;
     transition: opacity 1.2s ease, background-color 1.2s ease;
-    z-index: 0;
-    filter: saturate(2) brightness(1.2);
+    z-index: 0; filter: saturate(2) brightness(1.2);
   }
   #lightOrbs {
-    position: fixed; inset: 0;
-    pointer-events: none; z-index: 1; opacity: 0;
-    transition: opacity 1.2s ease;
+    position: fixed; inset: 0; pointer-events: none;
+    z-index: 1; opacity: 0; transition: opacity 1.2s ease;
   }
   .orb {
     position: absolute; border-radius: 50%;
-    filter: blur(28px);
-    animation: float 4s ease-in-out infinite;
-    opacity: 0.95;
+    filter: blur(28px); animation: float 4s ease-in-out infinite; opacity: 0.95;
   }
   @keyframes float {
     0%,100% { transform: translateY(0) scale(1); }
@@ -44,26 +37,26 @@
   .join-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 40px; line-height: 1.6; }
   .name-input {
     width: 100%; padding: 16px 20px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
     border-radius: 16px; color: white; font-size: 16px;
     text-align: center; margin-bottom: 16px; outline: none; -webkit-appearance: none;
   }
   .name-input::placeholder { color: rgba(255,255,255,0.3); }
   .join-btn {
     width: 100%; padding: 16px; background: white; color: black;
-    border: none; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 1px;
+    border: none; border-radius: 16px; font-size: 15px; font-weight: 700;
+    cursor: pointer; letter-spacing: 1px;
   }
   .join-btn:active { transform: scale(0.97); }
   #mainScreen { display: none; flex-direction: column; align-items: center; width: 100%; }
-  .wedding-photo {
+  .event-photo {
     width: 160px; height: 160px; border-radius: 50%;
     background: rgba(255,255,255,0.1); border: 3px solid rgba(255,255,255,0.2);
     display: flex; align-items: center; justify-content: center;
     font-size: 64px; margin-bottom: 28px; transition: box-shadow 1s; overflow: hidden;
   }
-  .couple-name { font-size: 26px; font-weight: 800; letter-spacing: 3px; margin-bottom: 6px; }
-  .wedding-date { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 40px; }
+  .event-title { font-size: 26px; font-weight: 800; letter-spacing: 3px; margin-bottom: 6px; }
+  .event-subtitle { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 40px; }
   .scene-message {
     font-size: 22px; font-weight: 700; min-height: 32px; margin-bottom: 32px;
     opacity: 0; transform: translateY(10px);
@@ -88,21 +81,21 @@
 <div id="lightOrbs"></div>
 <div id="winnerOverlay" class="winner-overlay">
   <div class="winner-emoji">🎉</div>
-  <div class="winner-text">恭喜你！</div>
-  <div class="winner-sub">你被選中了！</div>
+  <div class="winner-text" id="winnerText">恭喜你！</div>
+  <div class="winner-sub" id="winnerSub">你被選中了！</div>
 </div>
 <div class="content">
   <div id="joinScreen">
-    <div class="logo">💍</div>
-    <div class="join-title">加入婚禮燈海</div>
-    <div class="join-sub">輸入你的名字<br>一起點亮這個美好的夜晚</div>
+    <div class="logo" id="joinLogo">✨</div>
+    <div class="join-title" id="joinTitle">加入活動燈海</div>
+    <div class="join-sub" id="joinSub">輸入你的名字<br>一起點亮這個美好的時刻</div>
     <input type="text" id="nameInput" class="name-input" placeholder="你的名字" maxlength="20">
-    <button class="join-btn" onclick="joinWedding()">加入 ✨</button>
+    <button class="join-btn" onclick="joinEvent()">加入 ✨</button>
   </div>
   <div id="mainScreen">
-    <div id="weddingPhoto" class="wedding-photo">💑</div>
-    <div id="coupleName" class="couple-name">新郎 & 新娘</div>
-    <div id="weddingDate" class="wedding-date">FOREVER BEGINS TODAY</div>
+    <div id="eventPhoto" class="event-photo">✨</div>
+    <div id="eventTitle" class="event-title">活動名稱</div>
+    <div id="eventSubtitle" class="event-subtitle">POWERED BY STORYTRACE</div>
     <div id="sceneMessage" class="scene-message"></div>
     <div id="myId"></div>
     <div class="brand">STORYTRACE · KAYON STUDIO</div>
@@ -111,6 +104,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, set, onValue, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
     authDomain: "storytrace-wedding.firebaseapp.com",
@@ -120,9 +114,64 @@
     messagingSenderId: "865058497448",
     appId: "1:865058497448:web:f604e62c4c7407f464b39d"
   };
+
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
   let guestRef = null;
+
+  // ── 讀取網址參數 ──
+  const params = new URLSearchParams(window.location.search);
+  const eventType = params.get('event') || 'wedding';   // wedding / corporate / concert / party
+  const roomId    = params.get('room')  || 'default';   // 不同場次用不同 room，互不干擾
+
+  // ── 活動類型預設值 ──
+  const eventDefaults = {
+    wedding: {
+      logo: '💍', joinTitle: '加入婚禮燈海',
+      joinSub: '輸入你的名字<br>一起點亮這個美好的夜晚',
+      photo: '💑', title: params.get('title') || '新郎 & 新娘',
+      subtitle: params.get('subtitle') || 'FOREVER BEGINS TODAY',
+      winnerText: '恭喜你！', winnerSub: '你被選中了！'
+    },
+    corporate: {
+      logo: '🏢', joinTitle: '加入活動互動',
+      joinSub: '輸入你的名字<br>一起參與這場精彩活動',
+      photo: '⭐', title: params.get('title') || '企業活動',
+      subtitle: params.get('subtitle') || 'POWERED BY STORYTRACE',
+      winnerText: '恭喜得獎！', winnerSub: '請至台前領獎'
+    },
+    concert: {
+      logo: '🎤', joinTitle: '加入演唱會燈海',
+      joinSub: '輸入你的名字<br>一起成為今晚的主角',
+      photo: '🎵', title: params.get('title') || '演唱會',
+      subtitle: params.get('subtitle') || 'LIVE · STORYTRACE',
+      winnerText: '恭喜你！', winnerSub: '你被選中了！'
+    },
+    party: {
+      logo: '🎉', joinTitle: '加入派對燈海',
+      joinSub: '輸入你的名字<br>一起嗨起來！',
+      photo: '🎊', title: params.get('title') || '派對活動',
+      subtitle: params.get('subtitle') || "LET'S PARTY",
+      winnerText: '恭喜得獎！', winnerSub: '幸運的你！'
+    }
+  };
+
+  const ev = eventDefaults[eventType] || eventDefaults.wedding;
+
+  // 套用文字
+  document.getElementById('joinLogo').textContent    = ev.logo;
+  document.getElementById('joinTitle').textContent   = ev.joinTitle;
+  document.getElementById('joinSub').innerHTML       = ev.joinSub;
+  document.getElementById('eventPhoto').textContent  = ev.photo;
+  document.getElementById('eventTitle').textContent  = ev.title;
+  document.getElementById('eventSubtitle').textContent = ev.subtitle;
+  document.getElementById('winnerText').textContent  = ev.winnerText;
+  document.getElementById('winnerSub').textContent   = ev.winnerSub;
+
+  // 動態 title
+  document.title = ev.title + ' | Storytrace';
+
+  // ── Orb ──
   function createOrbs() {
     const container = document.getElementById('lightOrbs');
     container.innerHTML = '';
@@ -135,10 +184,13 @@
       });
   }
   createOrbs();
-  window.joinWedding = function() {
+
+  // ── 加入 ──
+  window.joinEvent = function() {
     const name = document.getElementById('nameInput').value.trim();
     if (!name) { document.getElementById('nameInput').focus(); return; }
-    guestRef = push(ref(db, 'guests'));
+    // room 隔離：不同活動用不同 Firebase 路徑
+    guestRef = push(ref(db, `rooms/${roomId}/guests`));
     set(guestRef, { name, joinedAt: Date.now() });
     window.addEventListener('beforeunload', () => { if (guestRef) set(guestRef, null); });
     document.getElementById('joinScreen').style.display = 'none';
@@ -147,8 +199,10 @@
     listenToControl();
     if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{});
   };
+
+  // ── 監聽控台 ──
   function listenToControl() {
-    onValue(ref(db, 'control'), (snap) => {
+    onValue(ref(db, `rooms/${roomId}/control`), (snap) => {
       const cmd = snap.val();
       if (!cmd) return;
       if (cmd.type === 'color') setLight(cmd.color, cmd.message || '');
@@ -156,6 +210,8 @@
       else if (cmd.type === 'lottery' && guestRef && cmd.winner === guestRef.key) showWinner();
     });
   }
+
+  // ── 亮燈 ──
   function setLight(color, message) {
     const bgGlow = document.getElementById('bgGlow');
     const lightOrbs = document.getElementById('lightOrbs');
@@ -164,28 +220,32 @@
     bgGlow.style.opacity = '1';
     document.querySelectorAll('.orb').forEach(o => o.style.background = color);
     lightOrbs.style.opacity = '1';
-    document.getElementById('weddingPhoto').style.boxShadow = `0 0 80px ${color}, 0 0 160px ${color}`;
+    document.getElementById('eventPhoto').style.boxShadow = `0 0 80px ${color}, 0 0 160px ${color}`;
     if (message) showMessage(message);
   }
+
   function lightsOff() {
     document.getElementById('bgGlow').style.opacity = '0';
     document.getElementById('lightOrbs').style.opacity = '0';
     document.body.style.background = '#000';
-    document.getElementById('weddingPhoto').style.boxShadow = 'none';
+    document.getElementById('eventPhoto').style.boxShadow = 'none';
   }
+
   function showMessage(msg) {
     const el = document.getElementById('sceneMessage');
     el.classList.remove('show');
     setTimeout(() => { el.textContent = msg; el.classList.add('show'); }, 100);
   }
+
   function showWinner() {
     const overlay = document.getElementById('winnerOverlay');
     overlay.style.display = 'flex';
     if (navigator.vibrate) navigator.vibrate([300,100,300,100,500]);
     setTimeout(() => { overlay.style.display = 'none'; }, 6000);
   }
+
   document.getElementById('nameInput').addEventListener('keypress', e => {
-    if (e.key === 'Enter') window.joinWedding();
+    if (e.key === 'Enter') window.joinEvent();
   });
 </script>
 </body>
