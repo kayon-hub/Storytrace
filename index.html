@@ -7,15 +7,15 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta property="og:title" content="點擊收聽 | Storytrace × KAYON STUDIO">
+<meta property="og:title" content="點擊收聽『瑤池之光』">
 <meta property="og:description" content="Storytrace × KAYON STUDIO">
-<meta property="og:image" content="https://kayon-hub.github.io/Storytrace/ICON.png">
+<meta property="og:image" content="https://kayon-hub.github.io/Storytrace/playerui.png">
 <meta property="og:url" content="https://kayon-hub.github.io/Storytrace/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="點擊收聽 | Storytrace × KAYON STUDIO">
+<meta name="twitter:title" content="點擊收聽『瑤池之光』">
 <meta name="twitter:description" content="Storytrace × KAYON STUDIO">
-<meta name="twitter:image" content="https://kayon-hub.github.io/Storytrace/ICON.png">
+<meta name="twitter:image" content="https://kayon-hub.github.io/Storytrace/playerui.png">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -23,261 +23,263 @@
 <link rel="apple-touch-icon" href="ICON.png">
 <meta name="theme-color" content="#000000">
 <style>
-  :root { --accent: #00E5FF; --glass: rgba(255,255,255,0.08); }
+  :root {
+    --accent: #00E5FF;
+    --glass: rgba(255, 255, 255, 0.08);
+  }
   * { box-sizing: border-box; }
-  body { margin: 0; background: #000; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: white; }
-
-  /* ── 介紹頁 ── */
-  #landingPage { display: none; flex-direction: column; align-items: center; padding: 60px 32px; text-align: center; }
-  .st-brand { font-size: 10px; letter-spacing: 4px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 48px; }
-  .st-icon { width: 72px; height: 72px; border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 36px; font-size: 28px; }
-  .st-title { font-size: 32px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px; background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .st-tagline { font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 48px; }
-  .st-divider { width: 1px; height: 40px; background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent); margin: 0 auto 48px; }
-  .st-body { max-width: 320px; font-size: 15px; line-height: 2; color: rgba(255,255,255,0.65); margin-bottom: 56px; }
-  .st-body strong { color: rgba(255,255,255,0.9); font-weight: 600; }
-
-  /* ── NFC 動畫 ── */
-  .nfc-scene { position: relative; width: 280px; height: 200px; margin: 0 auto 56px; }
-  .nfc-phone { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 80px; height: 140px; background: #111; border: 2px solid rgba(255,255,255,0.12); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .nfc-phone-screen { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 10px; opacity: 0; transition: opacity 0.6s ease; }
-  .nfc-phone-screen.on { opacity: 1; }
-  .nfc-mini-cover { width: 44px; height: 44px; border-radius: 6px; background: linear-gradient(135deg, #0a3a4a, #0d5c7a); display: flex; align-items: center; justify-content: center; font-size: 18px; }
-  .nfc-mini-song { font-size: 6px; color: rgba(255,255,255,0.8); font-weight: 600; letter-spacing: 0.5px; }
-  .nfc-mini-bar { width: 46px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-  .nfc-mini-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00E5FF, #0066FF); border-radius: 2px; transition: width 1.5s ease; }
-  .nfc-mini-fill.playing { width: 65%; }
-  .nfc-card { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 80px; height: 80px; animation: nfcTap 3s ease-in-out infinite; }
-  @keyframes nfcTap { 0%,40%{left:20px} 65%{left:110px} 80%{left:100px} 90%{left:110px} 100%{left:20px} }
-  .nfc-outer { width: 80px; height: 80px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15); animation: nfcFloat 3s ease-in-out infinite; }
-  @keyframes nfcFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-  .nfc-inner { width: 64px; height: 64px; background: linear-gradient(135deg,#0a0a1a,#1a1a3e,#0a0a1a); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
-  .nfc-text { font-size: 7px; color: rgba(255,255,255,0.6); letter-spacing: 1px; font-weight: 600; }
-  .nfc-sub { font-size: 5px; color: rgba(255,255,255,0.3); letter-spacing: 0.5px; }
-  .nfc-ripple { position: absolute; right: 48px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; pointer-events: none; }
-  .nfc-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); border: 1px solid rgba(0,229,255,0.6); border-radius: 50%; width: 20px; height: 20px; opacity: 0; }
-  .nfc-ring.r1 { animation: rippleOut 3s ease-out infinite; }
-  .nfc-ring.r2 { animation: rippleOut 3s ease-out infinite; animation-delay: 0.3s; }
-  .nfc-ring.r3 { animation: rippleOut 3s ease-out infinite; animation-delay: 0.6s; }
-  @keyframes rippleOut { 0%,60%{transform:translate(-50%,-50%) scale(0);opacity:0} 70%{transform:translate(-50%,-50%) scale(1);opacity:0.8} 100%{transform:translate(-50%,-50%) scale(4);opacity:0} }
-  .nfc-label-l { position: absolute; left: 20px; bottom: 0; font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; width: 80px; text-align: center; }
-  .nfc-label-r { position: absolute; right: 20px; bottom: 0; font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; width: 80px; text-align: center; }
-
-  .st-steps { display: flex; flex-direction: column; gap: 20px; max-width: 300px; margin: 0 auto 56px; text-align: left; }
-  .st-step { display: flex; align-items: flex-start; gap: 16px; }
-  .st-step-num { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(0,229,255,0.3); color: #00E5FF; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-  .st-step-text { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.55); }
-  .st-step-text strong { color: rgba(255,255,255,0.85); font-weight: 600; display: block; font-size: 14px; margin-bottom: 2px; }
-  .st-divider2 { width: 40px; height: 1px; background: rgba(255,255,255,0.1); margin: 0 auto 40px; }
-  .st-memory { max-width: 300px; font-size: 13px; line-height: 2; color: rgba(255,255,255,0.35); font-style: italic; margin-bottom: 56px; }
-  .st-footer { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.2); text-transform: uppercase; padding-bottom: 48px; }
-
-  /* ── 播放器 ── */
-  #playerPage { display: none; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-  .bg-cover { position: fixed; inset: 0; background-size: cover; background-position: center; filter: blur(60px) brightness(0.3) saturate(1.5); transform: scale(1.1); z-index: 0; }
-  .player { width: 88%; max-width: 380px; background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 35px 30px; text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8); z-index: 1; position: relative; }
-  .brand-p { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.3); margin-bottom: 20px; text-transform: uppercase; }
+  body {
+    margin: 0;
+    background: #000;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: white;
+    overflow: hidden;
+  }
+  .bg-cover {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(60px) brightness(0.3) saturate(1.5);
+    transform: scale(1.1);
+    z-index: 0;
+  }
+  .player {
+    width: 88%;
+    max-width: 380px;
+    background: var(--glass);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 40px;
+    padding: 35px 30px;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+    z-index: 1;
+    position: relative;
+  }
+  .brand {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
   .cover-box { width: 100%; aspect-ratio: 1/1; margin-bottom: 25px; }
-  .cover { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; box-shadow: 0 15px 45px rgba(0,229,255,0.15); transition: transform 0.5s ease, box-shadow 0.5s ease; }
-  .playing .cover { transform: scale(1.04); box-shadow: 0 20px 60px rgba(0,229,255,0.35); }
+  .cover {
+    width: 100%; height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 15px 45px rgba(0, 229, 255, 0.15);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+  .playing .cover {
+    transform: scale(1.04);
+    box-shadow: 0 20px 60px rgba(0, 229, 255, 0.35);
+  }
   .info { margin-bottom: 20px; }
   .title { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: 1px; }
   .artist { color: rgba(255,255,255,0.45); font-size: 13px; margin-top: 8px; line-height: 1.7; white-space: pre-wrap; }
   .progress-area { width: 100%; cursor: pointer; margin-top: 18px; padding: 6px 0; }
   .bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
-  .bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #00E5FF, #0066FF); border-radius: 10px; transition: width 0.5s linear; }
+  .bar-fill {
+    width: 0%; height: 100%;
+    background: linear-gradient(90deg, #00E5FF, #0066FF);
+    border-radius: 10px;
+    transition: width 0.5s linear;
+  }
   .time-labels { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 7px; }
   .controls { display: flex; justify-content: space-around; align-items: center; margin-top: 22px; }
-  button { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; transition: color 0.2s, transform 0.15s; font-size: 22px; display: flex; align-items: center; justify-content: center; padding: 8px; }
+  button {
+    background: none; border: none; color: rgba(255,255,255,0.6);
+    cursor: pointer; transition: color 0.2s, transform 0.15s;
+    font-size: 22px; display: flex; align-items: center; justify-content: center; padding: 8px;
+  }
   button:hover { color: white; }
-  .play-btn { width: 68px; height: 68px; background: white; color: black; border-radius: 50%; font-size: 28px; box-shadow: 0 8px 24px rgba(255,255,255,0.12); }
+  .play-btn {
+    width: 68px; height: 68px;
+    background: white; color: black;
+    border-radius: 50%; font-size: 28px;
+    box-shadow: 0 8px 24px rgba(255,255,255,0.12);
+  }
   button:active { transform: scale(0.92); }
-  .lyrics-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 100; display: none; flex-direction: column; box-sizing: border-box; }
-  .lyrics-header { padding: 50px 36px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .lyrics-panel {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100; display: none; flex-direction: column; box-sizing: border-box;
+  }
+  .lyrics-header {
+    padding: 50px 36px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
   .lyrics-song-title { font-size: 18px; font-weight: 700; }
   .lyrics-song-artist { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
   .lyrics-body { flex: 1; overflow-y: auto; padding: 30px 36px 80px; }
   .lyrics-body::-webkit-scrollbar { width: 0; }
-  .lyric-line { font-size: 20px; line-height: 2.4; font-weight: 600; color: rgba(255,255,255,0.25); transition: color 0.4s ease, font-size 0.3s ease; cursor: pointer; }
+  .lyric-line {
+    font-size: 20px; line-height: 2.4; font-weight: 600;
+    color: rgba(255,255,255,0.25);
+    transition: color 0.4s ease, font-size 0.3s ease;
+    cursor: pointer;
+  }
   .lyric-line.active { color: #fff; font-size: 24px; }
   .lyric-line.passed { color: rgba(255,255,255,0.45); }
-  .breath-line { display: flex; justify-content: center; align-items: center; height: 48px; cursor: pointer; }
-  .breath-circle { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.4s ease, transform 0.4s ease; }
-  .breath-line.active .breath-circle { background: rgba(255,255,255,0.9); transform: scale(2); }
-  .breath-line.passed .breath-circle { background: rgba(255,255,255,0.4); }
-  .close-lyrics { position: absolute; top: 48px; right: 28px; font-size: 28px; color: rgba(255,255,255,0.4); padding: 8px; }
+  .breath-line {
+    display: flex; justify-content: center; align-items: center;
+    height: 48px; cursor: pointer;
+  }
+  .breath-circle {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transition: background 0.4s ease, transform 0.4s ease;
+  }
+  .breath-line.active .breath-circle {
+    background: rgba(255,255,255,0.9);
+    transform: scale(2);
+  }
+  .breath-line.passed .breath-circle {
+    background: rgba(255,255,255,0.4);
+    transform: scale(1);
+  }
+  .close-lyrics {
+    position: absolute; top: 48px; right: 28px;
+    font-size: 28px; color: rgba(255,255,255,0.4); padding: 8px;
+  }
   .close-lyrics:hover { color: white; }
+
+  /* 倒數 3.2.1 */
+  .countdown-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px;
+    cursor: pointer;
+  }
+  .countdown-num {
+    font-size: 36px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.15);
+    transition: color 0.2s ease, transform 0.2s ease;
+    letter-spacing: 0.05em;
+  }
+  .countdown-line.active .countdown-num {
+    color: #00E5FF;
+    transform: scale(1.4);
+    text-shadow: 0 0 20px rgba(0,229,255,0.6);
+  }
+  .countdown-line.passed .countdown-num {
+    color: rgba(255,255,255,0.3);
+    transform: scale(1);
+  }
+
+  /* 樂器段落 */
+  .instrumental-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 52px;
+    cursor: pointer;
+  }
+  .instrumental-text {
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: rgba(255,255,255,0.2);
+    transition: color 0.4s ease;
+  }
+  .instrumental-line.active .instrumental-text {
+    color: rgba(255,255,255,0.55);
+  }
+  .instrumental-line.passed .instrumental-text {
+    color: rgba(255,255,255,0.3);
+  }
 </style>
 </head>
 <body>
 
-<!-- 介紹頁 -->
-<div id="landingPage">
-  <div class="st-brand">Storytrace × KAYON STUDIO</div>
-  <div class="st-icon">♪</div>
-  <div class="st-title">STORYTRACE</div>
-  <div class="st-tagline">你的故事，永遠不會消失</div>
-  <div class="st-divider"></div>
-  <div class="st-body">
-    當你點進這個畫面<br>
-    代表你擁有一個<strong>專屬於你的入口</strong><br><br>
-    我們把你的故事從 0 變成一首歌<br>
-    再把這首歌變成一張 <strong>NFC 迷你專輯</strong><br>
-    讓每個人都有個入口，有個歸屬
-  </div>
+<div class="bg-cover" id="bgCover"></div>
 
-  <!-- NFC 動畫 -->
-  <div class="nfc-scene">
-    <div class="nfc-card">
-      <div class="nfc-outer">
-        <div class="nfc-inner">
-          <div class="nfc-text">NFC</div>
-          <div class="nfc-sub">MINI ALBUM</div>
-        </div>
-      </div>
-    </div>
-    <div class="nfc-ripple">
-      <div class="nfc-ring r1"></div>
-      <div class="nfc-ring r2"></div>
-      <div class="nfc-ring r3"></div>
-    </div>
-    <div class="nfc-phone">
-      <div class="nfc-phone-screen" id="nfcScreen">
-        <div class="nfc-mini-cover">♪</div>
-        <div class="nfc-mini-song">STORYTRACE</div>
-        <div class="nfc-mini-bar"><div class="nfc-mini-fill" id="nfcFill"></div></div>
-      </div>
-    </div>
-    <div class="nfc-label-l">迷你專輯</div>
-    <div class="nfc-label-r">你的手機</div>
+<div class="player" id="mainPlayer">
+  <div class="brand">Storytrace × KAYON STUDIO</div>
+  <div class="cover-box">
+    <img id="coverImg" class="cover" src="" alt="專輯封面">
   </div>
-
-  <div class="st-steps">
-    <div class="st-step">
-      <div class="st-step-num">01</div>
-      <div class="st-step-text">
-        <strong>你的故事</strong>
-        每一段經歷、每一種心情，都值得被記錄
-      </div>
-    </div>
-    <div class="st-step">
-      <div class="st-step-num">02</div>
-      <div class="st-step-text">
-        <strong>變成一首歌</strong>
-        由 KAYON STUDIO 製作，專屬於你的旋律
-      </div>
-    </div>
-    <div class="st-step">
-      <div class="st-step-num">03</div>
-      <div class="st-step-text">
-        <strong>感應，進入</strong>
-        一塊 NFC，一個入口，一份永遠不消失的記憶
-      </div>
+  <div class="info">
+    <p id="trackTitle" class="title"></p>
+    <p id="trackArtist" class="artist"></p>
+  </div>
+  <div class="progress-area" onclick="seek(event)">
+    <div class="bar-bg"><div id="barFill" class="bar-fill"></div></div>
+    <div class="time-labels">
+      <span id="currentTime">0:00</span>
+      <span id="durationTime">0:00</span>
     </div>
   </div>
-  <div class="st-divider2"></div>
-  <div class="st-memory">
-    記憶或許會消失<br>
-    但當它被保存在數位裡<br>
-    就不會消失
+  <div class="controls">
+    <button onclick="openLyrics()" style="font-size:14px; letter-spacing:1px;">歌詞</button>
+    <button onclick="restart()" title="重新開始">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="19 20 9 12 19 4 19 20"></polygon>
+        <line x1="5" y1="19" x2="5" y2="5"></line>
+      </svg>
+    </button>
+    <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+    <button onclick="toggleRepeat()" id="repeatBtn" title="重複播放">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="17 1 21 5 17 9"></polyline>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+        <polyline points="7 23 3 19 7 15"></polyline>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+      </svg>
+    </button>
+    <button onclick="share()" title="分享">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
+      </svg>
+    </button>
   </div>
-  <div class="st-footer">KAYON STUDIO © 2026</div>
 </div>
 
-<!-- 播放器 -->
-<div id="playerPage">
-  <div class="bg-cover" id="bgCover"></div>
-  <div class="player" id="mainPlayer">
-    <div class="brand-p">Storytrace × KAYON STUDIO</div>
-    <div class="cover-box">
-      <img id="coverImg" class="cover" src="" alt="專輯封面">
-    </div>
-    <div class="info">
-      <p id="trackTitle" class="title"></p>
-      <p id="trackArtist" class="artist"></p>
-    </div>
-    <div class="progress-area" onclick="seek(event)">
-      <div class="bar-bg"><div id="barFill" class="bar-fill"></div></div>
-      <div class="time-labels">
-        <span id="currentTime">0:00</span>
-        <span id="durationTime">0:00</span>
-      </div>
-    </div>
-    <div class="controls">
-      <button onclick="openLyrics()" style="font-size:14px; letter-spacing:1px;">歌詞</button>
-      <button onclick="restart()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="19 20 9 12 19 4 19 20"></polygon>
-          <line x1="5" y1="19" x2="5" y2="5"></line>
-        </svg>
-      </button>
-      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-      <button onclick="toggleRepeat()" id="repeatBtn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="17 1 21 5 17 9"></polyline>
-          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-          <polyline points="7 23 3 19 7 15"></polyline>
-          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-        </svg>
-      </button>
-      <button onclick="share()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-          <polyline points="16 6 12 2 8 6"></polyline>
-          <line x1="12" y1="2" x2="12" y2="15"></line>
-        </svg>
-      </button>
-    </div>
+<div id="lyricsPanel" class="lyrics-panel">
+  <div class="lyrics-header">
+    <p id="lyricsSongTitle" class="lyrics-song-title"></p>
+    <p id="lyricsSongArtist" class="lyrics-song-artist"></p>
   </div>
-  <div id="lyricsPanel" class="lyrics-panel">
-    <div class="lyrics-header">
-      <p id="lyricsSongTitle" class="lyrics-song-title"></p>
-      <p id="lyricsSongArtist" class="lyrics-song-artist"></p>
-    </div>
-    <div class="lyrics-body"><div id="lyricsContent"></div></div>
-    <button class="close-lyrics" onclick="closeLyrics()">✕</button>
+  <div class="lyrics-body">
+    <div id="lyricsContent"></div>
   </div>
+  <button class="close-lyrics" onclick="closeLyrics()">✕</button>
 </div>
 
 <audio id="audioMain" preload="metadata"></audio>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+  const audio = document.getElementById("audioMain");
+  const playBtn = document.getElementById("playBtn");
+  const barFill = document.getElementById("barFill");
+  const player = document.getElementById("mainPlayer");
+  const bgCover = document.getElementById("bgCover");
 
-  if (id) {
-    document.getElementById("playerPage").style.display = "flex";
-    initPlayer(id);
-  } else {
-    document.getElementById("landingPage").style.display = "flex";
-    initNfcAnim();
-  }
+  let lyricsData = [];
+  let activeLine = -1;
+  let isRepeat = false;
 
-  function initNfcAnim() {
-    const screen = document.getElementById('nfcScreen');
-    const fill = document.getElementById('nfcFill');
-    function cycle() {
-      setTimeout(() => { screen.classList.add('on'); fill.classList.add('playing'); }, 1950);
-      setTimeout(() => { screen.classList.remove('on'); fill.classList.remove('playing'); }, 2700);
-    }
-    cycle();
-    setInterval(cycle, 3000);
-  }
-
-  async function initPlayer(id) {
-    const audio = document.getElementById("audioMain");
-    const playBtn = document.getElementById("playBtn");
-    const barFill = document.getElementById("barFill");
-    const player = document.getElementById("mainPlayer");
-    const bgCover = document.getElementById("bgCover");
-    let lyricsData = [];
-    let activeLine = -1;
-    let isRepeat = false;
-
+  window.onload = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id") || "yaochi0011";
     try {
       const res = await fetch("projects.json?v=" + Date.now());
       const projects = await res.json();
       const data = projects[id] || projects[Object.keys(projects)[0]];
+
       document.getElementById("trackTitle").innerText = data.title;
       document.getElementById("trackArtist").innerText = data.artist;
       document.getElementById("coverImg").src = data.cover;
@@ -286,6 +288,7 @@
       bgCover.style.backgroundImage = `url(${data.cover})`;
       audio.src = data.music;
       lyricsData = data.lyrics;
+
       const container = document.getElementById("lyricsContent");
       lyricsData.forEach((line, i) => {
         const div = document.createElement("div");
@@ -295,6 +298,18 @@
           const circle = document.createElement("div");
           circle.className = "breath-circle";
           div.appendChild(circle);
+        } else if (line.type === "countdown") {
+          div.className = "countdown-line";
+          const num = document.createElement("div");
+          num.className = "countdown-num";
+          num.innerText = line.text;
+          div.appendChild(num);
+        } else if (line.type === "instrumental") {
+          div.className = "instrumental-line";
+          const txt = document.createElement("div");
+          txt.className = "instrumental-text";
+          txt.innerText = line.text;
+          div.appendChild(txt);
         } else {
           div.className = "lyric-line";
           div.innerText = line.text;
@@ -302,71 +317,88 @@
         div.onclick = () => { audio.currentTime = line.time; };
         container.appendChild(div);
       });
-    } catch (e) { console.error("載入失敗", e); }
+    } catch (e) {
+      console.error("載入失敗", e);
+    }
+  };
 
-    window.togglePlay = function() {
-      if (audio.paused) {
-        audio.play().catch(() => alert("請先點擊頁面後再播放"));
-        playBtn.innerText = "⏸";
-        player.classList.add("playing");
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play().catch(() => alert("請先點擊頁面後再播放"));
+      playBtn.innerText = "⏸";
+      player.classList.add("playing");
+    } else {
+      audio.pause();
+      playBtn.innerText = "▶";
+      player.classList.remove("playing");
+    }
+  }
+
+  function toggleRepeat() {
+    isRepeat = !isRepeat;
+    audio.loop = isRepeat;
+    document.getElementById("repeatBtn").style.color = isRepeat ? "#00E5FF" : "rgba(255,255,255,0.6)";
+  }
+
+  audio.ontimeupdate = () => {
+    if (audio.duration) {
+      barFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+      document.getElementById("currentTime").innerText = fmt(audio.currentTime);
+      document.getElementById("durationTime").innerText = fmt(audio.duration);
+      updateLyrics(audio.currentTime);
+    }
+  };
+
+  function updateLyrics(t) {
+    let newActive = -1;
+    for (let i = lyricsData.length - 1; i >= 0; i--) {
+      if (t >= lyricsData[i].time) { newActive = i; break; }
+    }
+    if (newActive === activeLine) return;
+    activeLine = newActive;
+    document.querySelectorAll(".lyric-line, .breath-line, .countdown-line, .instrumental-line").forEach((el, i) => {
+      let base;
+      if (lyricsData[i].type === "breath") base = "breath-line";
+      else if (lyricsData[i].type === "countdown") base = "countdown-line";
+      else if (lyricsData[i].type === "instrumental") base = "instrumental-line";
+      else base = "lyric-line";
+      el.className = base + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
+    });
+    if (activeLine >= 0) {
+      const el = document.getElementById("line-" + activeLine);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  audio.onended = () => {
+    playBtn.innerText = "▶";
+    player.classList.remove("playing");
+  };
+
+  function fmt(sec) {
+    let m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function seek(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  }
+
+  function restart() { audio.currentTime = 0; }
+  function openLyrics() { document.getElementById("lyricsPanel").style.display = "flex"; }
+  function closeLyrics() { document.getElementById("lyricsPanel").style.display = "none"; }
+
+  async function share() {
+    const title = document.getElementById("trackTitle").innerText;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: title + " - Storytrace", url: window.location.href });
       } else {
-        audio.pause();
-        playBtn.innerText = "▶";
-        player.classList.remove("playing");
+        await navigator.clipboard.writeText(window.location.href);
+        alert("網址已複製");
       }
-    };
-    window.toggleRepeat = function() {
-      isRepeat = !isRepeat;
-      audio.loop = isRepeat;
-      document.getElementById("repeatBtn").style.color = isRepeat ? "#00E5FF" : "rgba(255,255,255,0.6)";
-    };
-    audio.ontimeupdate = () => {
-      if (audio.duration) {
-        barFill.style.width = (audio.currentTime / audio.duration * 100) + "%";
-        document.getElementById("currentTime").innerText = fmt(audio.currentTime);
-        document.getElementById("durationTime").innerText = fmt(audio.duration);
-        updateLyrics(audio.currentTime);
-      }
-    };
-    function updateLyrics(t) {
-      let newActive = -1;
-      for (let i = lyricsData.length - 1; i >= 0; i--) {
-        if (t >= lyricsData[i].time) { newActive = i; break; }
-      }
-      if (newActive === activeLine) return;
-      activeLine = newActive;
-      document.querySelectorAll(".lyric-line, .breath-line").forEach((el, i) => {
-        const base = lyricsData[i].type === "breath" ? "breath-line" : "lyric-line";
-        el.className = base + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
-      });
-      if (activeLine >= 0) {
-        const el = document.getElementById("line-" + activeLine);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }
-    audio.onended = () => { playBtn.innerText = "▶"; player.classList.remove("playing"); };
-    window.seek = function(e) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-    };
-    window.restart = function() { audio.currentTime = 0; };
-    window.openLyrics = function() { document.getElementById("lyricsPanel").style.display = "flex"; };
-    window.closeLyrics = function() { document.getElementById("lyricsPanel").style.display = "none"; };
-    window.share = async function() {
-      const title = document.getElementById("trackTitle").innerText;
-      try {
-        if (navigator.share) {
-          await navigator.share({ title: title + " - Storytrace", url: window.location.href });
-        } else {
-          await navigator.clipboard.writeText(window.location.href);
-          alert("網址已複製");
-        }
-      } catch(e) {}
-    };
-    function fmt(sec) {
-      let m = Math.floor(sec / 60), s = Math.floor(sec % 60);
-      return m + ":" + (s < 10 ? "0" : "") + s;
-    }
+    } catch(e) {}
   }
 </script>
 </body>
