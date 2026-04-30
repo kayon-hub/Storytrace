@@ -130,6 +130,22 @@
   }
   .lyric-line.active { color: #fff; font-size: 24px; }
   .lyric-line.passed { color: rgba(255,255,255,0.45); }
+
+  /* 爸爸 SOLO 高光行 */
+  .solo-line {
+    font-size: 28px; line-height: 2.4; font-weight: 800;
+    color: rgba(255,255,255,0.2);
+    text-align: center;
+    letter-spacing: 0.15em;
+    transition: color 0.4s ease, font-size 0.3s ease, text-shadow 0.4s ease;
+    cursor: pointer;
+  }
+  .solo-line.active {
+    color: #FFD700;
+    font-size: 36px;
+    text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.4);
+  }
+  .solo-line.passed { color: rgba(255,255,255,0.4); }
   .breath-line {
     display: flex; justify-content: center; align-items: center;
     height: 48px; cursor: pointer;
@@ -354,6 +370,21 @@
           const circle = document.createElement("div");
           circle.className = "breath-circle";
           div.appendChild(circle);
+        } else if (line.type === "countdown") {
+          div.className = "countdown-line";
+          const num = document.createElement("div");
+          num.className = "countdown-num";
+          num.innerText = line.text;
+          div.appendChild(num);
+        } else if (line.type === "instrumental") {
+          div.className = "instrumental-line";
+          const txt = document.createElement("div");
+          txt.className = "instrumental-text";
+          txt.innerText = line.text;
+          div.appendChild(txt);
+        } else if (line.text && line.text.includes('爸爸 SOLO')) {
+          div.className = "solo-line";
+          div.innerText = line.text;
         } else {
           div.className = "lyric-line";
           div.innerText = line.text;
@@ -411,8 +442,13 @@
     }
     if (newActive === activeLine) return;
     activeLine = newActive;
-    document.querySelectorAll(".lyric-line, .breath-line").forEach((el, i) => {
-      const base = lyricsData[i].type === "breath" ? "breath-line" : "lyric-line";
+    document.querySelectorAll(".lyric-line, .breath-line, .countdown-line, .instrumental-line, .solo-line").forEach((el, i) => {
+      let base;
+      if (lyricsData[i].type === "breath") base = "breath-line";
+      else if (lyricsData[i].type === "countdown") base = "countdown-line";
+      else if (lyricsData[i].type === "instrumental") base = "instrumental-line";
+      else if (lyricsData[i].text && lyricsData[i].text.includes('爸爸 SOLO')) base = "solo-line";
+      else base = "lyric-line";
       el.className = base + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
     });
     if (activeLine >= 0) {
