@@ -12,9 +12,10 @@
 // ════════════════════════════════════════════════════════
 
 // ────────────── CONFIG ──────────────
-const SHEET_ID     = '1v3cA-d8sN4owG3P1osSmIsl00CfI19RpXXrCMDZ4VPU';
-const NOTIFY_EMAIL = 'ray@karbonxgaiaentertainment.com';
-const LINE_TOKEN   = 'HgQRs9lj7OdDidR1mS78VtNv/9TjL1iNd2HqpqQw/laWEe4cI2n63QRfC1irwrzd1bRgkeyLMiXU0582eZVgyPhOcF5cjyBYGKueWXWh2hql5jbNPgP5uo8bJG2wbBmW/ohmq9TxRjFoJA3hDp1pnwdB04t89/1O/w1cDnyilFU=';
+const SHEET_ID      = '1v3cA-d8sN4owG3P1osSmIsl00CfI19RpXXrCMDZ4VPU';
+const NOTIFY_EMAIL  = 'ray@karbonxgaiaentertainment.com';
+const LINE_TOKEN    = 'HgQRs9lj7OdDidR1mS78VtNv/9TjL1iNd2HqpqQw/laWEe4cI2n63QRfC1irwrzd1bRgkeyLMiXU0582eZVgyPhOcF5cjyBYGKueWXWh2hql5jbNPgP5uo8bJG2wbBmW/ohmq9TxRjFoJA3hDp1pnwdB04t89/1O/w1cDnyilFU=';
+const LINE_USER_ID  = 'U6cc085fec4bee1b9ad8aa99b63da5b18';   // KAYON 個人 LINE
 
 // ────────────── MAIN HANDLER ──────────────
 function doPost(e) {
@@ -190,9 +191,10 @@ https://docs.google.com/spreadsheets/d/${SHEET_ID}
 
 // ────────────── LINE PUSH ──────────────
 function sendLineNotification(data) {
-  const userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID');
+  // 優先用 Script Properties（如果之後想換 ID 不用改程式），否則用上面的常數
+  const userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID') || LINE_USER_ID;
   if (!userId) {
-    Logger.log('LINE user ID not bound yet — skipping LINE push');
+    Logger.log('LINE user ID not configured — skipping LINE push');
     return;
   }
 
@@ -251,10 +253,9 @@ function checkLineUserId() {
 
 // 可手動執行：測試 LINE 推送是否正常
 function testLinePush() {
-  const userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID');
+  const userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID') || LINE_USER_ID;
   if (!userId) {
-    Logger.log('FAIL: user ID 還沒綁定。');
-    Logger.log('請先：(1) 設定 webhook URL  (2) 從個人 LINE 傳一句話給 KAYON STUDIO bot');
+    Logger.log('FAIL: user ID 沒設定');
     return;
   }
 
