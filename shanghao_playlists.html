@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>上好的代誌 — KAYON STUDIO</title>
+<meta property="og:title" content="點擊收聽『上好的代誌』">
+<meta property="og:description" content="Storytrace × KAYON STUDIO">
+<meta property="og:image" content="https://storytrace.karbonxgaiaentertainment.com/shanghao.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080808;
+  --surface:rgba(255,255,255,0.05);
+  --white:#f5f5f3;
+  --white60:rgba(245,245,243,0.6);
+  --white25:rgba(245,245,243,0.25);
+  --white10:rgba(245,245,243,0.1);
+  --accent:#c8a96e;
+  --line:rgba(245,245,243,0.08);
+}
+html,body{
+  min-height:100dvh;
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Noto Sans TC',sans-serif;
+  overflow-x:hidden;
+}
+
+/* 背景模糊封面 */
+.bg-blur{
+  position:fixed;inset:0;
+  background:url('https://storytrace.karbonxgaiaentertainment.com/shanghao.jpg') center/cover no-repeat;
+  filter:blur(40px) brightness(0.2) saturate(1.4);
+  transform:scale(1.1);
+  z-index:0;
+}
+
+.wrap{
+  position:relative;z-index:1;
+  min-height:100dvh;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:3rem 1.5rem calc(2rem + env(safe-area-inset-bottom));
+  max-width:480px;
+  margin:0 auto;
+}
+
+/* 頂部品牌 */
+.brand{
+  font-size:8px;letter-spacing:0.45em;text-transform:uppercase;
+  color:var(--white25);margin-bottom:2.5rem;text-align:center;
+}
+
+/* 封面 */
+.cover-wrap{
+  width:100%;
+  max-width:340px;
+  margin:0 auto 2rem;
+  position:relative;
+}
+.cover-wrap img{
+  width:100%;border-radius:16px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.6);
+  display:block;
+  object-fit:contain;
+}
+.cover-glow{
+  position:absolute;inset:-20px;
+  background:url('https://storytrace.karbonxgaiaentertainment.com/shanghao.jpg') center/cover no-repeat;
+  filter:blur(30px) brightness(0.4);
+  border-radius:50%;
+  z-index:-1;
+  opacity:0.6;
+}
+
+/* 標題 */
+.song-title{
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:1rem;
+  font-weight:300;
+  letter-spacing:0.6em;
+  line-height:1.8;
+  text-align:center;
+  margin-bottom:0.5rem;
+  color:var(--white60);
+}
+.song-sub{
+  font-size:9px;letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--accent);text-align:center;margin-bottom:2.5rem;
+}
+
+/* 分隔線 */
+.divider{
+  width:100%;height:1px;
+  background:var(--line);margin-bottom:1.5rem;
+}
+
+/* 播放清單標題 */
+.playlist-label{
+  width:100%;
+  font-size:8px;letter-spacing:0.4em;text-transform:uppercase;
+  color:var(--white25);margin-bottom:1rem;
+  display:flex;align-items:center;gap:10px;
+}
+.playlist-label::after{
+  content:'';flex:1;height:1px;background:var(--line);
+}
+
+/* 播放清單 */
+.playlist{
+  width:100%;
+  display:flex;flex-direction:column;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:2rem;
+}
+
+.track{
+  display:flex;align-items:center;gap:1rem;
+  padding:1.1rem 1.2rem;
+  background:rgba(8,8,8,0.85);
+  text-decoration:none;
+  color:var(--white);
+  transition:background 0.2s,padding-left 0.25s;
+  -webkit-tap-highlight-color:transparent;
+  cursor:pointer;
+}
+.track:active,.track:hover{
+  background:rgba(255,255,255,0.07);
+  padding-left:1.6rem;
+}
+
+.track-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;letter-spacing:0.1em;
+  color:var(--accent);
+  min-width:24px;text-align:center;
+  flex-shrink:0;
+}
+
+.track-info{flex:1;min-width:0;}
+.track-title{
+  font-size:13px;font-weight:500;
+  letter-spacing:0.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.track-desc{
+  font-size:10px;color:var(--white25);
+  margin-top:3px;letter-spacing:0.05em;
+}
+
+.track-icon{
+  opacity:0.3;font-size:14px;flex-shrink:0;
+  transition:opacity 0.2s,transform 0.2s;
+}
+.track:hover .track-icon,.track:active .track-icon{
+  opacity:1;transform:translate(2px,-2px);
+}
+
+/* 特別版標記 */
+.badge{
+  font-size:7px;letter-spacing:0.2em;text-transform:uppercase;
+  background:var(--accent);color:var(--bg);
+  padding:2px 7px;border-radius:100px;
+  font-weight:700;flex-shrink:0;
+}
+
+/* 頁尾 */
+.foot{
+  font-size:7px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--white25);text-align:center;line-height:2.2;
+}
+.foot strong{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:10px;letter-spacing:0.25em;
+  color:var(--white60);display:block;margin-bottom:4px;
+}
+
+/* 入場動畫 */
+.wrap > *{
+  opacity:0;animation:fadeUp 0.6s ease forwards;
+}
+.brand{animation-delay:0.1s}
+.cover-wrap{animation-delay:0.2s}
+.song-title{animation-delay:0.3s}
+.song-sub{animation-delay:0.35s}
+.divider{animation-delay:0.4s}
+.playlist-label{animation-delay:0.45s}
+.playlist{animation-delay:0.5s}
+.foot{animation-delay:0.65s}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-blur"></div>
+
+<div class="wrap">
+  <div class="brand">Storytrace × KAYON STUDIO</div>
+
+  <div class="cover-wrap">
+    <div class="cover-glow"></div>
+    <img src="https://storytrace.karbonxgaiaentertainment.com/shanghao.jpg" alt="上好的代誌">
+  </div>
+
+  <h1 class="song-title">上好的代誌</h1>
+  <p class="song-sub">KAYON STUDIO · 2026</p>
+
+  <div class="divider"></div>
+
+  <p class="playlist-label">選擇版本</p>
+
+  <div class="playlist">
+
+    <a href="https://storytrace.karbonxgaiaentertainment.com/?id=shanghao_official" class="track">
+      <div class="track-num">01</div>
+      <div class="track-info">
+        <div class="track-title">上好的代誌</div>
+        <div class="track-desc">演唱：曾炳揚（爸爸）／呂素卿（媽媽）</div>
+      </div>
+      <span class="badge">正式版</span>
+      <span class="track-icon">↗</span>
+    </a>
+
+    <a href="https://storytrace.karbonxgaiaentertainment.com/?id=shanghao" class="track">
+      <div class="track-num">02</div>
+      <div class="track-info">
+        <div class="track-title">上好的代誌（配唱版）</div>
+        <div class="track-desc">配唱歌手為年輕小朋友，請多見諒</div>
+      </div>
+      <span class="track-icon">↗</span>
+    </a>
+
+    <a href="https://storytrace.karbonxgaiaentertainment.com/?id=shanghao_karaoke" class="track">
+      <div class="track-num">03</div>
+      <div class="track-info">
+        <div class="track-title">上好的代誌（卡拉OK版）</div>
+        <div class="track-desc">純伴奏，歡迎跟著唱</div>
+      </div>
+      <span class="track-icon">↗</span>
+    </a>
+
+    <a href="https://storytrace.karbonxgaiaentertainment.com/?id=jingzhun" class="track">
+      <div class="track-num">04</div>
+      <div class="track-info">
+        <div class="track-title">精準的幸福</div>
+        <div class="track-desc">演唱：NÄXER</div>
+      </div>
+      <span class="track-icon">↗</span>
+    </a>
+
+  </div>
+
+  <div class="foot">
+    <strong>KARBØN X GAIA ENTERTAINMENT | KAYON STUDIO</strong>
+    © 2026 All Rights Reserved
+  </div>
+</div>
+
+</body>
+</html>
