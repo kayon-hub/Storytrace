@@ -21,6 +21,12 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
 
+    // ── 是 LINE webhook 事件嗎？ ──
+    if (data.events && Array.isArray(data.events)) {
+      return handleLineWebhook(data);
+    }
+
+    // ── 否則當成需求表單送出 ──
     // 1. 寫入 Sheets
     writeToSheet(data);
 
@@ -31,7 +37,6 @@ function doPost(e) {
     try {
       sendLineNotification(data);
     } catch (lineErr) {
-      // LINE 失敗不影響主流程，只記錄
       Logger.log('LINE push failed: ' + lineErr);
     }
 
@@ -45,6 +50,51 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({ result: 'error', error: err.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// ────────────── LINE WEBHOOK HANDLER ──────────────
+// 收到 LINE 的事件（使用者傳訊息、加好友、解除好友等）
+// 主要用來：在使用者第一次傳訊息時抓 user ID
+function handleLineWebhook(payload) {
+  const props = PropertiesService.getScriptProperties();
+
+  for (const event of (payload.events || [])) {
+    const userId = event.source && event.source.userId;
+    if (!userId) continue;
+
+    const existing = props.getProperty('LINE_USER_ID');
+
+    // 第一次：儲存 user ID 並回覆確認
+    if (!existing) {
+      props.setProperty('LINE_USER_ID', userId);
+      Logger.log('LINE user ID captured via webhook: ' + userId);
+
+      if (event.replyToken) {
+        try {
+          UrlFetchApp.fetch('https://api.line.me/v2/bot/message/reply', {
+            method: 'post',
+            contentType: 'application/json',
+            headers: { 'Authorization': 'Bearer ' + LINE_TOKEN },
+            payload: JSON.stringify({
+              replyToken: event.replyToken,
+              messages: [{
+                type: 'text',
+                text: '✅ Storytrace 已綁定你的 LINE！\n\n之後客戶填需求表時，這裡會收到完整內容通知。\n\n— KAYON STUDIO'
+              }]
+            }),
+            muteHttpExceptions: true
+          });
+        } catch (e) {
+          Logger.log('Webhook reply failed: ' + e);
+        }
+      }
+    }
+    // 已經綁定過：忽略後續訊息（避免重複占用 webhook 額度）
+  }
+
+  return ContentService
+    .createTextOutput('ok')
+    .setMimeType(ContentService.MimeType.TEXT);
 }
 
 function doGet(e) {
@@ -140,14 +190,10 @@ https://docs.google.com/spreadsheets/d/${SHEET_ID}
 
 // ────────────── LINE PUSH ──────────────
 function sendLineNotification(data) {
-  // 確保 LINE user ID 已註冊（首次自動撈）
-  let userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID');
+  const userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID');
   if (!userId) {
-    userId = bootstrapLineUserId();
-    if (!userId) {
-      Logger.log('Cannot resolve LINE user ID — skipping LINE push');
-      return;
-    }
+    Logger.log('LINE user ID not bound yet — skipping LINE push');
+    return;
   }
 
   const text =
@@ -190,41 +236,25 @@ docs.google.com/spreadsheets/d/${SHEET_ID}`;
   }
 }
 
-// ────────────── BOOTSTRAP / UTILITIES ──────────────
-// 首次執行：撈 bot 的 followers，把第一個（也就是 KAYON）存進 Script Properties
-function bootstrapLineUserId() {
-  const resp = UrlFetchApp.fetch('https://api.line.me/v2/bot/followers/ids', {
-    headers: { 'Authorization': 'Bearer ' + LINE_TOKEN },
-    muteHttpExceptions: true
-  });
-
-  if (resp.getResponseCode() !== 200) {
-    Logger.log('Followers API failed: ' + resp.getContentText());
-    return null;
+// ────────────── UTILITIES ──────────────
+// User ID 透過 webhook 取得（免費 OA 不能用 followers API）
+// 此函式僅作為診斷用：檢查目前是否已綁定
+function checkLineUserId() {
+  const userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID');
+  if (userId) {
+    Logger.log('OK: LINE user ID is bound: ' + userId);
+  } else {
+    Logger.log('NOT BOUND: 請先設定 webhook URL，然後從個人 LINE 傳一句話給 bot');
   }
-
-  const data = JSON.parse(resp.getContentText());
-  const ids = data.userIds || [];
-
-  if (ids.length === 0) {
-    Logger.log('No followers found. Make sure KAYON has added the bot as friend.');
-    return null;
-  }
-
-  const userId = ids[0];
-  PropertiesService.getScriptProperties().setProperty('LINE_USER_ID', userId);
-  Logger.log('LINE user ID registered: ' + userId);
   return userId;
 }
 
 // 可手動執行：測試 LINE 推送是否正常
 function testLinePush() {
-  let userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID');
+  const userId = PropertiesService.getScriptProperties().getProperty('LINE_USER_ID');
   if (!userId) {
-    userId = bootstrapLineUserId();
-  }
-  if (!userId) {
-    Logger.log('FAIL: cannot get user ID');
+    Logger.log('FAIL: user ID 還沒綁定。');
+    Logger.log('請先：(1) 設定 webhook URL  (2) 從個人 LINE 傳一句話給 KAYON STUDIO bot');
     return;
   }
 
