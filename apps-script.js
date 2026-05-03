@@ -13,7 +13,7 @@
 
 // ────────────── CONFIG ──────────────
 const SHEET_ID      = '1v3cA-d8sN4owG3P1osSmIsl00CfI19RpXXrCMDZ4VPU';
-const NOTIFY_EMAIL  = 'ray@karbonxgaiaentertainment.com';
+const NOTIFY_EMAIL  = 'kayon@karbonxgaiaentertainment.com';
 const LINE_TOKEN    = 'HgQRs9lj7OdDidR1mS78VtNv/9TjL1iNd2HqpqQw/laWEe4cI2n63QRfC1irwrzd1bRgkeyLMiXU0582eZVgyPhOcF5cjyBYGKueWXWh2hql5jbNPgP5uo8bJG2wbBmW/ohmq9TxRjFoJA3hDp1pnwdB04t89/1O/w1cDnyilFU=';
 const LINE_USER_ID  = 'U6cc085fec4bee1b9ad8aa99b63da5b18';   // KAYON 個人 LINE
 
