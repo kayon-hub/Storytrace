@@ -271,9 +271,9 @@ html,body{
   <div class="brand-inner">
 
     <div class="logos-wrap">
-      <img src="https://storytrace.karbonxgaiaentertainment.com/kxg_logo.png" class="logo-img" alt="KARBØN X GAIA">
+      <img src="https://storytrace.karbonxgaiaentertainment.com/kxghtml_pic.png" class="logo-img" alt="KARBØN X GAIA">
       <div class="logo-divider"></div>
-      <img src="https://storytrace.karbonxgaiaentertainment.com/kayon_logo.png" class="logo-img" alt="KAYON STUDIO">
+      <img src="https://storytrace.karbonxgaiaentertainment.com/kayonstudio_pic.png" class="logo-img" alt="KAYON STUDIO">
     </div>
 
     <div class="brand-copy">
@@ -283,15 +283,12 @@ html,body{
       <p class="copy-line">就永遠不會消失在這個世界上</p>
     </div>
 
-    <div class="promo-wrap">
-      <p class="promo-text">截圖此網頁享</p>
-      <p class="promo-discount">九折</p>
-      <p class="promo-sub">出示截圖給 KAYON STUDIO 即可享有優惠</p>
-    </div>
-
     <div class="qr-wrap">
-      <p class="qr-label">掃描加入 LINE@ 領取專屬優惠券</p>
-      <img src="https://storytrace.karbonxgaiaentertainment.com/line_qr.png" class="qr-img" alt="LINE QR Code">
+      <p class="qr-label">點擊加入 LINE@ 領取專屬優惠券</p>
+      <a href="https://lin.ee/8mCNvoz" target="_blank" class="line-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        加入 LINE@ 領取優惠券
+      </a>
       <p class="qr-sub">製作歌曲才能使用</p>
     </div>
 
@@ -341,43 +338,26 @@ html,body{
 .copy-line.visible{
   opacity:1;transform:translateY(0);
 }
-.promo-wrap{
-  text-align:center;
-  border:1px solid var(--line);
-  padding:2rem;border-radius:16px;
-  width:100%;opacity:0;
-  animation:fadeUp 1s ease 5s forwards;
-}
-.promo-text{
-  font-size:10px;letter-spacing:0.3em;text-transform:uppercase;
-  color:var(--white25);margin-bottom:0.8rem;
-}
-.promo-discount{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:5rem;letter-spacing:0.1em;
-  color:var(--accent);line-height:1;
-  margin-bottom:0.6rem;
-}
-.promo-sub{
-  font-size:10px;letter-spacing:0.08em;
-  color:var(--white25);
-}
 .qr-wrap{
   text-align:center;opacity:0;
-  animation:fadeUp 1s ease 6s forwards;
+  animation:fadeUp 1s ease 5s forwards;
 }
 .qr-label{
   font-size:9px;letter-spacing:0.2em;text-transform:uppercase;
   color:var(--white25);margin-bottom:1.2rem;
 }
-.qr-img{
-  width:180px;height:180px;
-  object-fit:contain;border-radius:12px;
-  display:block;margin:0 auto 0.8rem;
+.line-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#06C755;color:#fff;
+  font-size:11px;font-weight:500;letter-spacing:0.15em;
+  padding:14px 28px;border-radius:100px;
+  text-decoration:none;margin-bottom:0.8rem;
+  transition:opacity 0.2s;
 }
+.line-btn:hover,.line-btn:active{opacity:0.85;}
 .qr-sub{
   font-size:9px;letter-spacing:0.15em;
-  color:var(--accent);
+  color:var(--accent);display:block;
 }
 </style>
 
