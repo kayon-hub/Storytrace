@@ -266,5 +266,143 @@ html,body{
   </div>
 </div>
 
+<!-- 品牌動畫區塊 -->
+<div class="brand-section" id="brandSection">
+  <div class="brand-inner">
+
+    <div class="logos-wrap">
+      <img src="https://storytrace.karbonxgaiaentertainment.com/kxg_logo.png" class="logo-img" alt="KARBØN X GAIA">
+      <div class="logo-divider"></div>
+      <img src="https://storytrace.karbonxgaiaentertainment.com/kayon_logo.png" class="logo-img" alt="KAYON STUDIO">
+    </div>
+
+    <div class="brand-copy">
+      <p class="copy-line">HI，我是 KAYON</p>
+      <p class="copy-line">或許有天我們的記憶會遺失</p>
+      <p class="copy-line">但當這個回憶變成數位後</p>
+      <p class="copy-line">就永遠不會消失在這個世界上</p>
+    </div>
+
+    <div class="promo-wrap">
+      <p class="promo-text">截圖此網頁享</p>
+      <p class="promo-discount">九折</p>
+      <p class="promo-sub">出示截圖給 KAYON STUDIO 即可享有優惠</p>
+    </div>
+
+    <div class="qr-wrap">
+      <p class="qr-label">掃描加入 LINE@ 領取專屬優惠券</p>
+      <img src="https://storytrace.karbonxgaiaentertainment.com/line_qr.png" class="qr-img" alt="LINE QR Code">
+      <p class="qr-sub">製作歌曲才能使用</p>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.brand-section{
+  background:var(--bg);
+  border-top:1px solid var(--line);
+  padding:5rem 1.5rem 4rem;
+  max-width:480px;
+  margin:0 auto;
+  width:100%;
+}
+.brand-inner{
+  display:flex;flex-direction:column;
+  align-items:center;gap:3.5rem;
+}
+.logos-wrap{
+  display:flex;flex-direction:column;
+  align-items:center;gap:2rem;
+  width:100%;
+  opacity:0;
+  animation:fadeUp 1s ease 0.5s forwards;
+}
+.logo-img{
+  width:100%;max-width:220px;
+  object-fit:contain;display:block;
+}
+.logo-divider{
+  width:1px;height:32px;
+  background:var(--line);
+}
+.brand-copy{
+  display:flex;flex-direction:column;
+  align-items:center;gap:1rem;
+  text-align:center;width:100%;
+}
+.copy-line{
+  font-size:14px;font-weight:300;
+  letter-spacing:0.1em;color:var(--white60);
+  line-height:1.9;opacity:0;
+  transition:opacity 0.8s ease, transform 0.8s ease;
+  transform:translateY(12px);
+}
+.copy-line.visible{
+  opacity:1;transform:translateY(0);
+}
+.promo-wrap{
+  text-align:center;
+  border:1px solid var(--line);
+  padding:2rem;border-radius:16px;
+  width:100%;opacity:0;
+  animation:fadeUp 1s ease 5s forwards;
+}
+.promo-text{
+  font-size:10px;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--white25);margin-bottom:0.8rem;
+}
+.promo-discount{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:5rem;letter-spacing:0.1em;
+  color:var(--accent);line-height:1;
+  margin-bottom:0.6rem;
+}
+.promo-sub{
+  font-size:10px;letter-spacing:0.08em;
+  color:var(--white25);
+}
+.qr-wrap{
+  text-align:center;opacity:0;
+  animation:fadeUp 1s ease 6s forwards;
+}
+.qr-label{
+  font-size:9px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--white25);margin-bottom:1.2rem;
+}
+.qr-img{
+  width:180px;height:180px;
+  object-fit:contain;border-radius:12px;
+  display:block;margin:0 auto 0.8rem;
+}
+.qr-sub{
+  font-size:9px;letter-spacing:0.15em;
+  color:var(--accent);
+}
+</style>
+
+<script>
+/* 滾動到品牌區塊時觸發文案一句一句浮現 */
+const copyLines = document.querySelectorAll('.copy-line');
+const delays = [0.3, 1.1, 1.9, 2.7];
+let triggered = false;
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !triggered) {
+      triggered = true;
+      copyLines.forEach((line, i) => {
+        setTimeout(() => {
+          line.classList.add('visible');
+        }, delays[i] * 1000);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+
+const brandSection = document.getElementById('brandSection');
+if (brandSection) observer.observe(brandSection);
+</script>
+
 </body>
 </html>
