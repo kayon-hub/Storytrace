@@ -420,7 +420,7 @@
   },
   "shanghao": {
     "title": "上好的代誌（配唱版）",
-    "artist": "配唱版（歌手皆為年輕朋友，不太會講台語，請大家多見諒）\n製作人：KAYON\n作詞／作曲／編曲：KAYON STUDIO｜KAYON\n母帶處理：Tommy\n錄音師：Ethan\n錄音室：KAYON STUDIO\nKARBØN X GAIA ENTERTAINMENT\n｜KAYON STUDIO",
+    "artist": "配唱歌手為年輕朋友，不太會講台語，請大家多見諒",
     "cover": "shanghao.jpg",
     "music": "上好的代誌人聲版.mp3",
     "lyrics": [
@@ -621,6 +621,38 @@
       {
         "time": 254.0,
         "text": "阮攏佇遮 等著妳"
+      },
+      {
+        "time": 0,
+        "text": "── 製作團隊 ──"
+      },
+      {
+        "time": 0,
+        "text": "製作人：KAYON"
+      },
+      {
+        "time": 0,
+        "text": "作詞／作曲／編曲：KAYON STUDIO｜KAYON"
+      },
+      {
+        "time": 0,
+        "text": "母帶處理：Tommy"
+      },
+      {
+        "time": 0,
+        "text": "錄音師：Ethan"
+      },
+      {
+        "time": 0,
+        "text": "錄音室：KAYON STUDIO"
+      },
+      {
+        "time": 0,
+        "text": "KARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO"
+      },
+      {
+        "time": 0,
+        "text": "──────────────"
       }
     ]
   },
@@ -1197,7 +1229,7 @@
   },
   "candy_sugar": {
     "title": "Candy & Sugar",
-    "artist": "NÄXER 夏日主打新歌 搶先聽\n希望大家都能充滿粉紅泡泡洋溢在幸福裡\n兩位新人要一直一直一直幸福下去 🩷\n\n演唱：NÄXER\n製作人：KAYON\n作詞／作曲／編曲：KAYON STUDIO｜KAYON\n母帶處理：Tommy\n錄音師：Ethan\n錄音室：KAYON STUDIO\nKARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO",
+    "artist": "演唱：NÄXER",
     "cover": "naxernew.jpg",
     "music": "NAXER_Candy & Sugar.mp3",
     "lyrics": [
@@ -1460,6 +1492,42 @@
       {
         "time": 9999,
         "text": "Love you, baby"
+      },
+      {
+        "time": 9999,
+        "text": "── 製作團隊 ──"
+      },
+      {
+        "time": 9999,
+        "text": "演唱：NÄXER"
+      },
+      {
+        "time": 9999,
+        "text": "製作人：KAYON"
+      },
+      {
+        "time": 9999,
+        "text": "作詞／作曲／編曲：KAYON STUDIO｜KAYON"
+      },
+      {
+        "time": 9999,
+        "text": "母帶處理：Tommy"
+      },
+      {
+        "time": 9999,
+        "text": "錄音師：Ethan"
+      },
+      {
+        "time": 9999,
+        "text": "錄音室：KAYON STUDIO"
+      },
+      {
+        "time": 9999,
+        "text": "KARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO"
+      },
+      {
+        "time": 9999,
+        "text": "──────────────"
       }
     ]
   }
