@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>KAYON STUDIO 課程系統</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --black: #0D0D0D;
+      --surface: #141414;
+      --surface2: #1C1C1C;
+      --border: rgba(201,168,76,0.2);
+      --text: #F0EBE0;
+      --muted: rgba(240,235,224,0.5);
+      --danger: #E05555;
+      --line-green: #06C755;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Noto Sans TC', 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      padding: 24px 20px 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 60% 40% at 80% 10%, rgba(201,168,76,0.06), transparent 60%),
+                  radial-gradient(ellipse 40% 60% at 10% 80%, rgba(201,168,76,0.04), transparent 60%);
+    }
+    .wrap { max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+    .screen { animation: fadeUp 0.5s ease both; }
+    .hidden { display: none !important; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header / brand */
+    .brand {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .brand-line {
+      display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px;
+    }
+    .brand-line::before, .brand-line::after {
+      content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold));
+      max-width: 60px;
+    }
+    .brand-line::after { background: linear-gradient(to left, transparent, var(--gold)); }
+    .brand-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 7vw, 40px);
+      font-weight: 300; line-height: 1.1; letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .page-title em { font-style: italic; color: var(--gold-light); }
+    .page-sub {
+      font-size: 13px; color: var(--muted); line-height: 1.7; letter-spacing: 0.3px;
+      margin-bottom: 32px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    /* Form fields */
+    .field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    label {
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 500;
+    }
+    label .hint { color: var(--muted); font-weight: 300; letter-spacing: 0; text-transform: none; font-size: 11px; }
+    input[type="text"], input[type="tel"], input[type="date"], input[type="time"], textarea, select {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 300;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.04);
+    }
+    input::placeholder, textarea::placeholder { color: rgba(240,235,224,0.25); }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+    select { cursor: pointer; }
+    select option { background: #1C1C1C; }
+
+    /* Buttons */
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 16px 32px;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; width: 100%;
+      transition: all 0.2s;
+    }
+    .btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-line {
+      background: var(--line-green);
+      color: white;
+      letter-spacing: 1px;
+      font-size: 15px;
+    }
+    .btn-line:hover { background: #05a847; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+    }
+    .btn-secondary:hover { background: rgba(201,168,76,0.1); transform: none; }
+    .btn-danger {
+      background: transparent; color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+    .btn-danger:hover { background: rgba(224,85,85,0.1); transform: none; }
+
+    /* Student status header (booking page) */
+    .status-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+    .status-name {
+      font-size: 14px; color: var(--text);
+    }
+    .status-name strong { color: var(--gold-light); font-weight: 500; }
+    .status-badge {
+      font-size: 12px; color: var(--gold);
+      padding: 6px 12px;
+      background: rgba(201,168,76,0.08);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+    .status-badge strong { font-size: 14px; color: var(--gold-light); }
+
+    /* Renewal promo */
+    .promo {
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+    .promo-title {
+      font-size: 14px; color: var(--gold-light); font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .promo-text {
+      font-size: 13px; color: var(--muted); line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    /* Bookings list (leave page) */
+    .booking-item {
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .booking-item:hover {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.04);
+    }
+    .booking-item .when {
+      font-size: 16px; color: var(--text);
+      margin-bottom: 4px;
+    }
+    .booking-item .meta {
+      font-size: 12px; color: var(--muted);
+    }
+    .booking-item.locked {
+      opacity: 0.5; cursor: not-allowed;
+    }
+    .booking-item.locked:hover { border-color: var(--border); background: var(--surface); }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal {
+      background: var(--surface); border: 1px solid var(--gold);
+      border-radius: 4px; padding: 28px;
+      max-width: 480px; width: 100%;
+    }
+    .modal h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px; font-weight: 400; margin-bottom: 12px;
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-actions .btn { flex: 1; }
+
+    /* Success screen */
+    .success-icon { font-size: 64px; text-align: center; margin: 40px 0 24px; }
+
+    /* Loading */
+    .loader {
+      width: 40px; height: 40px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 80px auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { text-align: center; color: var(--muted); font-size: 13px; }
+
+    /* Error */
+    .error {
+      background: rgba(224,85,85,0.08);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 12px 16px;
+      border-radius: 2px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Loading -->
+    <div id="screen-loading" class="screen">
+      <div class="loader"></div>
+      <p class="loader-text">系統載入中…</p>
+    </div>
+
+    <!-- LINE Login required -->
+    <div id="screen-login" class="screen hidden">
+      <div class="brand">
+        <div class="brand-line"><span class="brand-text">KAYON STUDIO</span></div>
+        <h1 class="page-title">課程<em>系統</em></h1>
+        <p class="page-sub">用 LINE 連結你的學生帳號<br>之後預約、改期都自動帶資料</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <button class="btn btn-line" onclick="liff.login()">
+          🔗 用 LINE 連結帳號
+        </button>
+      </div>
+    </div>
+
+    <!-- Register -->
+    <div id="screen-register" class="screen hidden">
+      <div class="brand">
+        <div class="brand-line"><span class="brand-text">Welcome</span></div>
+        <h1 class="page-title">學生<em>註冊</em></h1>
+        <p class="page-sub" id="reg-greeting">歡迎加入 KAYON STUDIO 初階課程</p>
+      </div>
+      <form id="form-register" class="card">
+        <div class="field">
+          <label>姓名 <span class="hint">*必填</span></label>
+          <input id="reg-name" type="text" placeholder="你的本名或常用稱呼" required>
+        </div>
+        <div class="field">
+          <label>聯絡電話 <span class="hint">*必填</span></label>
+          <input id="reg-phone" type="tel" placeholder="0912-345-678" required>
+        </div>
+        <div class="field">
+          <label>學習目標 <span class="hint">想透過這 4 堂達成什麼（選填）</span></label>
+          <textarea id="reg-goal" placeholder="例如：寫一首送給伴侶的歌"></textarea>
+        </div>
+        <button class="btn" type="submit">完成註冊</button>
+      </form>
+    </div>
+
+    <!-- Booking -->
+    <div id="screen-booking" class="screen hidden">
+      <div class="status-bar">
+        <div class="status-name">嗨 <strong id="status-name"></strong></div>
+        <div class="status-badge">剩餘 <strong id="status-remaining">—</strong> 堂</div>
+      </div>
+
+      <div id="renewal-promo" class="promo hidden">
+        <div class="promo-title">🎁 即將上完這個方案</div>
+        <div class="promo-text">現在續購下一個 4 堂方案享 <strong style="color:var(--gold-light)">9 折優惠</strong>，過了最後一堂就恢復原價。</div>
+        <button class="btn btn-secondary" onclick="requestRenewal()">我有興趣，請聯絡我</button>
+      </div>
+
+      <div class="brand">
+        <div class="brand-line"><span class="brand-text">Booking</span></div>
+        <h1 class="page-title">預約<em>上課</em></h1>
+        <p class="page-sub">最少提前 24 小時，KAYON 收到後會跟你 LINE 確認</p>
+      </div>
+
+      <form id="form-booking" class="card">
+        <div class="field">
+          <label>預約日期 <span class="hint">*必填，最少明天起</span></label>
+          <input id="book-date" type="date" required>
+        </div>
+        <div class="field">
+          <label>預約時段 <span class="hint">*必填，24 小時皆可</span></label>
+          <select id="book-time" required>
+            <option value="">選擇時段</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>備註 <span class="hint">選填</span></label>
+          <textarea id="book-note" placeholder="例如：想專注練哪個段落"></textarea>
+        </div>
+        <button class="btn" type="submit">送出預約</button>
+      </form>
+    </div>
+
+    <!-- Leave -->
+    <div id="screen-leave" class="screen hidden">
+      <div class="brand">
+        <div class="brand-line"><span class="brand-text">Reschedule</span></div>
+        <h1 class="page-title">請假 / <em>改期</em></h1>
+        <p class="page-sub">點選你要處理的預約，課前 1 小時內無法取消</p>
+      </div>
+      <div id="bookings-list">
+        <div class="card" style="text-align:center;">
+          <div class="loader"></div>
+          <p class="loader-text">載入你的預約中…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div id="screen-success" class="screen hidden">
+      <div class="success-icon">✨</div>
+      <h1 class="page-title" style="text-align:center;" id="success-title">完成</h1>
+      <p class="page-sub" style="text-align:center;" id="success-msg"></p>
+      <button class="btn btn-secondary" onclick="liff.closeWindow()" style="margin-top:24px;">關閉視窗</button>
+    </div>
+
+    <!-- Action modal -->
+    <div id="action-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <h2 id="action-title">處理預約</h2>
+        <p id="action-info" style="font-size:14px; color:var(--muted); margin-bottom:16px;"></p>
+
+        <div id="action-choice">
+          <button class="btn btn-secondary" onclick="showRescheduleForm()" style="margin-bottom:10px;">改期</button>
+          <button class="btn btn-danger" onclick="cancelBooking()" style="margin-bottom:10px;">取消這堂</button>
+          <button class="btn" onclick="closeModal()" style="background:transparent; color:var(--muted); border:1px solid var(--border);">關閉</button>
+        </div>
+
+        <div id="reschedule-form" class="hidden">
+          <div class="field">
+            <label>改到日期 <span class="hint">*最少明天</span></label>
+            <input id="resched-date" type="date" required>
+          </div>
+          <div class="field">
+            <label>改到時段</label>
+            <select id="resched-time" required>
+              <option value="">選擇時段</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="hideRescheduleForm()">返回</button>
+            <button class="btn" onclick="submitReschedule()">確認改期</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ========================================
+    // CONFIG — 等下我把 LIFF_ID 跟 Web App URL 填進來
+    // ========================================
+    const LIFF_ID = '2009971827-k0iEMkIu';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6aVIxbLf7ObTmnYT7NNy4O4DXsEFBLAe49vH1gXU2MXqLBvpWRhgoXnUuFDIgRzWyeA/exec';
+
+    // ========================================
+    // STATE
+    // ========================================
+    let userProfile = null;
+    let studentData = null;
+    let bookingsCache = [];
+    let selectedBookingId = null;
+
+    // ========================================
+    // INIT
+    // ========================================
+    async function init() {
+      try {
+        await liff.init({ liffId: LIFF_ID });
+
+        if (!liff.isLoggedIn()) {
+          showScreen('login');
+          return;
+        }
+
+        userProfile = await liff.getProfile();
+        // userProfile = { userId, displayName, pictureUrl, statusMessage }
+
+        const params = new URLSearchParams(window.location.search);
+        const view = params.get('view') || 'booking';
+
+        // Check if student exists
+        const result = await callApi('getStudent', {});
+        studentData = result.student;
+
+        if (!studentData && view !== 'register') {
+          // Force register first
+          renderRegister();
+          return;
+        }
+
+        if (view === 'register') renderRegister();
+        else if (view === 'booking') renderBooking();
+        else if (view === 'leave') renderLeave();
+        else renderBooking();
+
+      } catch (err) {
+        console.error('Init error:', err);
+        showError('系統載入失敗：' + err.message);
+      }
+    }
+
+    // ========================================
+    // API CALLS
+    // ========================================
+    async function callApi(action, data) {
+      const payload = {
+        action,
+        userId: userProfile?.userId,
+        displayName: userProfile?.displayName,
+        ...data,
+      };
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+      });
+      const text = await res.text();
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw new Error('伺服器回應格式錯誤');
+      }
+    }
+
+    // ========================================
+    // SCREEN MANAGEMENT
+    // ========================================
+    function showScreen(name) {
+      const screens = ['loading', 'login', 'register', 'booking', 'leave', 'success'];
+      screens.forEach(s => {
+        const el = document.getElementById('screen-' + s);
+        if (el) el.classList.toggle('hidden', s !== name);
+      });
+    }
+
+    function showError(msg) {
+      alert(msg);
+    }
+
+    function showSuccess(title, msg) {
+      document.getElementById('success-title').textContent = title;
+      document.getElementById('success-msg').innerHTML = msg;
+      showScreen('success');
+    }
+
+    // ========================================
+    // REGISTER
+    // ========================================
+    function renderRegister() {
+      document.getElementById('reg-greeting').textContent =
+        `${userProfile.displayName}，歡迎加入 KAYON STUDIO 初階課程（4 堂 × 1 小時）`;
+      document.getElementById('reg-name').value = userProfile.displayName || '';
+      showScreen('register');
+    }
+
+    document.getElementById('form-register').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = '送出中…';
+      try {
+        const result = await callApi('register', {
+          name: document.getElementById('reg-name').value.trim(),
+          phone: document.getElementById('reg-phone').value.trim(),
+          goal: document.getElementById('reg-goal').value.trim(),
+        });
+        if (result.ok) {
+          showSuccess('註冊完成 ✨',
+            `${result.student.name}，你已加入 KAYON STUDIO。<br>剩餘 <strong style="color:var(--gold-light)">${result.student.remaining}</strong> 堂課可預約。<br><br>關閉視窗後可從 LINE Rich Menu 預約上課。`
+          );
+        } else {
+          showError(result.error || '註冊失敗');
+        }
+      } catch (err) {
+        showError('註冊失敗：' + err.message);
+      } finally {
+        btn.disabled = false; btn.textContent = '完成註冊';
+      }
+    });
+
+    // ========================================
+    // BOOKING
+    // ========================================
+    function renderBooking() {
+      document.getElementById('status-name').textContent = studentData.name;
+      document.getElementById('status-remaining').textContent = studentData.remaining;
+
+      // Renewal promo when student is on their last session before booking it
+      // i.e., when they have 1 remaining and are about to book the 4th
+      if (studentData.remaining === 1) {
+        document.getElementById('renewal-promo').classList.remove('hidden');
+      }
+
+      // Set min date to tomorrow (24h advance)
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('book-date').min = tomorrow.toISOString().split('T')[0];
+
+      // Populate time options (every hour, 24/7)
+      const timeSelect = document.getElementById('book-time');
+      for (let h = 0; h < 24; h++) {
+        const hh = String(h).padStart(2, '0');
+        const opt = document.createElement('option');
+        opt.value = `${hh}:00`;
+        opt.textContent = `${hh}:00`;
+        timeSelect.appendChild(opt);
+      }
+
+      // Also populate reschedule time select
+      const rsTimeSelect = document.getElementById('resched-time');
+      for (let h = 0; h < 24; h++) {
+        const hh = String(h).padStart(2, '0');
+        const opt = document.createElement('option');
+        opt.value = `${hh}:00`;
+        opt.textContent = `${hh}:00`;
+        rsTimeSelect.appendChild(opt);
+      }
+
+      showScreen('booking');
+    }
+
+    document.getElementById('form-booking').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = '送出中…';
+      try {
+        const date = document.getElementById('book-date').value;
+        const time = document.getElementById('book-time').value;
+        const note = document.getElementById('book-note').value.trim();
+
+        // Client-side 24h check
+        const bookingDt = new Date(`${date}T${time}:00+08:00`);
+        const now = new Date();
+        const hoursDiff = (bookingDt - now) / (1000 * 60 * 60);
+        if (hoursDiff < 24) {
+          showError('預約必須提前 24 小時以上');
+          btn.disabled = false; btn.textContent = '送出預約';
+          return;
+        }
+
+        const result = await callApi('book', { date, time, note });
+        if (result.ok) {
+          showSuccess('預約完成 ✨',
+            `已預約 <strong style="color:var(--gold-light)">${date} ${time}</strong><br>第 ${result.booking.session} 堂課<br>剩餘 <strong>${result.student.remaining}</strong> 堂<br><br>KAYON 已收到通知，會再 LINE 跟你確認。`
+          );
+        } else {
+          showError(result.error || '預約失敗');
+        }
+      } catch (err) {
+        showError('預約失敗：' + err.message);
+      } finally {
+        btn.disabled = false; btn.textContent = '送出預約';
+      }
+    });
+
+    async function requestRenewal() {
+      try {
+        const result = await callApi('renewRequest', {});
+        if (result.ok) {
+          showSuccess('續購請求已送出 🎁',
+            'KAYON 已收到你續購意願通知，會 LINE 私訊跟你聊方案內容。<br>9 折優惠在你上完最後一堂前都有效。'
+          );
+        }
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    // ========================================
+    // LEAVE / RESCHEDULE
+    // ========================================
+    async function renderLeave() {
+      showScreen('leave');
+      try {
+        const result = await callApi('getUpcoming', {});
+        bookingsCache = result.bookings || [];
+        renderBookingsList();
+      } catch (err) {
+        document.getElementById('bookings-list').innerHTML =
+          `<div class="error">${err.message}</div>`;
+      }
+    }
+
+    function renderBookingsList() {
+      const container = document.getElementById('bookings-list');
+      if (bookingsCache.length === 0) {
+        container.innerHTML = `<div class="card" style="text-align:center;">
+          <p class="loader-text">目前沒有未來的預約</p>
+        </div>`;
+        return;
+      }
+      container.innerHTML = bookingsCache.map(b => {
+        const dt = new Date(b.startTime);
+        const now = new Date();
+        const hoursLeft = (dt - now) / (1000 * 60 * 60);
+        const locked = hoursLeft < 1;
+        const dateStr = dt.toLocaleDateString('zh-TW', { month: 'long', day: 'numeric', weekday: 'short' });
+        const timeStr = dt.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false });
+        return `<div class="booking-item ${locked ? 'locked' : ''}"
+          ${locked ? '' : `onclick="openAction('${b.id}')"`}>
+          <div class="when">${dateStr} ${timeStr}</div>
+          <div class="meta">第 ${b.session} 堂 ${locked ? '・課前 1 小時內，無法取消' : ''}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function openAction(bookingId) {
+      const booking = bookingsCache.find(b => b.id === bookingId);
+      if (!booking) return;
+      selectedBookingId = bookingId;
+      const dt = new Date(booking.startTime);
+      const dateStr = dt.toLocaleDateString('zh-TW', { month: 'long', day: 'numeric' });
+      const timeStr = dt.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false });
+      document.getElementById('action-title').textContent = `第 ${booking.session} 堂`;
+      document.getElementById('action-info').textContent = `原訂：${dateStr} ${timeStr}`;
+      document.getElementById('action-choice').classList.remove('hidden');
+      document.getElementById('reschedule-form').classList.add('hidden');
+      document.getElementById('action-modal').classList.remove('hidden');
+
+      // Set reschedule min date
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      document.getElementById('resched-date').min = tomorrow.toISOString().split('T')[0];
+    }
+
+    function closeModal() {
+      document.getElementById('action-modal').classList.add('hidden');
+      selectedBookingId = null;
+    }
+
+    function showRescheduleForm() {
+      document.getElementById('action-choice').classList.add('hidden');
+      document.getElementById('reschedule-form').classList.remove('hidden');
+    }
+
+    function hideRescheduleForm() {
+      document.getElementById('reschedule-form').classList.add('hidden');
+      document.getElementById('action-choice').classList.remove('hidden');
+    }
+
+    async function cancelBooking() {
+      if (!confirm('確定取消這堂課？')) return;
+      try {
+        const result = await callApi('cancel', { bookingId: selectedBookingId });
+        if (result.ok) {
+          closeModal();
+          showSuccess('已取消 ✓',
+            `第 ${result.booking.session} 堂已取消，剩餘 <strong>${result.student.remaining}</strong> 堂<br>KAYON 已收到通知。`
+          );
+        } else {
+          showError(result.error || '取消失敗');
+        }
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    async function submitReschedule() {
+      const date = document.getElementById('resched-date').value;
+      const time = document.getElementById('resched-time').value;
+      if (!date || !time) {
+        showError('請選擇新的日期跟時段');
+        return;
+      }
+      const newDt = new Date(`${date}T${time}:00+08:00`);
+      const now = new Date();
+      if ((newDt - now) / (1000 * 60 * 60) < 24) {
+        showError('新時段必須在 24 小時之後');
+        return;
+      }
+      try {
+        const result = await callApi('reschedule', {
+          bookingId: selectedBookingId,
+          newDate: date, newTime: time,
+        });
+        if (result.ok) {
+          closeModal();
+          showSuccess('改期完成 ✨',
+            `第 ${result.booking.session} 堂已改到 <strong>${date} ${time}</strong><br>KAYON 已收到通知。`
+          );
+        } else {
+          showError(result.error || '改期失敗');
+        }
+      } catch (err) {
+        showError(err.message);
+      }
+    }
+
+    // ========================================
+    // BOOT
+    // ========================================
+    init();
+  </script>
+</body>
+</html>
