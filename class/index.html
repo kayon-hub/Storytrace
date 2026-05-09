@@ -296,11 +296,15 @@
           <label>聯絡電話 <span class="hint">*必填</span></label>
           <input id="reg-phone" type="tel" placeholder="0912-345-678" required>
         </div>
-        <div class="field">
+          <div class="field">
           <label>學習目標 <span class="hint">想透過這 4 堂達成什麼（選填）</span></label>
-          <textarea id="reg-goal" placeholder="例如：寫一首送給伴侶的歌"></textarea>
+          <textarea id="reg-goal" placeholder="例如：寫一首送給伴侶"></textarea>
         </div>
-        <button class="btn" type="submit">完成註冊</button>
+        <div class="field">
+          <label>優惠序號 <span class="hint">（選填）</span></label>
+          <input id="reg-promo" type="text" placeholder="若有優惠代碼請輸入">
+        </div>
+        <button type="submit" class="btn">完成註冊</button>
       </form>
     </div>
 
@@ -531,6 +535,7 @@
           name: document.getElementById('reg-name').value.trim(),
           phone: document.getElementById('reg-phone').value.trim(),
           goal: document.getElementById('reg-goal').value.trim(),
+          promo: document.getElementById('reg-promo').value.trim().toUpperCase(),
         });
         if (result.ok) {
           showSuccess('註冊完成 ✨',
