@@ -296,13 +296,20 @@
           <label>聯絡電話 <span class="hint">*必填</span></label>
           <input id="reg-phone" type="tel" placeholder="0912-345-678" required>
         </div>
-          <div class="field">
+        <div class="field">
+          <label>選擇方案 <span class="hint">*必選</span></label>
+          <select id="reg-plan">
+            <option value="PLAN_A">方案 A：4 堂課 ($4,000)</option>
+            <option value="PLAN_B">方案 B：8 堂送 1 堂 ($8,000)</option>
+          </select>
+        </div>
+        <div class="field">
           <label>學習目標 <span class="hint">想透過這 4 堂達成什麼（選填）</span></label>
           <textarea id="reg-goal" placeholder="例如：寫一首送給伴侶"></textarea>
         </div>
         <div class="field">
-          <label>優惠序號 <span class="hint">（選填）</span></label>
-          <input id="reg-promo" type="text" placeholder="若有優惠代碼請輸入">
+          <label>優惠序號 <span class="hint">（若有特殊折扣請輸入）</span></label>
+          <input id="reg-promo" type="text" placeholder="例如：學生證優惠代碼">
         </div>
         <button type="submit" class="btn">完成註冊</button>
       </form>
@@ -535,6 +542,7 @@
           name: document.getElementById('reg-name').value.trim(),
           phone: document.getElementById('reg-phone').value.trim(),
           goal: document.getElementById('reg-goal').value.trim(),
+          plan: document.getElementById('reg-plan').value,
           promo: document.getElementById('reg-promo').value.trim().toUpperCase(),
         });
         if (result.ok) {
