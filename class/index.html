@@ -417,6 +417,22 @@
     // INIT
     // ========================================
     async function init() {
+      // Populate time options for both booking and reschedule forms
+      const timeSelects = ['book-time', 'resched-time'];
+      timeSelects.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.innerHTML = ''; // Clear existing
+          for (let h = 0; h < 24; h++) {
+            const hh = String(h).padStart(2, '0');
+            const opt = document.createElement('option');
+            opt.value = `${hh}:00`;
+            opt.textContent = `${hh}:00`;
+            select.appendChild(opt);
+          }
+        }
+      });
+
       try {
         await liff.init({ liffId: LIFF_ID });
 
@@ -548,25 +564,7 @@
       tomorrow.setDate(tomorrow.getDate() + 1);
       document.getElementById('book-date').min = tomorrow.toISOString().split('T')[0];
 
-      // Populate time options (every hour, 24/7)
-      const timeSelect = document.getElementById('book-time');
-      for (let h = 0; h < 24; h++) {
-        const hh = String(h).padStart(2, '0');
-        const opt = document.createElement('option');
-        opt.value = `${hh}:00`;
-        opt.textContent = `${hh}:00`;
-        timeSelect.appendChild(opt);
-      }
 
-      // Also populate reschedule time select
-      const rsTimeSelect = document.getElementById('resched-time');
-      for (let h = 0; h < 24; h++) {
-        const hh = String(h).padStart(2, '0');
-        const opt = document.createElement('option');
-        opt.value = `${hh}:00`;
-        opt.textContent = `${hh}:00`;
-        rsTimeSelect.appendChild(opt);
-      }
 
       showScreen('booking');
     }
