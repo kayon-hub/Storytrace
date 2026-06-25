@@ -238,19 +238,16 @@
   /* 呼吸燈模式 */
   .breathe-mode .lyric-line {
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 1s ease, transform 1s ease, color 0.6s ease, text-shadow 1s ease, font-size 0.3s ease;
+    transition: opacity 1.6s ease, color 1.2s ease, text-shadow 1.6s ease;
   }
   .breathe-mode .lyric-line.active {
     opacity: 1;
-    transform: translateY(0);
     color: #fff;
-    font-size: 24px;
-    animation: breatheGlow 3s ease-in-out infinite;
+    font-size: 20px;
+    animation: breatheGlow 3.5s ease-in-out infinite;
   }
   .breathe-mode .lyric-line.passed {
     opacity: 1;
-    transform: translateY(0);
     color: rgba(255,255,255,0.28);
     text-shadow: none;
     animation: none;
@@ -260,8 +257,7 @@
   .breathe-mode .instrumental-line,
   .breathe-mode .countdown-line {
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 1s ease, transform 1s ease;
+    transition: opacity 1.6s ease;
   }
   .breathe-mode .breath-line.active,
   .breathe-mode .breath-line.passed,
@@ -269,17 +265,14 @@
   .breathe-mode .instrumental-line.passed,
   .breathe-mode .countdown-line.passed {
     opacity: 1;
-    transform: translateY(0);
   }
   .breathe-mode .solo-line.active {
     opacity: 1;
-    transform: translateY(0);
-    animation: breatheGlowGold 3s ease-in-out infinite;
+    animation: breatheGlowGold 3.5s ease-in-out infinite;
   }
   .breathe-mode .instrumental-line.active,
   .breathe-mode .countdown-line.active {
     opacity: 1;
-    transform: translateY(0);
   }
 
   @keyframes breatheGlow {
