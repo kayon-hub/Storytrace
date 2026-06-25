@@ -522,7 +522,9 @@
       else if (lyricsData[i].type === "instrumental") base = "instrumental-line";
       else if (lyricsData[i].text && lyricsData[i].text.includes('爸爸 SOLO')) base = "solo-line";
       else base = "lyric-line";
-      el.className = base + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
+      let cls = base + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
+      if (lyricsData[i].time >= 9999) cls += " credit-line";
+      el.className = cls;
     });
     if (activeLine >= 0) {
       const el = document.getElementById("line-" + activeLine);
