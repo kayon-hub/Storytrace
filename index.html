@@ -275,6 +275,16 @@
     opacity: 1;
   }
 
+  .breathe-mode .credit-line {
+    opacity: 1 !important;
+    animation: none !important;
+    color: rgba(255,255,255,0.25);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 2;
+    letter-spacing: 0.5px;
+  }
+
   @keyframes breatheGlow {
     0%, 100% {
       text-shadow: 0 0 8px rgba(255,255,255,0.25), 0 0 20px rgba(0,229,255,0.1);
@@ -448,6 +458,9 @@
         } else {
           div.className = "lyric-line";
           div.innerText = line.text;
+        }
+        if (line.time >= 9999) {
+          div.classList.add("credit-line");
         }
         div.onclick = () => { audio.currentTime = line.time; };
         container.appendChild(div);
