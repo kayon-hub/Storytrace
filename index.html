@@ -464,64 +464,99 @@
   let activeLine = -1;
   let isRepeat = false;
 
+  let projects = {};
+  let currentId = null;
+  let currentData = null;
+
   window.onload = async () => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id") || "yaochi0011";
     try {
       const res = await fetch("projects.json?v=" + Date.now());
-      const projects = await res.json();
-      const data = projects[id] || projects[Object.keys(projects)[0]];
-
-      document.getElementById("trackTitle").innerText = data.title;
-      document.getElementById("trackArtist").innerText = data.artist;
-      document.getElementById("coverImg").src = data.cover;
-      document.getElementById("lyricsSongTitle").innerText = data.title;
-      document.getElementById("lyricsSongArtist").innerText = data.artist.replace(/\n/g, "　");
-      bgCover.style.backgroundImage = `url(${data.cover})`;
-      audio.src = data.music;
-      lyricsData = data.lyrics;
-
-      const container = document.getElementById("lyricsContent");
-      if (data.lyricsStyle === "breathe") {
-        container.classList.add("breathe-mode");
-      }
-      lyricsData.forEach((line, i) => {
-        const div = document.createElement("div");
-        div.id = "line-" + i;
-        if (line.type === "breath") {
-          div.className = "breath-line";
-          const circle = document.createElement("div");
-          circle.className = "breath-circle";
-          div.appendChild(circle);
-        } else if (line.type === "countdown") {
-          div.className = "countdown-line";
-          const num = document.createElement("div");
-          num.className = "countdown-num";
-          num.innerText = line.text;
-          div.appendChild(num);
-        } else if (line.type === "instrumental") {
-          div.className = "instrumental-line";
-          const txt = document.createElement("div");
-          txt.className = "instrumental-text";
-          txt.innerText = line.text;
-          div.appendChild(txt);
-        } else if (line.text && line.text.includes('爸爸 SOLO')) {
-          div.className = "solo-line";
-          div.innerText = line.text;
-        } else {
-          div.className = "lyric-line";
-          div.innerText = line.text;
-        }
-        if (line.time >= 9999) {
-          div.classList.add("credit-line");
-        }
-        div.onclick = () => { audio.currentTime = line.time; };
-        container.appendChild(div);
-      });
+      projects = await res.json();
+      loadSong(projects[id] ? id : Object.keys(projects)[0], false);
     } catch (e) {
       console.error("載入失敗", e);
     }
   };
+
+  // 載入一首歌到同一個播放器（autoplay=true 用於專輯自動接播）
+  function loadSong(id, autoplay) {
+    const data = projects[id];
+    if (!data) return;
+    currentId = id;
+    currentData = data;
+    activeLine = -1;
+
+    document.getElementById("trackTitle").innerText = data.title;
+    document.getElementById("trackArtist").innerText = data.artist;
+    document.getElementById("coverImg").src = data.cover;
+    document.getElementById("lyricsSongTitle").innerText = data.title;
+    document.getElementById("lyricsSongArtist").innerText = data.artist.replace(/\n/g, "　");
+    bgCover.style.backgroundImage = `url(${data.cover})`;
+    audio.src = data.music;
+    lyricsData = data.lyrics;
+
+    barFill.style.width = "0%";
+    document.getElementById("lyricsBarFill").style.width = "0%";
+    ["currentTime", "durationTime", "lyricsCurrentTime", "lyricsDurationTime"].forEach(k => {
+      document.getElementById(k).innerText = "0:00";
+    });
+
+    const container = document.getElementById("lyricsContent");
+    container.innerHTML = "";
+    container.classList.toggle("breathe-mode", data.lyricsStyle === "breathe");
+    lyricsData.forEach((line, i) => {
+      const div = document.createElement("div");
+      div.id = "line-" + i;
+      if (line.type === "breath") {
+        div.className = "breath-line";
+        const circle = document.createElement("div");
+        circle.className = "breath-circle";
+        div.appendChild(circle);
+      } else if (line.type === "countdown") {
+        div.className = "countdown-line";
+        const num = document.createElement("div");
+        num.className = "countdown-num";
+        num.innerText = line.text;
+        div.appendChild(num);
+      } else if (line.type === "instrumental") {
+        div.className = "instrumental-line";
+        const txt = document.createElement("div");
+        txt.className = "instrumental-text";
+        txt.innerText = line.text;
+        div.appendChild(txt);
+      } else if (line.text && line.text.includes('爸爸 SOLO')) {
+        div.className = "solo-line";
+        div.innerText = line.text;
+      } else {
+        div.className = "lyric-line";
+        div.innerText = line.text;
+      }
+      if (line.time >= 9999) {
+        div.classList.add("credit-line");
+      }
+      div.onclick = () => { audio.currentTime = line.time; };
+      container.appendChild(div);
+    });
+    const body = document.querySelector(".lyrics-body");
+    if (body) body.scrollTop = 0;
+
+    document.title = data.title + " | Storytrace";
+    try { history.replaceState(null, "", "?id=" + encodeURIComponent(id)); } catch (e) {}
+
+    if (autoplay) {
+      audio.play().then(() => {
+        playBtn.innerText = "⏸";
+        document.getElementById("lyricsPlayBtn").innerText = "⏸";
+        player.classList.add("playing");
+      }).catch(() => {
+        playBtn.innerText = "▶";
+        document.getElementById("lyricsPlayBtn").innerText = "▶";
+        player.classList.remove("playing");
+      });
+    }
+  }
 
   function togglePlay() {
     if (audio.paused) {
@@ -586,6 +621,11 @@
   }
 
   audio.onended = () => {
+    // 專輯自動接播：projects.json 的 next 指向下一首（重複播放開啟時 loop 會接管，不會走到這裡）
+    if (!isRepeat && currentData && currentData.next && projects[currentData.next]) {
+      loadSong(currentData.next, true);
+      return;
+    }
     playBtn.innerText = "▶";
     document.getElementById("lyricsPlayBtn").innerText = "▶";
     player.classList.remove("playing");

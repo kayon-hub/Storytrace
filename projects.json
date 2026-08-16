@@ -1878,7 +1878,7 @@
   },
   "ciyingmazu": {
     "title": "慈應媽祖（平安版）",
-    "artist": "作詞／作曲：KAYON\n母帶／混音：林昱辰｜郭以丞\n製作：KAYON｜郭以丞\nKARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO",
+    "artist": "作詞／作曲：KAYON｜吳尚哲｜鄭雅琳\n母帶／混音：林昱辰｜郭以丞\n製作：KAYON｜郭以丞\nKARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO",
     "cover": "ciyingmazu_cover.jpg",
     "music": "ciyingmazu.mp3",
     "lyrics": [
@@ -2131,11 +2131,11 @@
       },
       {
         "time": 9999,
-        "text": "作詞：KAYON"
+        "text": "作詞：KAYON｜吳尚哲｜鄭雅琳"
       },
       {
         "time": 9999,
-        "text": "作曲：KAYON"
+        "text": "作曲：KAYON｜吳尚哲｜鄭雅琳"
       },
       {
         "time": 9999,
@@ -2149,11 +2149,12 @@
         "time": 9999,
         "text": "℗ © 2026 KARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO"
       }
-    ]
+    ],
+    "next": "ciyingmazu_hope"
   },
   "ciyingmazu_hope": {
     "title": "慈應媽祖（希望版）",
-    "artist": "作詞／作曲：KAYON\n母帶／混音：林昱辰｜郭以丞\n製作：KAYON｜郭以丞\nKARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO",
+    "artist": "作詞／作曲：KAYON｜吳尚哲｜鄭雅琳\n母帶／混音：林昱辰｜郭以丞\n製作：KAYON｜郭以丞\nKARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO",
     "cover": "ciyingmazu_cover.jpg",
     "music": "ciyingmazu_hope.mp3",
     "lyrics": [
@@ -2406,11 +2407,11 @@
       },
       {
         "time": 9999,
-        "text": "作詞：KAYON"
+        "text": "作詞：KAYON｜吳尚哲｜鄭雅琳"
       },
       {
         "time": 9999,
-        "text": "作曲：KAYON"
+        "text": "作曲：KAYON｜吳尚哲｜鄭雅琳"
       },
       {
         "time": 9999,
@@ -2424,11 +2425,12 @@
         "time": 9999,
         "text": "℗ © 2026 KARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO"
       }
-    ]
+    ],
+    "next": "ciyingmazu_karaoke"
   },
   "ciyingmazu_karaoke": {
     "title": "慈應媽祖（卡拉OK版）",
-    "artist": "作詞／作曲：KAYON\n母帶／混音：林昱辰｜郭以丞\n製作：KAYON｜郭以丞\nKARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO",
+    "artist": "作詞／作曲：KAYON｜吳尚哲｜鄭雅琳\n母帶／混音：林昱辰｜郭以丞\n製作：KAYON｜郭以丞\nKARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO",
     "cover": "ciyingmazu_cover.jpg",
     "music": "ciyingmazu_karaoke.mp3",
     "lyrics": [
@@ -2681,11 +2683,11 @@
       },
       {
         "time": 9999,
-        "text": "作詞：KAYON"
+        "text": "作詞：KAYON｜吳尚哲｜鄭雅琳"
       },
       {
         "time": 9999,
-        "text": "作曲：KAYON"
+        "text": "作曲：KAYON｜吳尚哲｜鄭雅琳"
       },
       {
         "time": 9999,
