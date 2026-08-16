@@ -97,6 +97,27 @@ html,body{
   color:var(--accent);text-align:center;margin-bottom:2.5rem;
 }
 
+/* PLAY CTA */
+.play-cta{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  min-width:220px;
+  padding:15px 38px;
+  margin:0 auto 2.2rem;
+  background:var(--accent);color:var(--bg);
+  border-radius:100px;text-decoration:none;
+  font-size:12px;font-weight:700;letter-spacing:0.35em;
+  box-shadow:0 12px 36px rgba(200,169,110,0.35);
+  transition:transform 0.15s,box-shadow 0.2s,opacity 0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.play-cta .en{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;letter-spacing:0.25em;line-height:1;
+}
+.play-cta .tri{font-size:11px;letter-spacing:0;}
+.play-cta:hover,.play-cta:active{transform:translateY(-1px) scale(1.02);box-shadow:0 16px 44px rgba(200,169,110,0.5);}
+.play-cta:active{transform:scale(0.98);}
+
 /* 分隔線 */
 .divider{
   width:100%;height:1px;
@@ -195,6 +216,7 @@ html,body{
 .cover-wrap{animation-delay:0.2s}
 .song-title{animation-delay:0.3s}
 .song-sub{animation-delay:0.35s}
+.play-cta{animation-delay:0.38s}
 .divider{animation-delay:0.4s}
 .playlist-label{animation-delay:0.45s}
 .playlist{animation-delay:0.5s}
@@ -220,6 +242,10 @@ html,body{
 
   <h1 class="song-title">慈應媽祖</h1>
   <p class="song-sub">新竹南寮慈應會 · 2026</p>
+
+  <a href="https://storytrace.karbonxgaiaentertainment.com/?id=ciyingmazu&autoplay=1" class="play-cta">
+    <span class="tri">▶</span><span class="en">PLAY</span><span>播放</span>
+  </a>
 
   <div class="divider"></div>
 
