@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>歌詞對拍工具 | Storytrace</title>
+<style>
+  :root { --accent:#00E5FF; --bg:#000; --glass:rgba(255,255,255,0.06); --line:rgba(255,255,255,0.1); }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:#fff; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; -webkit-tap-highlight-color:transparent; }
+  .wrap { max-width:520px; margin:0 auto; padding:16px 16px 120px; }
+  h1 { font-size:14px; letter-spacing:3px; color:rgba(255,255,255,0.35); text-transform:uppercase; margin:8px 0 14px; }
+  .song { display:flex; gap:12px; align-items:center; margin-bottom:14px; }
+  .song img { width:56px; height:56px; border-radius:10px; object-fit:cover; background:#222; }
+  .song .t { font-size:17px; font-weight:700; }
+  .song .s { font-size:12px; color:rgba(255,255,255,0.4); margin-top:2px; }
+  .card { background:var(--glass); border:1px solid var(--line); border-radius:18px; padding:14px; margin-bottom:12px; }
+  .stage { text-align:center; padding:18px 8px 10px; }
+  .stage .prev { font-size:13px; color:rgba(255,255,255,0.35); min-height:20px; }
+  .stage .cur { font-size:26px; font-weight:800; line-height:1.4; margin:10px 0; min-height:36px; }
+  .stage .next { font-size:14px; color:rgba(255,255,255,0.45); min-height:20px; }
+  .stage .idx { font-size:11px; color:rgba(255,255,255,0.3); letter-spacing:1px; margin-top:6px; }
+  .progress { cursor:pointer; padding:8px 0 2px; }
+  .bar { height:4px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; }
+  .fill { height:100%; width:0; background:linear-gradient(90deg,#00E5FF,#0066FF); }
+  .times { display:flex; justify-content:space-between; font-size:11px; color:rgba(255,255,255,0.4); margin-top:5px; font-variant-numeric:tabular-nums; }
+  .row { display:flex; gap:8px; align-items:center; }
+  .row.wrapb { flex-wrap:wrap; }
+  button { border:1px solid var(--line); background:rgba(255,255,255,0.06); color:#fff; border-radius:12px; padding:10px 12px; font-size:14px; cursor:pointer; }
+  button:active { transform:scale(0.97); }
+  button.primary { background:#fff; color:#000; border-color:#fff; font-weight:700; }
+  button.accent { border-color:rgba(0,229,255,0.5); color:var(--accent); }
+  button.danger { border-color:rgba(255,80,80,0.5); color:#ff7b7b; }
+  button:disabled { opacity:0.35; }
+  .tapbtn { width:100%; padding:22px 12px; font-size:20px; font-weight:800; border-radius:18px; margin-top:10px; background:var(--accent); color:#000; border:none; box-shadow:0 8px 30px rgba(0,229,255,0.25); }
+  .tapbtn:active { transform:scale(0.98); }
+  .hint { font-size:11px; color:rgba(255,255,255,0.35); line-height:1.7; margin-top:8px; }
+  .opts { display:flex; flex-wrap:wrap; gap:10px 16px; font-size:13px; color:rgba(255,255,255,0.7); align-items:center; }
+  .opts input[type=number] { width:64px; background:rgba(255,255,255,0.08); border:1px solid var(--line); color:#fff; border-radius:8px; padding:5px 6px; font-size:13px; }
+  .list { max-height:46vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  .li { display:flex; align-items:center; gap:8px; padding:6px 4px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:14px; }
+  .li.pointer { background:rgba(0,229,255,0.08); border-radius:8px; }
+  .li .n { width:26px; font-size:11px; color:rgba(255,255,255,0.3); text-align:right; }
+  .li .txt { flex:1; cursor:pointer; }
+  .li .txt.done { color:#fff; } .li .txt.todo { color:rgba(255,255,255,0.45); }
+  .li input { width:70px; background:rgba(255,255,255,0.08); border:1px solid var(--line); color:#fff; border-radius:8px; padding:5px 6px; font-size:13px; font-variant-numeric:tabular-nums; }
+  .li .go { padding:6px 8px; font-size:12px; }
+  textarea { width:100%; min-height:110px; background:rgba(0,0,0,0.5); border:1px solid var(--line); color:#ddd; border-radius:12px; padding:10px; font-size:12px; font-family:ui-monospace,Menlo,monospace; resize:vertical; }
+  .sec-title { font-size:12px; letter-spacing:2px; color:rgba(255,255,255,0.4); margin:0 0 8px; }
+  details summary { cursor:pointer; font-size:13px; color:rgba(255,255,255,0.6); }
+  .toast { position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:#fff; color:#000; padding:10px 16px; border-radius:12px; font-size:13px; opacity:0; transition:opacity .25s; pointer-events:none; z-index:9; }
+  .toast.show { opacity:1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Storytrace · 歌詞對拍工具</h1>
+
+  <div class="song">
+    <img id="cover" alt="">
+    <div><div class="t" id="title">載入中…</div><div class="s" id="sub"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="stage">
+      <div class="prev" id="prevLine"></div>
+      <div class="cur" id="curLine">—</div>
+      <div class="next" id="nextLine"></div>
+      <div class="idx" id="idxLabel"></div>
+    </div>
+    <div class="progress" id="progress"><div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="times"><span id="cur">0:00.0</span><span id="dur">0:00</span></div></div>
+    <div class="row" style="margin-top:8px;justify-content:center;flex-wrap:wrap">
+      <button onclick="seekBy(-5)">◀ 5s</button>
+      <button class="primary" id="playBtn" onclick="togglePlay()">▶ 播放</button>
+      <button onclick="seekBy(5)">5s ▶</button>
+      <button id="rateBtn" onclick="toggleRate()">速度 1×</button>
+    </div>
+    <button class="tapbtn" id="tapBtn" onclick="mark()">標記這句　⎵</button>
+    <div class="row" style="margin-top:8px;">
+      <button class="danger" style="flex:1" onclick="undo()">上一句重來 ⌫</button>
+      <button class="accent" style="flex:1" onclick="restartFrom0()">從頭開始</button>
+    </div>
+    <div class="hint">鍵盤：<b>空白鍵／Enter</b> 標記　<b>⌫</b> 上一句重來（會倒回 2 秒）　<b>← →</b> 前後 3 秒　<b>P</b> 播放/暫停。<br>
+      聽到那句的<b>第一個字</b>唱出來的瞬間按下去；點下方任一句可把指標移過去重標，點 ▶ 從那句試聽。進度會自動存在這台裝置。</div>
+  </div>
+
+  <div class="card">
+    <div class="opts">
+      <label><input type="checkbox" id="optCountdown" checked> 前面加 3·2·1 倒數</label>
+      <label><input type="checkbox" id="optCredits" checked> 保留版權行</label>
+      <label>反應補償 <input type="number" id="optOffset" value="0.15" step="0.05" min="0" max="1"> 秒</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="sec-title">歌詞（<span id="doneCount">0</span> / <span id="totalCount">0</span> 已標）</p>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="card">
+    <p class="sec-title">輸出 JSON（projects.json 的 lyrics 陣列）</p>
+    <textarea id="out" readonly></textarea>
+    <div class="row" style="margin-top:8px;">
+      <button class="primary" style="flex:1" onclick="copyOut()">複製 JSON</button>
+      <button style="flex:1" onclick="downloadOut()">下載 .json</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <details>
+      <summary>換一首／自訂歌詞與音檔</summary>
+      <div style="margin-top:10px">
+        <div class="hint">網址加 <b>?id=歌曲id</b> 會自動從 projects.json 載入歌詞跟音檔。也可以在下面貼歌詞（一行一句，空行忽略，行首/行尾的 m:ss 會被去掉）並選本機音檔。</div>
+        <textarea id="lyricsSrc" placeholder="貼歌詞…" style="margin-top:8px"></textarea>
+        <div class="row" style="margin-top:8px;flex-wrap:wrap">
+          <button onclick="reloadLyrics()">套用歌詞（會清掉已標時間）</button>
+          <label style="font-size:13px">音檔 <input type="file" id="audioFile" accept="audio/*"></label>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<audio id="audio" preload="auto"></audio>
+<div class="toast" id="toast"></div>
+
+<script>
+const audio = document.getElementById('audio');
+const $ = id => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const songId = params.get('id') || 'ciyingmazu';
+let lines = [];      // [{text}]
+let times = [];      // number|null per line
+let credits = [];    // credit-line entries (time 9999) from source song
+let pointer = 0;     // which line the next tap marks
+let rate = 1;
+const LS_KEY = 'lyricsync:' + songId;
+
+function fmt(s, dec){ if(!isFinite(s)) return '0:00'; const m=Math.floor(s/60), r=s-m*60; return m+':'+(dec? (r<10?'0':'')+r.toFixed(1) : (Math.floor(r)<10?'0':'')+Math.floor(r)); }
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),1400); }
+function stripTs(s){ return s.replace(/^\s*\[?\d{1,2}:\d{2}(?:\.\d+)?\]?\s*/,'').replace(/[:：]?\s*\d{1,2}:\d{2}(?:\.\d+)?\s*$/,'').trim(); }
+
+async function init(){
+  try{
+    const res = await fetch('projects.json?v=' + Date.now());
+    const projects = await res.json();
+    const data = projects[songId];
+    if(!data) throw new Error('找不到 id=' + songId);
+    $('title').textContent = data.title;
+    $('sub').textContent = 'id: ' + songId + '　' + (data.artist||'').split('\n')[0];
+    $('cover').src = data.cover;
+    audio.src = data.music;
+    credits = (data.lyrics||[]).filter(l => l.time >= 9999);
+    lines = (data.lyrics||[]).filter(l => l.time < 9999 && !l.type).map(l => ({text:l.text}));
+    $('lyricsSrc').value = lines.map(l=>l.text).join('\n');
+    times = lines.map(()=>null);
+    const saved = localStorage.getItem(LS_KEY);
+    if(saved){ try{ const s=JSON.parse(saved); if(s.length===times.length){ times=s; toast('已載入上次的進度'); } }catch(e){} }
+    pointer = Math.max(0, times.findIndex(t=>t===null)); if(pointer<0) pointer=0;
+    if(times.every(t=>t!==null)) pointer = 0;
+  }catch(e){
+    $('title').textContent = '載入失敗：' + e.message;
+  }
+  render();
+}
+
+function reloadLyrics(){
+  const src = $('lyricsSrc').value.split('\n').map(stripTs).filter(Boolean);
+  if(!src.length) return;
+  lines = src.map(t=>({text:t})); times = lines.map(()=>null); pointer = 0;
+  save(); render(); toast('歌詞已套用');
+}
+$('audioFile').addEventListener('change', e => {
+  const f = e.target.files[0]; if(!f) return;
+  audio.src = URL.createObjectURL(f); toast('已載入本機音檔：' + f.name);
+});
+
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(times)); }
+
+function mark(){
+  if(!lines.length) return;
+  if(audio.paused){ audio.play(); }
+  const off = parseFloat($('optOffset').value)||0;
+  const t = Math.max(0, Math.round((audio.currentTime - off)*100)/100);
+  times[pointer] = t;
+  if(pointer < lines.length-1) pointer++;
+  save(); render();
+  const el = document.querySelector('.li.pointer'); if(el) el.scrollIntoView({block:'center', behavior:'smooth'});
+}
+function undo(){
+  // find last marked line at or before pointer
+  let i = pointer;
+  if(times[i]===null) i--;
+  while(i>=0 && times[i]===null) i--;
+  if(i<0){ toast('沒有可重來的句子'); return; }
+  const t = times[i]; times[i]=null; pointer=i;
+  audio.currentTime = Math.max(0, t-2);
+  if(audio.paused) audio.play();
+  save(); render(); toast('重標第 ' + (i+1) + ' 句');
+}
+function restartFrom0(){ pointer=0; audio.currentTime = 0; render(); }
+function setPointer(i){ pointer=i; render(); }
+function seekTo(i){ const t = times[i]; if(t===null) { toast('這句還沒標'); return; } audio.currentTime = Math.max(0, t-1.5); pointer=i; if(audio.paused) audio.play(); render(); }
+function editTime(i, v){ const n=parseFloat(v); times[i] = isNaN(n)?null:Math.round(n*100)/100; save(); renderOut(); }
+
+function togglePlay(){ if(audio.paused) audio.play(); else audio.pause(); }
+function seekBy(s){ audio.currentTime = Math.max(0, Math.min((audio.duration||1e9), audio.currentTime + s)); }
+function toggleRate(){ rate = rate===1 ? 0.8 : 1; audio.playbackRate = rate; $('rateBtn').textContent = '速度 ' + rate + '×'; }
+audio.addEventListener('play', ()=> $('playBtn').textContent='⏸ 暫停');
+audio.addEventListener('pause', ()=> $('playBtn').textContent='▶ 播放');
+audio.addEventListener('timeupdate', ()=>{
+  if(audio.duration){ $('fill').style.width = (audio.currentTime/audio.duration*100)+'%'; }
+  $('cur').textContent = fmt(audio.currentTime, true); $('dur').textContent = fmt(audio.duration||0);
+});
+$('progress').addEventListener('click', e=>{
+  const r = e.currentTarget.getBoundingClientRect(); if(audio.duration) audio.currentTime = (e.clientX-r.left)/r.width*audio.duration;
+});
+
+document.addEventListener('keydown', e=>{
+  const tag = (e.target.tagName||'').toLowerCase(); if(tag==='input'||tag==='textarea') return;
+  if(e.code==='Space'||e.code==='Enter'){ e.preventDefault(); mark(); }
+  else if(e.code==='Backspace'){ e.preventDefault(); undo(); }
+  else if(e.code==='ArrowLeft'){ e.preventDefault(); seekBy(-3); }
+  else if(e.code==='ArrowRight'){ e.preventDefault(); seekBy(3); }
+  else if(e.key==='p'||e.key==='P'){ togglePlay(); }
+});
+['optCountdown','optCredits'].forEach(id => $(id).addEventListener('change', renderOut));
+
+function render(){
+  $('prevLine').textContent = pointer>0 ? (times[pointer-1]!==null ? fmt(times[pointer-1],true)+'　' : '') + lines[pointer-1].text : '';
+  $('curLine').textContent = lines[pointer] ? lines[pointer].text : '—';
+  $('nextLine').textContent = lines[pointer+1] ? '下一句：' + lines[pointer+1].text : '';
+  $('idxLabel').textContent = lines.length ? `第 ${pointer+1} / ${lines.length} 句` : '';
+  const list = $('list'); list.innerHTML='';
+  lines.forEach((l,i)=>{
+    const d = document.createElement('div'); d.className = 'li' + (i===pointer?' pointer':'');
+    d.innerHTML = `<span class="n">${i+1}</span><span class="txt ${times[i]===null?'todo':'done'}"></span>
+      <input type="number" step="0.1" min="0" value="${times[i]===null?'':times[i]}" placeholder="—" onchange="editTime(${i}, this.value)">
+      <button class="go" onclick="seekTo(${i})">▶</button>`;
+    d.querySelector('.txt').textContent = l.text;
+    d.querySelector('.txt').onclick = ()=>setPointer(i);
+    list.appendChild(d);
+  });
+  $('doneCount').textContent = times.filter(t=>t!==null).length; $('totalCount').textContent = lines.length;
+  renderOut();
+}
+function buildOut(){
+  const out = [];
+  const marked = lines.map((l,i)=>({time:times[i], text:l.text})).filter(x=>x.time!==null);
+  if($('optCountdown').checked && marked.length){
+    const f = marked[0].time;
+    [3,2,1].forEach(n => out.push({time: Math.round((f-n)*100)/100, text:String(n), type:'countdown'}));
+  }
+  marked.forEach(x => out.push({time:x.time, text:x.text}));
+  if($('optCredits').checked) credits.forEach(c => out.push({time:9999, text:c.text}));
+  return out;
+}
+function renderOut(){ $('out').value = JSON.stringify(buildOut(), null, 2); }
+async function copyOut(){ try{ await navigator.clipboard.writeText($('out').value); toast('已複製 JSON'); }catch(e){ $('out').select(); document.execCommand('copy'); toast('已複製'); } }
+function downloadOut(){
+  const blob = new Blob([$('out').value], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = songId + '-lyrics.json'; a.click();
+}
+init();
+</script>
+</body>
+</html>

@@ -170,6 +170,59 @@
   }
   .close-lyrics:hover { color: white; }
 
+  /* 倒數 3.2.1 呼吸燈號（4/30 上傳時遺失，補回並改成呼吸燈） */
+  .countdown-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px;
+    cursor: pointer;
+  }
+  .countdown-num {
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    transition: color 0.4s ease, border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .countdown-line.active .countdown-num {
+    color: #00E5FF;
+    border-color: rgba(0,229,255,0.7);
+    transform: scale(1.25);
+    animation: countdownBreathe 1s ease-in-out infinite;
+  }
+  .countdown-line.passed .countdown-num {
+    color: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.15);
+    transform: scale(1);
+    box-shadow: none;
+    animation: none;
+  }
+  @keyframes countdownBreathe {
+    0%, 100% { box-shadow: 0 0 6px rgba(0,229,255,0.25), 0 0 14px rgba(0,229,255,0.1); }
+    50%      { box-shadow: 0 0 18px rgba(0,229,255,0.7), 0 0 40px rgba(0,229,255,0.3); }
+  }
+
+  /* 樂器段落 */
+  .instrumental-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 52px;
+    cursor: pointer;
+  }
+  .instrumental-text {
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: rgba(255,255,255,0.2);
+    transition: color 0.4s ease;
+  }
+  .instrumental-line.active .instrumental-text { color: rgba(255,255,255,0.55); }
+  .instrumental-line.passed .instrumental-text { color: rgba(255,255,255,0.3); }
+
   /* 歌詞頁底部播放列 */
   .lyrics-player-bar {
     position: absolute;
