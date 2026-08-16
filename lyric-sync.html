@@ -83,7 +83,7 @@
       <button class="accent" style="flex:1" onclick="restartFrom0()">從頭開始</button>
     </div>
     <div class="hint">鍵盤：<b>空白鍵／Enter</b> 標記　<b>⌫</b> 上一句重來（會倒回 2 秒）　<b>← →</b> 前後 3 秒　<b>P</b> 播放/暫停。<br>
-      聽到那句的<b>第一個字</b>唱出來的瞬間按下去；點下方任一句可把指標移過去重標，點 ▶ 從那句試聽。進度會自動存在這台裝置。</div>
+      聽到那句的<b>第一個字</b>唱出來的瞬間按下去；點下方任一句可把指標移過去重標，點 ▶ 從那句試聽，或直接改右邊的秒數。進度會自動存在這台裝置。</div>
   </div>
 
   <div class="card">
@@ -153,11 +153,14 @@ async function init(){
     $('cover').src = data.cover;
     audio.src = data.music;
     credits = (data.lyrics||[]).filter(l => l.time >= 9999);
-    lines = (data.lyrics||[]).filter(l => l.time < 9999 && !l.type).map(l => ({text:l.text}));
+    const srcLines = (data.lyrics||[]).filter(l => l.time < 9999 && !l.type);
+    lines = srcLines.map(l => ({text:l.text}));
     $('lyricsSrc').value = lines.map(l=>l.text).join('\n');
-    times = lines.map(()=>null);
+    // 預載目前 projects.json 已有的時間（若有），只需校對／微調
+    times = srcLines.map(l => (typeof l.time==='number' && l.time>0) ? l.time : null);
     const saved = localStorage.getItem(LS_KEY);
-    if(saved){ try{ const s=JSON.parse(saved); if(s.length===times.length){ times=s; toast('已載入上次的進度'); } }catch(e){} }
+    if(saved){ try{ const s=JSON.parse(saved); if(s.length===times.length && s.some(x=>x!==null)){ times=s; toast('已載入這台裝置上次的進度'); } }catch(e){} }
+    else if(times.some(t=>t!==null)) toast('已預載目前上線的時間，聽著校對即可');
     pointer = Math.max(0, times.findIndex(t=>t===null)); if(pointer<0) pointer=0;
     if(times.every(t=>t!==null)) pointer = 0;
   }catch(e){
