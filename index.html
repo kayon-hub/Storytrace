@@ -81,30 +81,6 @@
     transform: scale(1.04);
     box-shadow: 0 20px 60px rgba(0, 229, 255, 0.35);
   }
-  /* 封面上的 PLAY CTA（未播放時顯示，播放中隱藏） */
-  .cover-box { position: relative; }
-  .cover-cta {
-    position: absolute; left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 14px 26px;
-    border-radius: 100px;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,0.35);
-    color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 3px;
-    cursor: pointer; white-space: nowrap;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    animation: ctaPulse 2.4s ease-in-out infinite;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .cover-cta .en { font-size: 15px; letter-spacing: 4px; }
-  .cover-cta:active { transform: translate(-50%, -50%) scale(0.95); }
-  .playing .cover-cta { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.9); animation: none; }
-  @keyframes ctaPulse {
-    0%, 100% { box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 0 rgba(255,255,255,0.25); }
-    50%      { box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 12px rgba(255,255,255,0); }
-  }
   .info { margin-bottom: 20px; }
   .title { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: 1px; }
   .artist { color: rgba(255,255,255,0.45); font-size: 13px; margin-top: 8px; line-height: 1.7; white-space: pre-wrap; }
@@ -388,7 +364,6 @@
   <div class="brand">Storytrace × KAYON STUDIO</div>
   <div class="cover-box">
     <img id="coverImg" class="cover" src="" alt="專輯封面">
-    <button class="cover-cta" id="coverCta" onclick="togglePlay()" aria-label="播放">▶ <span class="en">PLAY</span> 播放</button>
   </div>
   <div class="info">
     <p id="trackTitle" class="title"></p>
