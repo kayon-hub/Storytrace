@@ -2702,5 +2702,36 @@
         "text": "℗ © 2026 KARBØN X GAIA ENTERTAINMENT｜KAYON STUDIO"
       }
     ]
+  },
+  "tingjian_liuzi": {
+    "title": "六字大明咒（KOST Edit）試聽版",
+    "artist": "新韻傳音 SOUND MUSIC × KAYON STUDIO",
+    "cover": "tingjianfanyin_cover.png",
+    "music": "liuzi-mingzhou-kost.wav",
+    "lyrics": [],
+    "next": "tingjian_dizang_v21"
+  },
+  "tingjian_dizang_v21": {
+    "title": "地藏王菩薩心咒（Version 2.1）試聽版",
+    "artist": "新韻傳音 SOUND MUSIC × KAYON STUDIO",
+    "cover": "tingjianfanyin_cover.png",
+    "music": "dizang-xinzhou-v21.wav",
+    "lyrics": [],
+    "next": "tingjian_dizang_v2"
+  },
+  "tingjian_dizang_v2": {
+    "title": "地藏王菩薩心咒（Version 2）試聽版",
+    "artist": "新韻傳音 SOUND MUSIC × KAYON STUDIO",
+    "cover": "tingjianfanyin_cover.png",
+    "music": "dizang-xinzhou-v2.wav",
+    "lyrics": [],
+    "next": "tingjian_dizang_v3"
+  },
+  "tingjian_dizang_v3": {
+    "title": "地藏王菩薩心咒（Version 3）試聽版",
+    "artist": "新韻傳音 SOUND MUSIC × KAYON STUDIO",
+    "cover": "tingjianfanyin_cover.png",
+    "music": "dizang-xinzhou-v3.wav",
+    "lyrics": []
   }
 }
