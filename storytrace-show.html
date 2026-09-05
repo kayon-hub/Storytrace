@@ -183,6 +183,17 @@ body {
 .upload-text { font-size: 13px; color: var(--muted); }
 .upload-sub { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 6px; }
 
+/* ── BANNER（錯誤／警告，取代 alert）── */
+.banner {
+  position: sticky; top: 45px; z-index: 99;
+  padding: 9px 20px; font-size: 12px; line-height: 1.5;
+  border-bottom: 1px solid var(--border);
+}
+.banner.error { background: #3a0a10; color: #ff8899; border-bottom-color: rgba(255,68,85,0.5); }
+.banner.warn  { background: #33280a; color: var(--gold); border-bottom-color: rgba(201,168,76,0.4); }
+.banner.info  { background: #0a2a20; color: var(--green); border-bottom-color: rgba(0,229,160,0.3); }
+.audio-meta { font-size: 11px; color: var(--muted); margin-top: 6px; min-height: 14px; }
+
 /* ── UTILS ── */
 .mt8 { margin-top: 8px; }
 .mt12 { margin-top: 12px; }
@@ -196,13 +207,14 @@ body {
   <div class="topbar-title">STORYTRACE SHOW</div>
   <div class="topbar-room" id="topbarRoom">Room: —</div>
 </div>
+<div id="banner" class="banner" hidden></div>
 
 <!-- ROOM -->
 <div class="section">
   <div class="sec-label">場次 Room</div>
   <div class="room-row">
     <input type="text" id="roomInput" class="room-input" placeholder="例如：wedding_0510" value="test01">
-    <button class="room-btn" onclick="setRoom()">確認</button>
+    <button class="room-btn" id="roomBtn">確認</button>
   </div>
 </div>
 
@@ -228,7 +240,8 @@ body {
         </button>
         <div id="audioFileName" style="font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">未選擇</div>
       </div>
-      <input type="file" id="audioFileInput" accept="audio/*" style="display:none">
+      <div class="audio-meta" id="audioMeta"></div>
+      <input type="file" id="audioFileInput" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg,audio/*" style="display:none">
     </div>
     <!-- 隱藏的 audio 元素 -->
     <audio id="audioPlayer" style="display:none"></audio>
@@ -237,7 +250,7 @@ body {
       <div class="song-meta" id="playerSongMeta">載入演出資料後選擇歌曲</div>
     </div>
     <div class="progress-wrap">
-      <div class="progress-bar-bg" id="progressBg" onclick="seekToClick(event)">
+      <div class="progress-bar-bg" id="progressBg">
         <div class="progress-bar-fill" id="progressFill"></div>
         <div class="progress-markers" id="progressMarkers"></div>
       </div>
@@ -278,11 +291,11 @@ body {
 <div class="section">
   <div class="sec-label">手動接管</div>
   <div class="override-row">
-    <button class="ov-btn" onclick="manualColor('hsl(340,100%,50%)')">● 玫瑰紅</button>
-    <button class="ov-btn" onclick="manualColor('hsl(45,100%,50%)')">● 金色</button>
-    <button class="ov-btn" onclick="manualColor('hsl(0,0%,100%)')">● 純白</button>
-    <button class="ov-btn" onclick="manualColor('hsl(325,100%,55%)')">● 粉紅</button>
-    <button class="ov-btn" onclick="manualOff()">⬛ 關燈</button>
+    <button class="ov-btn" data-color="hsl(340,100%,50%)">● 玫瑰紅</button>
+    <button class="ov-btn" data-color="hsl(45,100%,50%)">● 金色</button>
+    <button class="ov-btn" data-color="hsl(0,0%,100%)">● 純白</button>
+    <button class="ov-btn" data-color="hsl(325,100%,55%)">● 粉紅</button>
+    <button class="ov-btn" data-off="1">⬛ 關燈</button>
   </div>
 </div>
 
@@ -293,15 +306,21 @@ body {
     <div class="upload-text">📂 點擊或拖入 show.json</div>
     <div class="upload-sub">每場婚禮更換 JSON 即可，不需改程式碼</div>
   </div>
-  <input type="file" id="fileInput" accept=".json" style="display:none">
+  <input type="file" id="fileInput" accept=".json,application/json" style="display:none">
   <div class="ie-row mt8">
     <button class="ie-btn ie-export" id="exportBtn">↓ 匯出目前演出資料</button>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<script>
+// ============================================================
+//  Storytrace 演出控台 — classic script（非 module）
+//  - DOM 事件綁定等 gate.js 判定完（DOMContentLoaded 之後）才做；鎖定畫面中就不初始化，解鎖 reload 後再跑
+//  - Firebase 用動態 import() 載入：載入失敗只影響送指令，不會讓選檔／拖曳整個失效，畫面上直接紅字講原因
+//  - 有音樂檔時一律以 audio.currentTime 為計時基準
+// ============================================================
+(function () {
+'use strict';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
@@ -313,135 +332,229 @@ const firebaseConfig = {
   appId: "1:865058497448:web:f604e62c4c7407f464b39d"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// ── AUDIO ──
-const audio = document.getElementById('audioPlayer');
-let audioReady = false;
-
-// 選檔按鈕
-document.getElementById('audioPickBtn').addEventListener('click', () => {
-  document.getElementById('audioFileInput').click();
-});
-document.getElementById('audioFileInput').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const url = URL.createObjectURL(file);
-  audio.src = url;
-  audioReady = true;
-  document.getElementById('audioFileName').textContent = file.name;
-  document.getElementById('audioPickBtn').textContent = '✅ ' + file.name.substring(0, 20) + (file.name.length > 20 ? '…' : '');
-  audio.load();
-});
-
-// 播放結束自動下一首
-audio.addEventListener('ended', () => {
-  if (showData && currentSongIdx < showData.songs.length - 1) {
-    nextSong();
-    setTimeout(() => playShow(), 300);
-  } else {
-    stopShow();
-    updateStatus('stopped', '演出結束');
-  }
-});
-
-// 按鈕綁定
-document.getElementById('playBtn').addEventListener('click', playShow);
-document.getElementById('pauseBtn').addEventListener('click', pauseShow);
-document.getElementById('stopBtn').addEventListener('click', stopShow);
-document.getElementById('prevBtn').addEventListener('click', prevSong);
-document.getElementById('nextBtn').addEventListener('click', nextSong);
+const $ = (id) => document.getElementById(id);
 
 // ── STATE ──
+let db = null, fbRef = null, fbSet = null;
+let fbReady = false;
 let currentRoom = 'test01';
-let showData = null;       // 完整 JSON
+let showData = null;         // 完整 JSON
 let currentSongIdx = 0;
-let playState = 'stopped'; // stopped | playing | paused
-let startedAt = null;      // 開始播放的 Date.now()
-let pausedAtSec = 0;       // 暫停時音樂播到第幾秒
-let rafId = null;
-let lastCueFired = {};     // { cueId: true } 已觸發的 oneShot
+let playState = 'stopped';   // stopped | playing | paused
+let startedAt = null;        // 純燈光模式的時鐘基準（Date.now()）
+let pausedAtSec = 0;         // 暫停／定位點（秒）
+let timerId = null;
+let lastCueFired = {};       // { cueId: true }
+let audioReady = false;      // 目前這首有可播的音檔
+const songAudio = {};        // { songId: { src, label, kind } } 每首各自記住選過的音檔
+let audio = null;
 
-// ── ROOM ──
-window.setRoom = function() {
-  const val = document.getElementById('roomInput').value.trim().replace(/\s+/g,'_') || 'test01';
-  currentRoom = val;
-  document.getElementById('roomInput').value = val;
-  document.getElementById('topbarRoom').textContent = 'Room: ' + val;
-};
-setRoom();
+// ── BANNER（取代 alert）──
+let bannerTimer = null;
+function showBanner(msg, level) {
+  const el = $('banner'); if (!el) return;
+  el.textContent = msg;
+  el.className = 'banner ' + (level || 'info');
+  el.hidden = false;
+  if (bannerTimer) { clearTimeout(bannerTimer); bannerTimer = null; }
+  if (level !== 'error') bannerTimer = setTimeout(hideBanner, 8000);   // 警告／提示 8 秒自動收，錯誤留著（點一下可關）
+}
+function hideBanner() { const el = $('banner'); if (el) el.hidden = true; if (bannerTimer) { clearTimeout(bannerTimer); bannerTimer = null; } }
 
-// ── FIREBASE 連線 ──
-document.getElementById('connDot').classList.add('on');
-
-function writeControl(obj) {
-  set(ref(db, `rooms/${currentRoom}/control`), { ...obj, ts: Date.now() });
+// ── FIREBASE（動態載入）──
+async function connectFirebase() {
+  try {
+    const [appMod, dbMod] = await Promise.all([
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js'),
+    ]);
+    const app = appMod.initializeApp(firebaseConfig);
+    db = dbMod.getDatabase(app);
+    fbRef = dbMod.ref; fbSet = dbMod.set;
+    fbReady = true;
+    dbMod.onValue(dbMod.ref(db, '.info/connected'), (snap) => {
+      const on = !!snap.val();
+      $('connDot').classList.toggle('on', on);
+      $('connDot').title = on ? 'Firebase 已連線' : 'Firebase 斷線中';
+      if (on) { if ($('banner').textContent.startsWith('Firebase 斷線')) hideBanner(); }
+      else showBanner('Firebase 斷線中，重連中…（指令會等連上後補送）', 'warn');
+    });
+  } catch (err) {
+    fbReady = false;
+    $('connDot').classList.remove('on');
+    showBanner('Firebase 載入失敗：' + ((err && err.message) || err) + '。檢查網路後重新整理；選檔／預覽仍可用，但指令送不到手機。', 'error');
+  }
 }
 
-function writeShow(obj) {
-  set(ref(db, `rooms/${currentRoom}/show`), { ...obj, updatedAt: Date.now() });
+function fbWrite(path, value) {
+  if (!fbReady) { showBanner('Firebase 尚未連線，這個指令沒送出（' + path + '）', 'warn'); return Promise.resolve(); }
+  return fbSet(fbRef(db, 'rooms/' + currentRoom + '/' + path), value)
+    .catch(err => showBanner('寫入 Firebase 失敗（' + path + '）：' + err.message, 'error'));
+}
+function writeControl(obj) { return fbWrite('control', Object.assign({}, obj, { ts: Date.now() })); }
+function writeShow(obj)    { return fbWrite('show',    Object.assign({}, obj, { updatedAt: Date.now() })); }
+function writeLyrics(obj)  { return fbWrite('lyrics',  obj); }   // null＝清掉
+
+// ── ROOM ──
+function setRoom() {
+  const val = $('roomInput').value.trim().replace(/\s+/g, '_') || 'test01';
+  currentRoom = val;
+  $('roomInput').value = val;
+  $('topbarRoom').textContent = 'Room: ' + val;
+}
+
+// ── AUDIO ──
+function currentSong() { return showData ? showData.songs[currentSongIdx] : null; }
+
+function effectiveDuration() {
+  const song = currentSong();
+  if (audioReady && isFinite(audio.duration) && audio.duration > 0) return audio.duration;
+  return song ? (Number(song.durationSec) || 0) : 0;
+}
+
+function isHttpUrl(s) { return typeof s === 'string' && /^https?:\/\//i.test(s); }
+
+function setAudioSource(src, label, kind) {
+  if (audio.src && audio.src.startsWith('blob:')) { try { URL.revokeObjectURL(audio.src); } catch (e) {} }
+  audioReady = false;
+  audio.src = src;
+  $('audioFileName').textContent = label;
+  $('audioPickBtn').textContent = '✅ ' + (label.length > 22 ? label.slice(0, 22) + '…' : label);
+  $('audioMeta').textContent = kind === 'url' ? '從網址載入中…' : '讀取檔案中…';
+  audio.load();
+}
+
+function clearAudioSource(reason) {
+  if (audio.src && audio.src.startsWith('blob:')) { try { URL.revokeObjectURL(audio.src); } catch (e) {} }
+  audioReady = false;
+  audio.removeAttribute('src');
+  try { audio.load(); } catch (e) {}
+  $('audioFileName').textContent = reason || '未選擇';
+  $('audioPickBtn').textContent = '🎵 選擇音樂檔案';
+  $('audioMeta').textContent = '';
+}
+
+function refreshDurationUI() {
+  const song = currentSong(); if (!song) return;
+  const dur = effectiveDuration();
+  $('timeTotal').textContent = fmtSec(dur);
+  if (audioReady && isFinite(audio.duration)) {
+    const diff = Math.abs(audio.duration - (Number(song.durationSec) || 0));
+    $('audioMeta').textContent = '音檔長度 ' + fmtSec(audio.duration) +
+      (diff > 1 ? '（JSON 寫 ' + fmtSec(song.durationSec) + '，以音檔為準）' : '') +
+      ' · 計時基準：audio.currentTime';
+  }
+}
+
+// 選歌時決定音檔來源：這首選過檔 → 用那個；filename 是 https:// → 直接載；否則純燈光模式
+function applySongAudio(song) {
+  const saved = songAudio[song.id];
+  if (saved) { setAudioSource(saved.src, saved.label, saved.kind); return; }
+  if (isHttpUrl(song.filename)) {
+    let label = song.filename.split('/').pop() || song.filename;
+    try { label = decodeURIComponent(label); } catch (e) {}
+    songAudio[song.id] = { src: song.filename, label: label, kind: 'url' };
+    setAudioSource(song.filename, songAudio[song.id].label, 'url');
+    return;
+  }
+  clearAudioSource('未選擇（' + (song.filename || '此曲') + '）');
 }
 
 // ── 載入 JSON ──
+function validateShow(data) {
+  if (!data || typeof data !== 'object') throw new Error('不是 JSON 物件');
+  if (!Array.isArray(data.songs) || data.songs.length === 0) throw new Error('格式錯誤：缺少 songs 陣列');
+  data.songs.forEach((s, i) => {
+    if (!s.id) s.id = 'song_' + (i + 1);
+    if (!s.title) s.title = '未命名曲目 ' + (i + 1);
+    if (!Array.isArray(s.cues)) throw new Error('第 ' + (i + 1) + ' 首缺少 cues 陣列');
+    s.cues.forEach((c, j) => {
+      if (typeof c.timeSec !== 'number') throw new Error('第 ' + (i + 1) + ' 首第 ' + (j + 1) + ' 個 cue 的 timeSec 不是數字');
+      if (!c.id) c.id = s.id + '_c' + (j + 1);
+    });
+    s.cues.sort((a, b) => a.timeSec - b.timeSec);
+  });
+}
+
 function loadShow(data) {
   showData = data;
   currentSongIdx = 0;
   lastCueFired = {};
+  playState = 'stopped'; pausedAtSec = 0; startedAt = null; stopLoop();
   renderSongList();
   selectSong(0);
   updateStatus('stopped', '演出資料已載入，按「開始演出」');
 }
 
+function readShowFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      validateShow(data);
+      loadShow(data);
+      $('uploadArea').querySelector('.upload-text').textContent = '✅ ' + (data.showId || file.name);
+      hideBanner();
+    } catch (err) {
+      showBanner('載入失敗（' + file.name + '）：' + err.message, 'error');
+    }
+  };
+  reader.onerror = () => showBanner('讀檔失敗：' + file.name, 'error');
+  reader.readAsText(file);
+}
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
 function renderSongList() {
   if (!showData) return;
-  const list = document.getElementById('songList');
-  list.innerHTML = showData.songs.map((s, i) => `
-    <div class="song-item ${i===currentSongIdx?'active':''}" onclick="selectSong(${i})">
-      <div class="song-num">${i+1}</div>
-      <div class="song-item-title">${s.title}</div>
+  $('songList').innerHTML = showData.songs.map((s, i) => `
+    <div class="song-item ${i === currentSongIdx ? 'active' : ''}" data-idx="${i}">
+      <div class="song-num">${i + 1}</div>
+      <div class="song-item-title">${esc(s.title)}</div>
       <div class="song-item-dur">${fmtSec(s.durationSec)}</div>
       <div class="song-cue-count">${s.cues.length} cues</div>
     </div>
   `).join('');
 }
 
-window.selectSong = function(idx) {
+function selectSong(idx) {
   if (!showData) return;
+  if (playState !== 'stopped') stopShow();
   currentSongIdx = idx;
+  const song = showData.songs[idx];
   renderSongList();
   renderCueList();
+  applySongAudio(song);
   renderProgressMarkers();
-  const song = showData.songs[idx];
-  document.getElementById('playerSongTitle').textContent = song.title;
-  document.getElementById('playerSongMeta').textContent =
-    `時長 ${fmtSec(song.durationSec)}  ·  ${song.cues.length} 個 cue  ·  ${song.filename}`;
-  document.getElementById('timeTotal').textContent = fmtSec(song.durationSec);
-};
+  $('playerSongTitle').textContent = song.title;
+  $('playerSongMeta').textContent = '時長 ' + fmtSec(song.durationSec) + '  ·  ' + song.cues.length + ' 個 cue  ·  ' + (song.filename || '');
+  $('timeTotal').textContent = fmtSec(song.durationSec);
+  renderTime(0);
+}
 
 function renderCueList() {
   if (!showData) return;
-  const song = showData.songs[currentSongIdx];
-  const list = document.getElementById('cueList');
-  document.getElementById('cueCount').textContent = `(${song.cues.length})`;
-  list.innerHTML = song.cues.map(cue => {
+  const song = currentSong();
+  $('cueCount').textContent = '(' + song.cues.length + ')';
+  $('cueList').innerHTML = song.cues.map(cue => {
     const swatchStyle = cue.color
-      ? `background:${cue.color};border:1px solid rgba(255,255,255,0.2)`
-      : `background:rgba(255,255,255,0.1);border:1px dashed rgba(255,255,255,0.2)`;
+      ? 'background:' + esc(cue.color) + ';border:1px solid rgba(255,255,255,0.2)'
+      : 'background:rgba(255,255,255,0.1);border:1px dashed rgba(255,255,255,0.2)';
     const lyricsPreview = cue.type === 'lyrics' && cue.text
-      ? `<div style="font-size:13px;margin-top:4px;color:rgba(255,255,255,0.8);">${cue.text}</div>
+      ? `<div style="font-size:13px;margin-top:4px;color:rgba(255,255,255,0.8);">${esc(cue.text)}</div>
          <div style="font-size:10px;color:var(--gold);margin-top:2px;">${cue.words ? cue.words.length + ' 個字' : ''}</div>`
       : '';
     return `
-      <div class="cue-row" id="cue_${cue.id}">
+      <div class="cue-row" id="cue_${esc(cue.id)}">
         <div class="cue-time">${fmtSec(cue.timeSec)}</div>
         <div class="cue-swatch" style="${swatchStyle}"></div>
         <div class="cue-body">
-          <div class="cue-type">${cue.type === 'lyrics' ? '🎤 lyrics' : cue.type}${cue.oneShot?' · 一次性':''}</div>
+          <div class="cue-type">${cue.type === 'lyrics' ? '🎤 lyrics' : esc(cue.type)}${cue.oneShot ? ' · 一次性' : ''}</div>
           ${lyricsPreview}
-          ${cue.message ? `<div class="cue-msg">${cue.message}</div>` : ''}
-          ${cue.note ? `<div class="cue-note">📋 ${cue.note}</div>` : ''}
-          ${cue.position ? `<div class="cue-pos">📍 ${cue.position}</div>` : ''}
+          ${cue.message ? `<div class="cue-msg">${esc(cue.message)}</div>` : ''}
+          ${cue.note ? `<div class="cue-note">📋 ${esc(cue.note)}</div>` : ''}
+          ${cue.position ? `<div class="cue-pos">📍 ${esc(cue.position)}</div>` : ''}
         </div>
       </div>
     `;
@@ -450,186 +563,199 @@ function renderCueList() {
 
 function renderProgressMarkers() {
   if (!showData) return;
-  const song = showData.songs[currentSongIdx];
-  const container = document.getElementById('progressMarkers');
-  container.innerHTML = song.cues.map(cue => {
-    const pct = (cue.timeSec / song.durationSec) * 100;
-    return `<div class="cue-marker" style="left:${pct}%" title="${fmtSec(cue.timeSec)} ${cue.note||''}"></div>`;
+  const song = currentSong();
+  const dur = effectiveDuration() || 1;
+  $('progressMarkers').innerHTML = song.cues.map(cue => {
+    const pct = Math.min(100, (cue.timeSec / dur) * 100);
+    return `<div class="cue-marker" style="left:${pct}%" title="${fmtSec(cue.timeSec)} ${esc(cue.note || '')}"></div>`;
   }).join('');
 }
 
+function renderTime(sec) {
+  const dur = effectiveDuration();
+  const pct = dur > 0 ? Math.min((sec / dur) * 100, 100) : 0;
+  $('progressFill').style.width = pct + '%';
+  $('timeNow').textContent = fmtSec(sec);
+}
+
 // ── PLAYBACK ──
-window.playShow = function() {
-  if (!showData) { alert('請先載入演出資料（JSON）'); return; }
-  const song = showData.songs[currentSongIdx];
+async function playShow() {
+  if (!showData) { showBanner('請先載入演出資料（show.json）', 'warn'); return; }
+  if (playState === 'playing') return;
+  const song = currentSong();
+  const resuming = playState === 'paused';
+  if (!resuming) { pausedAtSec = 0; lastCueFired = {}; }
 
-  if (!audioReady) {
-    // 沒有音樂檔案也可以跑（純燈光模式）
-    startedAt = Date.now() - pausedAtSec * 1000;
+  if (audioReady) {
+    try { audio.currentTime = pausedAtSec; } catch (e) {}
+    try { await audio.play(); }
+    catch (e) {
+      showBanner('瀏覽器擋下播放（' + e.message + '），請再按一次「開始演出」', 'error');
+      return;
+    }
   } else {
-    audio.currentTime = pausedAtSec;
-    audio.play().catch(e => console.warn('audio play:', e));
+    startedAt = Date.now() - pausedAtSec * 1000;
   }
 
-  if (playState !== 'paused') {
-    lastCueFired = {};
-    pausedAtSec = 0;
-  }
-
-  startedAt = Date.now() - pausedAtSec * 1000;
   playState = 'playing';
-  updateStatus('playing', `▶ ${song.title}`);
-
+  updateStatus('playing', '▶ ' + song.title + (audioReady ? '' : '（純燈光模式：沒有音樂檔，用系統時鐘計時）'));
   writeShow({
     state: 'playing',
-    showId: showData.showId,
+    showId: showData.showId || '',
     songId: song.id,
     songIdx: currentSongIdx,
-    startedAt: startedAt,
-    durationSec: song.durationSec
+    startedAt: Date.now() - pausedAtSec * 1000,
+    durationSec: effectiveDuration()
   });
-
+  if (resuming) syncLightsAt(pausedAtSec);   // 暫停期間若被手動接管過，續播時把燈光對回 cue 狀態
   startLoop();
-};
+}
 
-window.pauseShow = function() {
+function pauseShow() {
   if (playState !== 'playing') return;
   pausedAtSec = getElapsedSec();
   playState = 'paused';
   if (audioReady) audio.pause();
   stopLoop();
-  updateStatus('paused', `⏸ ${fmtSec(pausedAtSec)} 暫停`);
-  writeShow({ state: 'paused', pausedAtSec });
-};
+  renderTime(pausedAtSec);
+  updateStatus('paused', '⏸ ' + fmtSec(pausedAtSec) + ' 暫停');
+  writeShow({ state: 'paused', pausedAtSec: pausedAtSec });
+}
 
-window.stopShow = function() {
+function stopShow(opts) {
+  opts = opts || {};
   playState = 'stopped';
   startedAt = null;
   pausedAtSec = 0;
   lastCueFired = {};
-  if (audioReady) { audio.pause(); audio.currentTime = 0; }
+  if (audioReady) { audio.pause(); try { audio.currentTime = 0; } catch (e) {} }
   stopLoop();
-  updateStatus('stopped', '已停止');
+  updateStatus('stopped', opts.text || '已停止');
   writeShow({ state: 'stopped' });
   writeControl({ type: 'off' });
-  document.getElementById('progressFill').style.width = '0%';
-  document.getElementById('timeNow').textContent = '0:00';
-  document.querySelectorAll('.cue-row').forEach(el => el.classList.remove('firing'));
-};
+  writeLyrics(null);
+  renderTime(0);
+  document.querySelectorAll('.cue-row.firing').forEach(el => el.classList.remove('firing'));
+}
 
-window.nextSong = function() {
+function nextSong() {
   if (!showData) return;
   stopShow();
   selectSong((currentSongIdx + 1) % showData.songs.length);
-};
-
-window.prevSong = function() {
+}
+function prevSong() {
   if (!showData) return;
   stopShow();
   selectSong((currentSongIdx - 1 + showData.songs.length) % showData.songs.length);
-};
+}
 
-window.seekToClick = function(e) {
-  if (!showData || playState === 'stopped') return;
-  const bg = document.getElementById('progressBg');
-  const rect = bg.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  const song = showData.songs[currentSongIdx];
-  seekTo(pct * song.durationSec);
-};
-
-function seekTo(sec) {
-  const song = showData.songs[currentSongIdx];
-  pausedAtSec = Math.max(0, Math.min(sec, song.durationSec));
-  if (audioReady) audio.currentTime = pausedAtSec;
-  if (playState === 'playing') {
-    startedAt = Date.now() - pausedAtSec * 1000;
-    lastCueFired = {};
-    song.cues.filter(c => c.timeSec < pausedAtSec && !c.oneShot).forEach(c => {
-      lastCueFired[c.id] = true;
-    });
-    writeShow({ state: 'playing', showId: showData.showId, songId: song.id, songIdx: currentSongIdx, startedAt, durationSec: song.durationSec });
+function onSongEnd() {
+  if (currentSongIdx < showData.songs.length - 1) {
+    nextSong();
+    setTimeout(playShow, 500);
+  } else {
+    stopShow({ text: '演出結束' });
   }
 }
 
-// ── LOOP ──
+function seekToClick(e) {
+  if (!showData) return;
+  const rect = $('progressBg').getBoundingClientRect();
+  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  seekTo(pct * effectiveDuration());
+}
+
+// 跳轉：跳轉點之前的 cue 視為已過（不重播），只補送最近一個顏色讓手機燈光對齊
+function seekTo(sec) {
+  if (!showData) return;
+  const song = currentSong();
+  const pos = Math.max(0, Math.min(Number(sec) || 0, effectiveDuration()));
+  pausedAtSec = pos;
+  if (audioReady) { try { audio.currentTime = pos; } catch (e) {} }
+  lastCueFired = {};
+  song.cues.forEach(c => { if (c.timeSec <= pos) lastCueFired[c.id] = true; });
+  if (playState === 'playing') {
+    startedAt = Date.now() - pos * 1000;
+    syncLightsAt(pos);
+    writeShow({ state: 'playing', showId: showData.showId || '', songId: song.id, songIdx: currentSongIdx, startedAt: startedAt, durationSec: effectiveDuration() });
+  } else {
+    playState = 'paused';   // 停止中點進度條＝定位，按「開始演出」從這裡播
+    updateStatus('paused', '已定位 ' + fmtSec(pos) + '，按「開始演出」從這裡播');
+  }
+  renderTime(pos);
+  highlightActiveCue(pos);
+}
+
+function syncLightsAt(sec) {
+  const song = currentSong(); if (!song) return;
+  const past = song.cues.filter(c => c.timeSec <= sec);
+  if (!past.length) return;
+  const last = past[past.length - 1];
+  if (last.type === 'off') { writeControl({ type: 'off' }); return; }
+  const lastColor = past.slice().reverse().find(c => c.color);
+  if (lastColor) writeControl({ type: 'color', color: lastColor.color, message: '', transition: 0.3 });
+}
+
+// ── LOOP（setInterval＋timeupdate，不用 rAF：分頁在背景時 rAF 會整個停掉，音樂還在跑 cue 卻不送）──
 function startLoop() {
   stopLoop();
-  function tick() {
-    if (playState !== 'playing') return;
-    const elapsed = getElapsedSec();
-    const song = showData.songs[currentSongIdx];
-
-    // 進度條
-    const pct = Math.min((elapsed / song.durationSec) * 100, 100);
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('timeNow').textContent = fmtSec(elapsed);
-
-    // 觸發 cues
-    song.cues.forEach(cue => {
-      if (elapsed >= cue.timeSec && !lastCueFired[cue.id]) {
-        lastCueFired[cue.id] = true;
-        fireCue(cue);
-      }
-    });
-
-    // 高亮當前 cue
-    const activeCue = [...song.cues].reverse().find(c => elapsed >= c.timeSec);
-    document.querySelectorAll('.cue-row').forEach(el => el.classList.remove('firing'));
-    if (activeCue) {
-      const el = document.getElementById('cue_' + activeCue.id);
-      if (el) el.classList.add('firing');
-    }
-
-    // 歌曲結束
-    if (elapsed >= song.durationSec) {
-      if (currentSongIdx < showData.songs.length - 1) {
-        nextSong();
-        setTimeout(() => playShow(), 500);
-      } else {
-        stopShow();
-        updateStatus('stopped', '演出結束');
-      }
-      return;
-    }
-
-    rafId = requestAnimationFrame(tick);
-  }
-  rafId = requestAnimationFrame(tick);
+  timerId = setInterval(tick, 50);
+  tick();
 }
-
 function stopLoop() {
-  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  if (timerId) { clearInterval(timerId); timerId = null; }
 }
 
 function getElapsedSec() {
-  // 有音樂且正在播放：用 audio.currentTime（最精準）
-  if (audioReady && !audio.paused && playState === 'playing') {
-    return audio.currentTime;
+  if (audioReady) return audio.currentTime;                 // 有音檔：唯一基準
+  if (playState === 'playing' && startedAt) return (Date.now() - startedAt) / 1000;
+  return pausedAtSec;
+}
+
+function tick() {
+  if (playState !== 'playing' || !showData) return;
+  const song = currentSong();
+  const elapsed = getElapsedSec();
+  renderTime(elapsed);
+
+  for (const cue of song.cues) {
+    if (elapsed >= cue.timeSec && !lastCueFired[cue.id]) {
+      lastCueFired[cue.id] = true;
+      fireCue(cue);
+    }
   }
-  // 純燈光模式或暫停：用 Date.now() 計算
-  if (!startedAt) return pausedAtSec;
-  return (Date.now() - startedAt) / 1000;
+  highlightActiveCue(elapsed);
+
+  // 純燈光模式才用 durationSec 判斷結束；有音檔靠 ended 事件
+  if (!audioReady && elapsed >= effectiveDuration()) onSongEnd();
+}
+
+function highlightActiveCue(elapsed) {
+  const song = currentSong(); if (!song) return;
+  let active = null;
+  for (const c of song.cues) { if (elapsed >= c.timeSec) active = c; else break; }
+  document.querySelectorAll('.cue-row.firing').forEach(el => el.classList.remove('firing'));
+  if (active) { const el = $('cue_' + active.id); if (el) el.classList.add('firing'); }
 }
 
 // ── FIRE CUE → Firebase ──
 function fireCue(cue) {
+  const transition = (typeof cue.transitionSec === 'number') ? cue.transitionSec : null;
   if (cue.type === 'color') {
-    writeControl({ type: 'color', color: cue.color, message: cue.message || '', transition: cue.transitionSec || 1.2 });
+    writeControl({ type: 'color', color: cue.color || '#000', message: cue.message || '', transition: transition == null ? 1.2 : transition });
   } else if (cue.type === 'off') {
     writeControl({ type: 'off' });
   } else if (cue.type === 'message') {
-    writeControl({ type: 'message', message: cue.message });
+    writeControl({ type: 'message', message: cue.message || '' });
   } else if (cue.type === 'lyrics') {
-    // 先送顏色到 control 節點
     if (cue.color) {
-      writeControl({ type: 'color', color: cue.color, message: '', transition: cue.transitionSec || 0.3 });
+      writeControl({ type: 'color', color: cue.color, message: '', transition: transition == null ? 0.3 : transition });
     }
-    // 歌詞送到獨立的 lyrics 節點，不覆蓋 control
-    set(ref(db, `rooms/${currentRoom}/lyrics`), {
+    writeLyrics({
       type: 'lyrics',
-      text: cue.text,
-      words: cue.words,
+      cueId: cue.id,
+      text: cue.text || '',
+      words: Array.isArray(cue.words) ? cue.words : [],
       highlightColor: cue.highlightColor || '#ffffff',
       ts: Date.now()
     });
@@ -637,96 +763,148 @@ function fireCue(cue) {
 }
 
 // ── MANUAL OVERRIDE ──
-window.manualColor = function(color) {
+function manualColor(color) {
   if (playState === 'playing') pauseShow();
-  writeControl({ type: 'color', color, message: '' });
-};
-window.manualOff = function() {
+  writeControl({ type: 'color', color: color, message: '' });
+}
+function manualOff() {
   if (playState === 'playing') pauseShow();
   writeControl({ type: 'off' });
-};
+  writeLyrics(null);
+}
 
 // ── STATUS UI ──
 function updateStatus(state, text) {
-  const badge = document.getElementById('statusBadge');
+  const badge = $('statusBadge');
   badge.className = 'status-badge';
   if (state === 'playing') badge.classList.add('badge-playing');
   else if (state === 'paused') badge.classList.add('badge-paused');
   else badge.classList.add('badge-stopped');
   badge.textContent = state.toUpperCase();
-  document.getElementById('statusText').textContent = text;
-}
-
-// ── FILE IMPORT ──
-window.handleDrop = function(e) {
-  e.preventDefault();
-  document.getElementById('uploadArea').classList.remove('drag');
-  const file = e.dataTransfer.files[0];
-  if (file) readShowFile(file);
-};
-window.handleFileInput = function(e) {
-  const file = e.target.files[0];
-  if (file) readShowFile(file);
-};
-function readShowFile(file) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!data.songs || !Array.isArray(data.songs)) throw new Error('格式錯誤：缺少 songs 陣列');
-      loadShow(data);
-      document.getElementById('uploadArea').querySelector('.upload-text').textContent = '✅ ' + (data.showId || file.name);
-    } catch(err) {
-      alert('載入失敗：' + err.message);
-    }
-  };
-  reader.readAsText(file);
+  $('statusText').textContent = text;
 }
 
 // ── EXPORT ──
-window.exportShow = function() {
-  if (!showData) { alert('尚未載入演出資料'); return; }
+function exportShow() {
+  if (!showData) { showBanner('尚未載入演出資料', 'warn'); return; }
   const blob = new Blob([JSON.stringify(showData, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = (showData.showId || 'show') + '.json';
-  a.click();
-};
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
 
 // ── UTILS ──
 function fmtSec(s) {
+  s = Number(s); if (!isFinite(s) || s < 0) s = 0;
   const m = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
-  return `${m}:${sec.toString().padStart(2,'0')}`;
+  return m + ':' + String(sec).padStart(2, '0');
 }
 
-// ── 初始化 ──
-document.getElementById('topbarRoom').textContent = 'Room: ' + currentRoom;
+// ── 初始化（DOMContentLoaded 之後、確認不是 gate 鎖定畫面才綁）──
+function init() {
+  audio = $('audioPlayer');
 
-// Upload area events (綁在 JS 裡，避免 module 非同步問題)
-const uploadArea = document.getElementById('uploadArea');
-const fileInput  = document.getElementById('fileInput');
-uploadArea.addEventListener('click', () => fileInput.click());
-uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('drag'); });
-uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag'));
-uploadArea.addEventListener('drop', (e) => {
-  e.preventDefault();
-  uploadArea.classList.remove('drag');
-  const file = e.dataTransfer.files[0];
-  if (file) readShowFile(file);
-});
-fileInput.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) readShowFile(file);
-});
-document.getElementById('exportBtn').addEventListener('click', () => {
-  if (!showData) { alert('尚未載入演出資料'); return; }
-  const blob = new Blob([JSON.stringify(showData, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = (showData.showId || 'show') + '.json';
-  a.click();
-});
+  $('banner').addEventListener('click', hideBanner);
+  $('banner').style.cursor = 'pointer';
+
+  // 整頁擋掉瀏覽器預設的拖放行為：演出中誤拖檔案到頁面不會把控台整頁換掉
+  document.addEventListener('dragover', (e) => { e.preventDefault(); });
+  document.addEventListener('drop', (e) => { e.preventDefault(); });
+
+  // Room
+  $('roomBtn').addEventListener('click', setRoom);
+  $('roomInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') setRoom(); });
+  setRoom();
+
+  // Show JSON：點擊／拖曳
+  const uploadArea = $('uploadArea');
+  const fileInput = $('fileInput');
+  uploadArea.addEventListener('click', () => { fileInput.value = ''; fileInput.click(); });
+  uploadArea.addEventListener('dragenter', (e) => { e.preventDefault(); uploadArea.classList.add('drag'); });
+  uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; uploadArea.classList.add('drag'); });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag'));
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag');
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) { showBanner('拖進來的不是檔案', 'warn'); return; }
+    if (!/\.json$/i.test(file.name) && file.type !== 'application/json') { showBanner('請拖入 .json 檔（拖進來的是 ' + file.name + '）', 'warn'); return; }
+    readShowFile(file);
+  });
+  fileInput.addEventListener('change', (e) => readShowFile(e.target.files && e.target.files[0]));
+  $('exportBtn').addEventListener('click', exportShow);
+
+  // 音樂選檔
+  const audioInput = $('audioFileInput');
+  $('audioPickBtn').addEventListener('click', () => { audioInput.value = ''; audioInput.click(); });
+  audioInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (playState !== 'stopped') stopShow();
+    const src = URL.createObjectURL(file);
+    const song = currentSong();
+    if (song) songAudio[song.id] = { src: src, label: file.name, kind: 'file' };
+    setAudioSource(src, file.name, 'file');
+  });
+  audio.addEventListener('loadedmetadata', () => {
+    audioReady = true;
+    refreshDurationUI();
+    renderProgressMarkers();
+    renderTime(pausedAtSec);
+    if ($('banner').textContent.startsWith('音樂檔載入失敗')) hideBanner();
+  });
+  audio.addEventListener('error', () => {
+    if (!audio.getAttribute('src')) return;   // 清除來源時的 error 不算
+    audioReady = false;
+    $('audioMeta').textContent = '';
+    $('audioFileName').textContent = '載入失敗';
+    showBanner('音樂檔載入失敗（格式不支援、檔案損壞或網址錯誤），目前為純燈光模式', 'error');
+  });
+  audio.addEventListener('ended', () => { if (playState === 'playing') onSongEnd(); });
+  audio.addEventListener('timeupdate', () => { if (playState === 'playing') tick(); });
+
+  // 播放控制
+  $('playBtn').addEventListener('click', playShow);
+  $('pauseBtn').addEventListener('click', pauseShow);
+  $('stopBtn').addEventListener('click', () => stopShow());
+  $('prevBtn').addEventListener('click', prevSong);
+  $('nextBtn').addEventListener('click', nextSong);
+  $('progressBg').addEventListener('click', seekToClick);
+
+  // 曲目（事件委派）
+  $('songList').addEventListener('click', (e) => {
+    const item = e.target.closest('.song-item[data-idx]');
+    if (item) selectSong(Number(item.dataset.idx));
+  });
+
+  // 手動接管
+  document.querySelectorAll('.ov-btn[data-color]').forEach(btn => btn.addEventListener('click', () => manualColor(btn.dataset.color)));
+  document.querySelectorAll('.ov-btn[data-off]').forEach(btn => btn.addEventListener('click', manualOff));
+
+  // 給 console／測試用
+  window.storytraceShow = {
+    playShow, pauseShow, stopShow, seekTo, selectSong, loadShow, setRoom,
+    get state() { return { playState, currentRoom, currentSongIdx, pausedAtSec, audioReady, fbReady, elapsed: getElapsedSec(), fired: Object.keys(lastCueFired).length, showId: showData && showData.showId }; }
+  };
+
+  connectFirebase();
+}
+
+function boot() {
+  if (!$('uploadArea')) return;   // gate.js 正顯示密碼畫面（body 已被換掉），解鎖後會 reload 再進來
+  try { init(); }
+  catch (err) {
+    showBanner('控台初始化失敗：' + err.message, 'error');
+    console.error(err);
+  }
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+})();
 </script>
 </body>
 </html>

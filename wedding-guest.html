@@ -95,9 +95,17 @@
     transition: color 0.15s ease, text-shadow 0.15s ease;
   }
   .lyric-word.lit {
-    color: #ffffff;
+    color: var(--lit, #ffffff);
     text-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 60px rgba(255,255,255,0.4);
   }
+  /* 一個「詞」（空格之間）是一個 run：英文／韓文詞內不斷行，中文 run 內每個字都可斷 */
+  .lyric-run { display: inline-block; }
+  .lyric-run.nowrap { white-space: nowrap; }
+  .lyric-space { display: inline-block; width: 0.35em; }
+  .lyric-space.wide { width: 1em; }
+  .lyric-gap { display: inline-block; color: rgba(255,255,255,0.25); white-space: pre; }
+  .lyric-line.long { font-size: 24px; }
+  .lyric-line.xlong { font-size: 21px; letter-spacing: 1px; }
 </style>
 </head>
 <body>
@@ -263,9 +271,13 @@
 
   // ── 監聽歌詞節點（獨立，不覆蓋 control）──
   function listenToLyrics() {
+    // onValue 一掛上去會先回「目前的值」——那是上一句（甚至上一場）的舊歌詞，跳過不重播；
+    // 之後每次控台寫入才是即時的。控台停止／關燈會把節點清成 null → 收起歌詞。
+    let first = true;
     onValue(ref(db, `rooms/${roomId}/lyrics`), (snap) => {
       const cmd = snap.val();
-      if (!cmd || cmd.type !== 'lyrics') return;
+      if (first) { first = false; if (!cmd) hideLyrics(); return; }
+      if (!cmd || cmd.type !== 'lyrics') { hideLyrics(); return; }
       showLyrics(cmd);
     });
   }
@@ -312,6 +324,78 @@
   // ── 逐字歌詞顯示 ──
   let lyricsTimers = [];
 
+  function hideLyrics() {
+    lyricsTimers.forEach(t => clearTimeout(t));
+    lyricsTimers = [];
+    document.getElementById('lyricsDisplay').classList.remove('show');
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+
+  // 照 text 排版：words 只有「字」沒有空格逗號（英文／韓文句會黏成一串），
+  // 所以沿著 text 走，遇到下一個 word 就包成可點亮的 span，中間的空格標點原樣保留。
+  // 空格切成一個個 run：英文／韓文的 run 整個不斷行（不會在音節中間折行），含中文字的 run 可逐字斷。
+  function buildLyricHtml(text, words) {
+    const tokens = [];   // { kind:'word', i, text } | { kind:'gap', text }
+    let cursor = 0;
+    let ok = true;
+    words.forEach((w, i) => {
+      const word = String(w.word == null ? '' : w.word);
+      const at = word ? text.indexOf(word, cursor) : -1;
+      if (at < 0) { ok = false; return; }
+      if (at > cursor) tokens.push({ kind: 'gap', text: text.slice(cursor, at) });
+      tokens.push({ kind: 'word', i: i, text: word });
+      cursor = at + word.length;
+    });
+    if (!ok) {
+      // text 跟 words 對不上：退回只排 words，多字詞之間補空格
+      tokens.length = 0;
+      words.forEach((w, i) => {
+        const word = String(w.word == null ? '' : w.word);
+        if (i > 0 && (word.length > 1 || String(words[i - 1].word || '').length > 1)) tokens.push({ kind: 'gap', text: ' ' });
+        tokens.push({ kind: 'word', i: i, text: word });
+      });
+    } else if (cursor < text.length) {
+      tokens.push({ kind: 'gap', text: text.slice(cursor) });
+    }
+
+    // 依空白切 run
+    const runs = [];        // 每個 run 是 { html:[], text:'' }
+    const out = [];
+    let run = null;
+    const flush = () => {
+      if (!run || !run.html.length) { run = null; return; }
+      const hasCJK = /[\u3400-\u9fff\uf900-\ufaff\u3040-\u30ff]/.test(run.text);
+      out.push('<span class="lyric-run' + (hasCJK ? '' : ' nowrap') + '">' + run.html.join('') + '</span>');
+      run = null;
+    };
+    const pushGapText = (t) => {
+      if (!t) return;
+      if (!run) run = { html: [], text: '' };
+      run.html.push('<span class="lyric-gap">' + escapeHtml(t) + '</span>');
+      run.text += t;
+    };
+    tokens.forEach(tok => {
+      if (tok.kind === 'word') {
+        if (!run) run = { html: [], text: '' };
+        run.html.push('<span class="lyric-word" id="lw_' + tok.i + '">' + escapeHtml(tok.text) + '</span>');
+        run.text += tok.text;
+        return;
+      }
+      // gap：空白前的標點黏在前一個 run，空白本身變成 run 之間的間距，空白後的黏到下一個 run
+      const m = /^(\S*)(\s+)(.*)$/s.exec(tok.text);
+      if (!m) { pushGapText(tok.text); return; }
+      pushGapText(m[1]);
+      flush();
+      out.push('<span class="lyric-space' + (/[\u3000]/.test(m[2]) ? ' wide' : '') + '"></span>');
+      pushGapText(m[3]);
+    });
+    flush();
+    return out.join('');
+  }
+
   function showLyrics(cmd) {
     // 清掉上一句的 timer
     lyricsTimers.forEach(t => clearTimeout(t));
@@ -319,22 +403,24 @@
 
     const display = document.getElementById('lyricsDisplay');
     const line = document.getElementById('lyricLine');
+    const words = Array.isArray(cmd.words) ? cmd.words : [];
 
-    if (!cmd.words || cmd.words.length === 0) {
+    if (words.length === 0) {
       display.classList.remove('show');
       return;
     }
 
-    // 建立字元 DOM
-    line.innerHTML = cmd.words.map((w, i) =>
-      `<span class="lyric-word" id="lw_${i}">${w.word}</span>`
-    ).join('');
-
+    line.style.setProperty('--lit', cmd.highlightColor || '#ffffff');
+    const text = String(cmd.text || '');
+    const visibleLen = text.replace(/\s/g, '').length;
+    line.classList.toggle('long', visibleLen > 14 && visibleLen <= 22);
+    line.classList.toggle('xlong', visibleLen > 22);
+    line.innerHTML = buildLyricHtml(text, words);
     display.classList.add('show');
 
     // 逐字點亮
-    cmd.words.forEach((w, i) => {
-      const delay = (w.offsetSec || 0) * 1000;
+    words.forEach((w, i) => {
+      const delay = Math.max(0, (Number(w.offsetSec) || 0) * 1000);
       const tid = setTimeout(() => {
         const el = document.getElementById(`lw_${i}`);
         if (el) el.classList.add('lit');
@@ -342,10 +428,8 @@
       lyricsTimers.push(tid);
     });
 
-    // 整句結束後淡出
-    const lineDuration = cmd.words.length > 0
-      ? (cmd.words[cmd.words.length - 1].offsetSec || 0) + 1.5
-      : 2;
+    // 整句結束後淡出（下一句進來會先清掉這個 timer）
+    const lineDuration = (Number(words[words.length - 1].offsetSec) || 0) + 1.5;
     const fadeTimer = setTimeout(() => {
       display.classList.remove('show');
     }, lineDuration * 1000);
