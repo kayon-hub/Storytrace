@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="ICON.png">
 <link rel="manifest" href="manifest.json">
 <script src="storytrace-auth.js"></script>
+<script src="storytrace-fx.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   :root { --gold: #C9A84C; --gold-lt: #E8C97A; --cream: #F0EBE0; --muted: rgba(240,235,224,0.45); }
@@ -356,6 +357,7 @@
     document.querySelectorAll('.orb').forEach(o => o.style.background = color);
     document.getElementById('lightOrbs').style.opacity = '1';
     document.getElementById('eventPhoto').style.boxShadow = `0 0 80px ${color}, 0 0 160px ${color}`;
+    if (window.StorytraceFX) StorytraceFX.onColor(color);
     if (message) showMessage(message);
   }
   function lightsOff() {
@@ -365,6 +367,7 @@
     document.getElementById('lightOrbs').style.opacity = '0';
     document.body.style.background = '#0D0D0D';
     document.getElementById('eventPhoto').style.boxShadow = 'none';
+    if (window.StorytraceFX) StorytraceFX.off();
   }
   function showMessage(msg) {
     const el = document.getElementById('sceneMessage');
@@ -373,6 +376,7 @@
   }
   function showWinner() {
     document.getElementById('winnerOverlay').style.display = 'flex';
+    if (window.StorytraceFX) StorytraceFX.onWin();
     if (navigator.vibrate) navigator.vibrate([300,100,300,100,500]);
     setTimeout(() => { document.getElementById('winnerOverlay').style.display = 'none'; }, 6000);
   }
@@ -473,6 +477,7 @@
     line.classList.toggle('xlong', visibleLen > 22);
     line.innerHTML = buildLyricHtml(text, words);
     display.classList.add('show');
+    if (window.StorytraceFX) StorytraceFX.onLyric();
 
     // 逐字點亮
     words.forEach((w, i) => {
