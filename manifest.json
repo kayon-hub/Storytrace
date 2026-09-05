@@ -1,18 +1,18 @@
 {
-  "name": "KAYON STUDIO",
-  "short_name": "KAYON STUDIO",
-  "description": "Storytrace × KAYON STUDIO",
-  "start_url": "/Storytrace/",
+  "name": "Storytrace",
+  "short_name": "Storytrace",
+  "description": "Storytrace — OBARAI · KAYON STUDIO · KARBØN X GAIA ENTERTAINMENT",
+  "start_url": "/wedding-guest.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#0D0D0D",
+  "theme_color": "#0D0D0D",
   "orientation": "portrait",
   "icons": [
     {
       "src": "ICON.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

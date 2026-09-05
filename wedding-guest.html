@@ -2,17 +2,26 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>活動燈光 | Storytrace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Storytrace</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Storytrace">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="apple-touch-icon" href="ICON.png">
+<link rel="manifest" href="manifest.json">
 <script src="storytrace-auth.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root { --gold: #C9A84C; --gold-lt: #E8C97A; --cream: #F0EBE0; --muted: rgba(240,235,224,0.45); }
+  html, body { height: 100%; }
   body {
-    background: #000; color: white;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-height: 100vh; display: flex; flex-direction: column;
+    background: #0D0D0D; color: var(--cream);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Segoe UI", sans-serif;
+    min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     overflow: hidden; transition: background 1.2s ease;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
   #bgGlow {
     position: fixed; inset: 0; opacity: 0;
@@ -31,33 +40,38 @@
     0%,100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-20px) scale(1.08); }
   }
-  .content { position: relative; z-index: 2; text-align: center; padding: 40px 32px; width: 100%; max-width: 380px; }
-  #joinScreen { display: flex; flex-direction: column; align-items: center; }
-  .logo { font-size: 48px; margin-bottom: 24px; }
-  .join-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-  .join-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 40px; line-height: 1.6; }
+  .content { position: relative; z-index: 2; text-align: center; padding: 40px 28px 32px; width: 100%; max-width: 380px; }
+  #joinScreen { display: flex; flex-direction: column; align-items: center; width: 100%; }
+  .wordmark { font-family: Georgia, "Times New Roman", serif; font-size: 28px; font-style: italic; font-weight: 400; letter-spacing: 0.02em; color: #fff; margin-bottom: 6px; }
+  .gold-rule { width: 36px; height: 1px; background: var(--gold); margin: 0 auto 22px; }
+  .logo { display: none; }
+  .join-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.04em; }
+  .join-sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; line-height: 1.7; }
   .name-input {
     width: 100%; padding: 16px 20px;
-    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 16px; color: white; font-size: 16px;
-    text-align: center; margin-bottom: 16px; outline: none; -webkit-appearance: none;
+    background: #141414; border: 1px solid rgba(201,168,76,0.28);
+    border-radius: 12px; color: var(--cream); font-size: 16px;
+    text-align: center; margin-bottom: 12px; outline: none; -webkit-appearance: none;
   }
-  .name-input::placeholder { color: rgba(255,255,255,0.3); }
+  .name-input:focus { border-color: var(--gold); }
+  .name-input::placeholder { color: rgba(240,235,224,0.3); }
   .join-btn {
-    width: 100%; padding: 16px; background: white; color: black;
-    border: none; border-radius: 16px; font-size: 15px; font-weight: 700;
-    cursor: pointer; letter-spacing: 1px;
+    width: 100%; min-height: 48px; padding: 14px; background: var(--gold); color: #0D0D0D;
+    border: none; border-radius: 12px; font-size: 15px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.12em;
   }
-  .join-btn:active { transform: scale(0.97); }
+  .join-btn:active { transform: scale(0.98); }
+  .join-brands { margin-top: 28px; font-size: 9px; letter-spacing: 0.14em; color: rgba(240,235,224,0.28); text-transform: uppercase; line-height: 1.6; }
   #mainScreen { display: none; flex-direction: column; align-items: center; width: 100%; }
   .event-photo {
-    width: 160px; height: 160px; border-radius: 50%;
-    background: rgba(255,255,255,0.1); border: 3px solid rgba(255,255,255,0.2);
+    width: 96px; height: 96px; border-radius: 20px;
+    background: #141414 url(ICON.png) center/72% no-repeat;
+    border: 1px solid rgba(201,168,76,0.35);
     display: flex; align-items: center; justify-content: center;
-    font-size: 64px; margin-bottom: 28px; transition: box-shadow 1s; overflow: hidden;
+    font-size: 0; margin-bottom: 24px; transition: box-shadow 1s; overflow: hidden;
   }
-  .event-title { font-size: 26px; font-weight: 800; letter-spacing: 3px; margin-bottom: 6px; }
-  .event-subtitle { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 40px; }
+  .event-title { font-size: 24px; font-weight: 600; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .event-subtitle { font-size: 11px; color: var(--muted); letter-spacing: 0.22em; margin-bottom: 40px; text-transform: uppercase; }
   .scene-message {
     font-size: 22px; font-weight: 700; min-height: 32px; margin-bottom: 32px;
     opacity: 0; transform: translateY(10px);
@@ -66,15 +80,19 @@
   }
   .scene-message.show { opacity: 1; transform: translateY(0); }
   #myId { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 40px; letter-spacing: 1px; }
-  .brand { font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,0.15); text-transform: uppercase; margin-top: 8px; }
+  .brand { font-size: 9px; letter-spacing: 0.16em; color: rgba(240,235,224,0.28); text-transform: uppercase; margin-top: 8px; }
   .winner-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 200;
+    position: fixed; inset: 0; background: rgba(13,13,13,0.94); z-index: 200;
     display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    padding: 32px;
   }
-  .winner-emoji { font-size: 80px; margin-bottom: 24px; animation: bounce 0.6s ease infinite alternate; }
-  @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
-  .winner-text { font-size: 32px; font-weight: 800; color: gold; margin-bottom: 12px; }
-  .winner-sub { font-size: 16px; color: rgba(255,255,255,0.6); }
+  .winner-emoji {
+    width: 48px; height: 48px; margin-bottom: 22px;
+    border: 1px solid var(--gold); transform: rotate(45deg);
+    animation: none;
+  }
+  .winner-text { font-size: 28px; font-weight: 600; color: var(--gold-lt); margin-bottom: 12px; letter-spacing: 0.06em; }
+  .winner-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
 
   /* ── 逐字歌詞 ── */
   #lyricsDisplay {
@@ -114,25 +132,28 @@
 <div id="lyricsDisplay"><div class="lyric-line" id="lyricLine"></div></div>
 <div id="lightOrbs"></div>
 <div id="winnerOverlay" class="winner-overlay">
-  <div class="winner-emoji">🎉</div>
+  <div class="winner-emoji" aria-hidden="true"></div>
   <div class="winner-text" id="winnerText">恭喜你！</div>
-  <div class="winner-sub" id="winnerSub">你被選中了！</div>
+  <div class="winner-sub" id="winnerSub">請依現場指示</div>
 </div>
 <div class="content">
   <div id="joinScreen">
-    <div class="logo" id="joinLogo">✨</div>
-    <div class="join-title" id="joinTitle">加入活動燈海</div>
-    <div class="join-sub" id="joinSub">輸入你的名字<br>一起點亮這個美好的時刻</div>
+    <div class="wordmark">Storytrace</div>
+    <div class="gold-rule"></div>
+    <div class="logo" id="joinLogo"></div>
+    <div class="join-title" id="joinTitle">加入這場婚禮</div>
+    <div class="join-sub" id="joinSub">手機將成為現場的光。<br>不需要安裝，也不需要帳號。</div>
     <input type="text" id="nameInput" class="name-input" placeholder="你的名字" maxlength="20">
-    <button class="join-btn" onclick="joinEvent()">加入 ✨</button>
+    <button class="join-btn" onclick="joinEvent()">加入</button>
+    <div class="join-brands">Storytrace<br>OBARAI · KAYON STUDIO · KARBØN X GAIA ENTERTAINMENT</div>
   </div>
   <div id="mainScreen">
-    <div id="eventPhoto" class="event-photo">✨</div>
+    <div id="eventPhoto" class="event-photo"></div>
     <div id="eventTitle" class="event-title">活動名稱</div>
-    <div id="eventSubtitle" class="event-subtitle">POWERED BY STORYTRACE</div>
+    <div id="eventSubtitle" class="event-subtitle">STORYTRACE</div>
     <div id="sceneMessage" class="scene-message"></div>
     <div id="myId"></div>
-    <div class="brand">STORYTRACE · KAYON STUDIO</div>
+    <div class="brand">OBARAI · KAYON STUDIO · KARBØN X GAIA ENTERTAINMENT</div>
   </div>
 </div>
 <script type="module">
@@ -162,10 +183,10 @@
 
   // ── 活動類型預設 ──
   const eventDefaults = {
-    wedding:   { logo:'💍', joinTitle:'加入婚禮燈海',   joinSub:'輸入你的名字<br>一起點亮這個美好的夜晚', photo:'💑', title:params.get('title')||'新郎 & 新娘',  subtitle:params.get('subtitle')||'FOREVER BEGINS TODAY',    winnerText:'恭喜你！',   winnerSub:'你被選中了！' },
-    corporate: { logo:'🏢', joinTitle:'加入活動互動',   joinSub:'輸入你的名字<br>一起參與這場精彩活動',   photo:'⭐', title:params.get('title')||'企業活動',    subtitle:params.get('subtitle')||'POWERED BY STORYTRACE',   winnerText:'恭喜得獎！', winnerSub:'請至台前領獎' },
-    concert:   { logo:'🎤', joinTitle:'加入演唱會燈海', joinSub:'輸入你的名字<br>一起成為今晚的主角',     photo:'🎵', title:params.get('title')||'演唱會',      subtitle:params.get('subtitle')||'LIVE · STORYTRACE',       winnerText:'恭喜你！',   winnerSub:'你被選中了！' },
-    party:     { logo:'🎉', joinTitle:'加入派對燈海',   joinSub:'輸入你的名字<br>一起嗨起來！',           photo:'🎊', title:params.get('title')||'派對活動',    subtitle:params.get('subtitle')||"LET'S PARTY",            winnerText:'恭喜得獎！', winnerSub:'幸運的你！' },
+    wedding:   { logo:'', joinTitle:'加入這場婚禮', joinSub:'手機將成為現場的光。<br>不需要安裝，也不需要帳號。', photo:'', title:params.get('title')||'Alex & Jamie',  subtitle:params.get('subtitle')||'STORYTRACE',    winnerText:'恭喜你！',   winnerSub:'請依現場指示' },
+    corporate: { logo:'', joinTitle:'加入這場活動', joinSub:'手機將成為現場的光。<br>不需要安裝，也不需要帳號。', photo:'', title:params.get('title')||'企業活動',    subtitle:params.get('subtitle')||'STORYTRACE',   winnerText:'恭喜得獎！', winnerSub:'請依現場指示' },
+    concert:   { logo:'', joinTitle:'加入這場演出', joinSub:'手機將成為現場的光。<br>不需要安裝，也不需要帳號。', photo:'', title:params.get('title')||'演唱會',      subtitle:params.get('subtitle')||'STORYTRACE',       winnerText:'恭喜你！',   winnerSub:'請依現場指示' },
+    party:     { logo:'', joinTitle:'加入這場派對', joinSub:'手機將成為現場的光。<br>不需要安裝，也不需要帳號。', photo:'', title:params.get('title')||'派對活動',    subtitle:params.get('subtitle')||'STORYTRACE',            winnerText:'恭喜得獎！', winnerSub:'請依現場指示' },
   };
 
   const ev = eventDefaults[eventType] || eventDefaults.wedding;

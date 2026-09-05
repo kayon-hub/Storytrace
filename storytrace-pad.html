@@ -2,8 +2,13 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>副控 iPad | Storytrace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>副控 | Storytrace</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Storytrace 副控">
+<meta name="theme-color" content="#0D0D0D">
+<link rel="apple-touch-icon" href="ICON.png">
 <script src="storytrace-gate.js"></script>
 <script src="storytrace-auth.js"></script>
 <style>
@@ -83,7 +88,7 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
 </head>
 <body>
 <div class="topbar">
-  <div class="topbar-title">STORYTRACE PAD</div>
+  <div class="topbar-title">STORYTRACE · 副控</div>
   <div class="topbar-ver" id="verTag">v2026-09-05.5</div>
   <div class="pill" id="connPill">連線中…</div>
   <div class="pill" id="hostPill">主控：—</div>
@@ -119,12 +124,12 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
   <div class="right">
     <div class="big">
       <button class="btn go" id="goBtn">GO<small id="goSub">開始演出</small></button>
-      <button class="btn hold" id="holdBtn">⏸ HOLD</button>
+      <button class="btn hold" id="holdBtn">HOLD</button>
     </div>
     <div class="row">
       <button class="btn" id="prevBtn">← 上一首</button>
       <button class="btn" id="nextBtn">下一首 →</button>
-      <button class="btn" id="offBtn">⬛ 關燈</button>
+      <button class="btn" id="offBtn">關燈</button>
       <button class="btn stop" id="stopBtn">■ STOP</button>
     </div>
     <div class="colors">
@@ -302,7 +307,7 @@ function render() {
 
   const songs = show && Array.isArray(show.songs) ? show.songs : [];
   if (songs.length) {
-    $('songList').innerHTML = songs.map((s, i) => `<div class="song-item${i === show.songIdx ? ' active' : ''}" data-idx="${i}"><div class="num">${i + 1}</div><div class="title">${esc(s.title)}</div><div class="audio ${s.audioReady ? 'ok' : 'missing'}">${s.audioReady ? '✅ 音檔' : '⚠️ 缺音檔'}</div><div style="font-size:12px;color:var(--muted)">${(s.trigger || 'manual') === 'auto' ? '自動接' : '等 GO'} · ${fmtSec(s.durationSec)}</div></div>`).join('');
+    $('songList').innerHTML = songs.map((s, i) => `<div class="song-item${i === show.songIdx ? ' active' : ''}" data-idx="${i}"><div class="num">${i + 1}</div><div class="title">${esc(s.title)}</div><div class="audio ${s.audioReady ? 'ok' : 'missing'}">${s.audioReady ? '音檔已配' : '缺音檔'}</div><div style="font-size:12px;color:var(--muted)">${(s.trigger || 'manual') === 'auto' ? '自動接' : '等 GO'} · ${fmtSec(s.durationSec)}</div></div>`).join('');
   } else $('songList').innerHTML = '<div style="font-size:13px;color:var(--muted);padding:12px;">主控載入演出資料後這裡會列出曲目</div>';
 
   const ok = canCommand() && pendingCount === 0;

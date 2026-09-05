@@ -88,9 +88,10 @@
     const wrap = document.createElement('div');
     wrap.style.cssText = 'width:100%;max-width:340px;text-align:center;';
     wrap.innerHTML = `
-      <div style="font-size:44px;margin-bottom:8px;">🎛️</div>
-      <h1 style="margin:0 0 4px;font-size:18px;letter-spacing:3px;font-weight:600;">STORYTRACE</h1>
-      <p style="opacity:.45;margin:0 0 28px;font-size:11px;letter-spacing:2px;">CONTROL PANEL ACCESS</p>
+      <div style="font-family:Georgia,serif;font-style:italic;font-size:28px;margin-bottom:8px;color:#F0EBE0;">Storytrace</div>
+      <div style="width:36px;height:1px;background:#C9A84C;margin:0 auto 18px;"></div>
+      <h1 style="margin:0 0 4px;font-size:13px;letter-spacing:3px;font-weight:600;">主控／副控</h1>
+      <p style="opacity:.45;margin:0 0 28px;font-size:11px;letter-spacing:2px;">KAYON STUDIO · KARBØN X GAIA · OBARAI</p>
       <input type="password" id="st-pwd" placeholder="輸入控台密碼" autocomplete="off" autocapitalize="off" autocorrect="off"
         style="width:100%;padding:14px 16px;border:1px solid rgba(201,168,76,.3);background:#1a1a1a;color:#fff;border-radius:8px;font-size:16px;outline:none;box-sizing:border-box;letter-spacing:2px;text-align:center;">
       <button id="st-unlock"
@@ -147,9 +148,9 @@
       if (inputHash === CONFIG.PASSWORD_HASH.toLowerCase()) {
         clearAttempts();
         if (remEl.checked) writeCache();
-        btnEl.textContent = '✓ UNLOCKED';
-        btnEl.style.background = '#27ae60';
-        btnEl.style.color = '#fff';
+        btnEl.textContent = 'UNLOCKED';
+        btnEl.style.background = '#C9A84C';
+        btnEl.style.color = '#0D0D0D';
         setTimeout(() => location.reload(), 200);
       } else {
         btnEl.disabled = false;
