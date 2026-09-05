@@ -224,6 +224,8 @@
     });
 
     listenToControl();
+    listenToLyrics();
+    listenToShow();
     if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{});
   }
 
@@ -252,12 +254,19 @@
       const cmd = snap.val();
       if (!cmd) return;
       if (cmd.type === 'color' || cmd.type === 'scene') setLight(cmd.color, cmd.message || '', cmd.transition);
-      else if (cmd.type === 'lyrics') showLyrics(cmd);
       else if (cmd.type === 'message') showMessage(cmd.message);
       else if (cmd.type === 'off') lightsOff();
       else if (cmd.type === 'lottery' && guestKey && cmd.winner === guestKey) showWinner();
-      // reset：清除這個 room 的 localStorage，下次要重填名字
       else if (cmd.type === 'reset') localStorage.removeItem(STORAGE_KEY);
+    });
+  }
+
+  // ── 監聽歌詞節點（獨立，不覆蓋 control）──
+  function listenToLyrics() {
+    onValue(ref(db, `rooms/${roomId}/lyrics`), (snap) => {
+      const cmd = snap.val();
+      if (!cmd || cmd.type !== 'lyrics') return;
+      showLyrics(cmd);
     });
   }
 
@@ -266,7 +275,6 @@
     onValue(ref(db, `rooms/${roomId}/show`), (snap) => {
       const show = snap.val();
       if (!show || show.state === 'stopped') return;
-      // 控台主動推送 control 指令，賓客接收即可
     });
   }
 

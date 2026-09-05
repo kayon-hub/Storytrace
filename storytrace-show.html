@@ -276,16 +276,13 @@ body {
 <!-- IMPORT/EXPORT -->
 <div class="section">
   <div class="sec-label">演出資料</div>
-  <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()"
-    ondragover="event.preventDefault();this.classList.add('drag')"
-    ondragleave="this.classList.remove('drag')"
-    ondrop="handleDrop(event)">
+  <div class="upload-area" id="uploadArea">
     <div class="upload-text">📂 點擊或拖入 show.json</div>
     <div class="upload-sub">每場婚禮更換 JSON 即可，不需改程式碼</div>
   </div>
-  <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleFileInput(event)">
+  <input type="file" id="fileInput" accept=".json" style="display:none">
   <div class="ie-row mt8">
-    <button class="ie-btn ie-export" onclick="exportShow()">↓ 匯出目前演出資料</button>
+    <button class="ie-btn ie-export" id="exportBtn">↓ 匯出目前演出資料</button>
   </div>
 </div>
 
@@ -565,20 +562,18 @@ function fireCue(cue) {
   } else if (cue.type === 'message') {
     writeControl({ type: 'message', message: cue.message });
   } else if (cue.type === 'lyrics') {
-    // 送出背景顏色 + 逐字歌詞
+    // 先送顏色到 control 節點
     if (cue.color) {
       writeControl({ type: 'color', color: cue.color, message: '', transition: cue.transitionSec || 0.3 });
     }
-    // 稍微延遲再送歌詞，讓顏色先換
-    setTimeout(() => {
-      writeControl({
-        type: 'lyrics',
-        text: cue.text,
-        words: cue.words,
-        color: cue.color,
-        highlightColor: cue.highlightColor || '#ffffff',
-      });
-    }, 100);
+    // 歌詞送到獨立的 lyrics 節點，不覆蓋 control
+    set(ref(db, `rooms/${currentRoom}/lyrics`), {
+      type: 'lyrics',
+      text: cue.text,
+      words: cue.words,
+      highlightColor: cue.highlightColor || '#ffffff',
+      ts: Date.now()
+    });
   }
 }
 
@@ -646,8 +641,33 @@ function fmtSec(s) {
   return `${m}:${sec.toString().padStart(2,'0')}`;
 }
 
-// 初始化
+// ── 初始化 ──
 document.getElementById('topbarRoom').textContent = 'Room: ' + currentRoom;
+
+// Upload area events (綁在 JS 裡，避免 module 非同步問題)
+const uploadArea = document.getElementById('uploadArea');
+const fileInput  = document.getElementById('fileInput');
+uploadArea.addEventListener('click', () => fileInput.click());
+uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('drag'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag'));
+uploadArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadArea.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) readShowFile(file);
+});
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) readShowFile(file);
+});
+document.getElementById('exportBtn').addEventListener('click', () => {
+  if (!showData) { alert('尚未載入演出資料'); return; }
+  const blob = new Blob([JSON.stringify(showData, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (showData.showId || 'show') + '.json';
+  a.click();
+});
 </script>
 </body>
 </html>
