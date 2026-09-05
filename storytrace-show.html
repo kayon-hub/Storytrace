@@ -219,6 +219,19 @@ body {
 <div class="section">
   <div class="sec-label">播放器</div>
   <div class="player-card">
+    <!-- 音樂選檔 -->
+    <div style="margin-bottom:16px;">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">音樂來源</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button id="audioPickBtn" style="padding:10px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;flex:1;text-align:left;">
+          🎵 選擇音樂檔案
+        </button>
+        <div id="audioFileName" style="font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">未選擇</div>
+      </div>
+      <input type="file" id="audioFileInput" accept="audio/*" style="display:none">
+    </div>
+    <!-- 隱藏的 audio 元素 -->
+    <audio id="audioPlayer" style="display:none"></audio>
     <div class="song-info">
       <div class="song-title" id="playerSongTitle">— 尚未選擇歌曲 —</div>
       <div class="song-meta" id="playerSongMeta">載入演出資料後選擇歌曲</div>
@@ -234,13 +247,13 @@ body {
       </div>
     </div>
     <div class="player-controls">
-      <button class="ctrl-btn ctrl-play" onclick="playShow()">▶ 開始演出</button>
-      <button class="ctrl-btn ctrl-pause" onclick="pauseShow()">⏸ 暫停</button>
-      <button class="ctrl-btn ctrl-stop" onclick="stopShow()">■</button>
+      <button class="ctrl-btn ctrl-play" id="playBtn">▶ 開始演出</button>
+      <button class="ctrl-btn ctrl-pause" id="pauseBtn">⏸ 暫停</button>
+      <button class="ctrl-btn ctrl-stop" id="stopBtn">■</button>
     </div>
     <div class="player-controls mt8">
-      <button class="ctrl-btn ctrl-skip" onclick="prevSong()" style="flex:1">← 上一首</button>
-      <button class="ctrl-btn ctrl-skip" onclick="nextSong()" style="flex:1">下一首 →</button>
+      <button class="ctrl-btn ctrl-skip" id="prevBtn" style="flex:1">← 上一首</button>
+      <button class="ctrl-btn ctrl-skip" id="nextBtn" style="flex:1">下一首 →</button>
     </div>
   </div>
 </div>
@@ -302,6 +315,43 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
+// ── AUDIO ──
+const audio = document.getElementById('audioPlayer');
+let audioReady = false;
+
+// 選檔按鈕
+document.getElementById('audioPickBtn').addEventListener('click', () => {
+  document.getElementById('audioFileInput').click();
+});
+document.getElementById('audioFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  audio.src = url;
+  audioReady = true;
+  document.getElementById('audioFileName').textContent = file.name;
+  document.getElementById('audioPickBtn').textContent = '✅ ' + file.name.substring(0, 20) + (file.name.length > 20 ? '…' : '');
+  audio.load();
+});
+
+// 播放結束自動下一首
+audio.addEventListener('ended', () => {
+  if (showData && currentSongIdx < showData.songs.length - 1) {
+    nextSong();
+    setTimeout(() => playShow(), 300);
+  } else {
+    stopShow();
+    updateStatus('stopped', '演出結束');
+  }
+});
+
+// 按鈕綁定
+document.getElementById('playBtn').addEventListener('click', playShow);
+document.getElementById('pauseBtn').addEventListener('click', pauseShow);
+document.getElementById('stopBtn').addEventListener('click', stopShow);
+document.getElementById('prevBtn').addEventListener('click', prevSong);
+document.getElementById('nextBtn').addEventListener('click', nextSong);
 
 // ── STATE ──
 let currentRoom = 'test01';
@@ -413,20 +463,23 @@ window.playShow = function() {
   if (!showData) { alert('請先載入演出資料（JSON）'); return; }
   const song = showData.songs[currentSongIdx];
 
-  if (playState === 'paused') {
-    // 從暫停位置繼續
+  if (!audioReady) {
+    // 沒有音樂檔案也可以跑（純燈光模式）
     startedAt = Date.now() - pausedAtSec * 1000;
   } else {
-    // 重新開始
-    startedAt = Date.now();
-    pausedAtSec = 0;
-    lastCueFired = {};
+    audio.currentTime = pausedAtSec;
+    audio.play().catch(e => console.warn('audio play:', e));
   }
 
+  if (playState !== 'paused') {
+    lastCueFired = {};
+    pausedAtSec = 0;
+  }
+
+  startedAt = Date.now() - pausedAtSec * 1000;
   playState = 'playing';
   updateStatus('playing', `▶ ${song.title}`);
 
-  // 寫入 Firebase，讓賓客端知道演出開始
   writeShow({
     state: 'playing',
     showId: showData.showId,
@@ -443,6 +496,7 @@ window.pauseShow = function() {
   if (playState !== 'playing') return;
   pausedAtSec = getElapsedSec();
   playState = 'paused';
+  if (audioReady) audio.pause();
   stopLoop();
   updateStatus('paused', `⏸ ${fmtSec(pausedAtSec)} 暫停`);
   writeShow({ state: 'paused', pausedAtSec });
@@ -453,6 +507,7 @@ window.stopShow = function() {
   startedAt = null;
   pausedAtSec = 0;
   lastCueFired = {};
+  if (audioReady) { audio.pause(); audio.currentTime = 0; }
   stopLoop();
   updateStatus('stopped', '已停止');
   writeShow({ state: 'stopped' });
@@ -480,19 +535,18 @@ window.seekToClick = function(e) {
   const rect = bg.getBoundingClientRect();
   const pct = (e.clientX - rect.left) / rect.width;
   const song = showData.songs[currentSongIdx];
-  const targetSec = pct * song.durationSec;
-  seekTo(targetSec);
+  seekTo(pct * song.durationSec);
 };
 
 function seekTo(sec) {
   const song = showData.songs[currentSongIdx];
   pausedAtSec = Math.max(0, Math.min(sec, song.durationSec));
+  if (audioReady) audio.currentTime = pausedAtSec;
   if (playState === 'playing') {
     startedAt = Date.now() - pausedAtSec * 1000;
-    // 重設 oneShot cues 在 seek 點之前的已觸發狀態
     lastCueFired = {};
     song.cues.filter(c => c.timeSec < pausedAtSec && !c.oneShot).forEach(c => {
-      lastCueFired[c.id] = true; // 標記為已觸發，不重播
+      lastCueFired[c.id] = true;
     });
     writeShow({ state: 'playing', showId: showData.showId, songId: song.id, songIdx: currentSongIdx, startedAt, durationSec: song.durationSec });
   }
@@ -549,6 +603,11 @@ function stopLoop() {
 }
 
 function getElapsedSec() {
+  // 有音樂且正在播放：用 audio.currentTime（最精準）
+  if (audioReady && !audio.paused && playState === 'playing') {
+    return audio.currentTime;
+  }
+  // 純燈光模式或暫停：用 Date.now() 計算
   if (!startedAt) return pausedAtSec;
   return (Date.now() - startedAt) / 1000;
 }
