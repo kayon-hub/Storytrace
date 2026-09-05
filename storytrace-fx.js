@@ -224,14 +224,5 @@
     for (i = 0; i < parts.length; i++) parts[i].decay = 0.04;
   }
 
-  global.StorytraceFX = { onColor: onColor, onLyric: onLyric, onWin: onWin, off: off };
-
-  if (/(?:\?|&)fxdemo=1(?:&|$)/.test(location.search || '')) {
-    window.addEventListener('load', function () {
-      setTimeout(function () { onColor('hsl(340,100%,50%)'); }, 500);
-      setTimeout(function () { onLyric(); }, 2000);
-      setTimeout(function () { onColor('hsl(45,100%,50%)'); }, 3600);
-      setTimeout(function () { fireworks(); }, 5400);
-    });
-  }
+  global.StorytraceFX = { onColor: onColor, onLyric: onLyric, onWin: onWin, off: off, fireworks: fireworks };
 })(window);

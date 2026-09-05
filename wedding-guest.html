@@ -174,7 +174,7 @@
     <div id="eventPhoto" class="event-photo"></div>
     <div id="eventTitle" class="event-title">活動名稱</div>
     <div id="eventSubtitle" class="event-subtitle">STORYTRACE</div>
-    <div class="wait-hint">請讓畫面保持開啟</div>
+    <div class="wait-hint" id="waitHint">請讓畫面保持開啟</div>
     <div id="sceneMessage" class="scene-message"></div>
     <div id="myId"></div>
     <div class="brand">OBARAI · KAYON STUDIO · KARBØN X GAIA ENTERTAINMENT</div>
@@ -296,6 +296,25 @@
     listenToControl();
     listenToLyrics();
     if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{});
+    if (isFxDemo()) {
+      const hint = document.getElementById('waitHint');
+      if (hint) hint.textContent = '特效預覽 · 點畫面可再看一輪';
+      setTimeout(playFxDemoShow, 500);
+      document.getElementById('mainScreen').addEventListener('click', playFxDemoShow);
+    }
+  }
+
+  function isFxDemo() {
+    return /(?:\?|&)fxdemo=1(?:&|$)/.test(location.search || '');
+  }
+
+  function playFxDemoShow() {
+    setLight('hsl(340,100%,50%)', '入場');
+    setTimeout(() => { if (window.StorytraceFX) StorytraceFX.onLyric(); }, 1600);
+    setTimeout(() => setLight('hsl(45,100%,50%)', '副歌'), 3000);
+    setTimeout(() => setLight('hsl(0,0%,96%)', ''), 4800);
+    setTimeout(() => showWinner(), 6400);
+    setTimeout(() => lightsOff(), 12000);
   }
 
   // ── 加入按鈕 ──
