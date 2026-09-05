@@ -23,6 +23,13 @@
     overflow: hidden; transition: background 1.2s ease;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
+  body.join-mode::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 80% 100%, rgba(201,168,76,0.05) 0%, transparent 50%);
+  }
   #bgGlow {
     position: fixed; inset: 0; opacity: 0;
     transition: opacity 1.2s ease, background-color 1.2s ease;
@@ -42,11 +49,16 @@
   }
   .content { position: relative; z-index: 2; text-align: center; padding: 40px 28px 32px; width: 100%; max-width: 380px; }
   #joinScreen { display: flex; flex-direction: column; align-items: center; width: 100%; }
-  .wordmark { font-family: Georgia, "Times New Roman", serif; font-size: 28px; font-style: italic; font-weight: 400; letter-spacing: 0.02em; color: #fff; margin-bottom: 6px; }
+  .join-icon {
+    width: 72px; height: 72px; border-radius: 16px; object-fit: cover;
+    margin-bottom: 20px; border: 1px solid rgba(201,168,76,0.28);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  }
+  .wordmark { font-family: Georgia, "Times New Roman", serif; font-size: 34px; font-style: italic; font-weight: 400; letter-spacing: 0.01em; color: #fff; margin-bottom: 8px; }
   .gold-rule { width: 36px; height: 1px; background: var(--gold); margin: 0 auto 22px; }
   .logo { display: none; }
-  .join-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.04em; }
-  .join-sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; line-height: 1.7; }
+  .join-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.06em; }
+  .join-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.7; }
   .name-input {
     width: 100%; padding: 16px 20px;
     background: #141414; border: 1px solid rgba(201,168,76,0.28);
@@ -64,14 +76,22 @@
   .join-brands { margin-top: 28px; font-size: 9px; letter-spacing: 0.14em; color: rgba(240,235,224,0.28); text-transform: uppercase; line-height: 1.6; }
   #mainScreen { display: none; flex-direction: column; align-items: center; width: 100%; }
   .event-photo {
-    width: 96px; height: 96px; border-radius: 20px;
+    width: 88px; height: 88px; border-radius: 18px;
     background: #141414 url(ICON.png) center/72% no-repeat;
     border: 1px solid rgba(201,168,76,0.35);
     display: flex; align-items: center; justify-content: center;
-    font-size: 0; margin-bottom: 24px; transition: box-shadow 1s; overflow: hidden;
+    font-size: 0; margin-bottom: 20px; transition: box-shadow 1s, opacity 0.6s; overflow: hidden;
   }
-  .event-title { font-size: 24px; font-weight: 600; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .event-subtitle { font-size: 11px; color: var(--muted); letter-spacing: 0.22em; margin-bottom: 40px; text-transform: uppercase; }
+  .event-title { font-size: 26px; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .event-subtitle { font-size: 11px; color: var(--muted); letter-spacing: 0.22em; margin-bottom: 16px; text-transform: uppercase; }
+  .wait-hint { font-size: 13px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 28px; }
+  body.live-light .event-photo,
+  body.live-light .event-subtitle,
+  body.live-light .wait-hint,
+  body.live-light #myId,
+  body.live-light .brand { opacity: 0; pointer-events: none; }
+  body.live-light .event-title { opacity: 0.0; }
+  body.live-light .scene-message { text-shadow: 0 2px 24px rgba(0,0,0,0.55); }
   .scene-message {
     font-size: 22px; font-weight: 700; min-height: 32px; margin-bottom: 32px;
     opacity: 0; transform: translateY(10px);
@@ -96,7 +116,7 @@
 
   /* ── 逐字歌詞 ── */
   #lyricsDisplay {
-    position: fixed; bottom: 80px; left: 0; right: 0;
+    position: fixed; bottom: calc(72px + env(safe-area-inset-bottom)); left: 0; right: 0;
     z-index: 50; text-align: center; padding: 0 24px;
     pointer-events: none;
     opacity: 0; transition: opacity 0.4s ease;
@@ -127,17 +147,19 @@
   .lyric-line.xlong { font-size: 21px; letter-spacing: 1px; }
 </style>
 </head>
-<body>
+<body class="join-mode">
 <div id="bgGlow"></div>
 <div id="lyricsDisplay"><div class="lyric-line" id="lyricLine"></div></div>
 <div id="lightOrbs"></div>
 <div id="winnerOverlay" class="winner-overlay">
+  <div class="wordmark" style="font-size:20px;margin-bottom:18px;">Storytrace</div>
   <div class="winner-emoji" aria-hidden="true"></div>
   <div class="winner-text" id="winnerText">恭喜你！</div>
   <div class="winner-sub" id="winnerSub">請依現場指示</div>
 </div>
 <div class="content">
   <div id="joinScreen">
+    <img class="join-icon" src="ICON.png" alt="Storytrace">
     <div class="wordmark">Storytrace</div>
     <div class="gold-rule"></div>
     <div class="logo" id="joinLogo"></div>
@@ -151,6 +173,7 @@
     <div id="eventPhoto" class="event-photo"></div>
     <div id="eventTitle" class="event-title">活動名稱</div>
     <div id="eventSubtitle" class="event-subtitle">STORYTRACE</div>
+    <div class="wait-hint">請讓畫面保持開啟</div>
     <div id="sceneMessage" class="scene-message"></div>
     <div id="myId"></div>
     <div class="brand">OBARAI · KAYON STUDIO · KARBØN X GAIA ENTERTAINMENT</div>
@@ -255,6 +278,8 @@
 
   // ── 入場流程 ──
   async function enter(name) {
+    document.body.classList.remove('join-mode');
+    document.body.classList.add('wait-mode');
     document.getElementById('joinScreen').style.display = 'none';
     document.getElementById('mainScreen').style.display = 'flex';
     document.getElementById('myId').textContent = `ID: ${guestKey.slice(-8)}`;
@@ -319,6 +344,8 @@
 
   // ── 燈光 ──
   function setLight(color, message, transitionSec) {
+    document.body.classList.add('live-light');
+    document.body.classList.remove('wait-mode');
     const t = (transitionSec != null ? transitionSec : 1.2) + 's';
     const bg = document.getElementById('bgGlow');
     bg.style.transition = `opacity ${t} ease, background-color ${t} ease`;
@@ -332,9 +359,11 @@
     if (message) showMessage(message);
   }
   function lightsOff() {
+    document.body.classList.remove('live-light');
+    document.body.classList.add('wait-mode');
     document.getElementById('bgGlow').style.opacity = '0';
     document.getElementById('lightOrbs').style.opacity = '0';
-    document.body.style.background = '#000';
+    document.body.style.background = '#0D0D0D';
     document.getElementById('eventPhoto').style.boxShadow = 'none';
   }
   function showMessage(msg) {
