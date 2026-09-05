@@ -12,7 +12,7 @@
 
   const CONFIG = {
     // 密碼的 SHA-256 雜湊。要換密碼跟 Claude 說即可
-    PASSWORD_HASH: '98c4817e87fd529505cfd9d2f9a417f2daea340e1b8959c15011fb58b9be8685',
+    PASSWORD_HASH: '2c1bdd0e5a76f7bd02be97e06236255e5bdaf2bc088880f48293ddf901604c2c',
     CACHE_HOURS: 12,           // 解鎖快取時數，0 = 每次都要輸入
     LS_KEY: 'storytrace_gate_unlock_v1',
     MAX_ATTEMPTS: 5,           // 連錯 N 次鎖定
