@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>演出控台 | Storytrace</title>
 <script src="storytrace-gate.js"></script>
+<script src="storytrace-auth.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -228,7 +229,7 @@ body {
 <div class="topbar">
   <div class="conn-dot" id="connDot" title="Firebase 未連線"></div>
   <div class="topbar-title">STORYTRACE SHOW</div>
-  <div class="topbar-ver" id="verTag">v2026-09-05.3</div>
+  <div class="topbar-ver" id="verTag">v2026-09-05.4</div>
   <div class="topbar-holder" id="holderTag">操作權：主控</div>
   <div class="topbar-room" id="topbarRoom">Room: —</div>
 </div>
@@ -240,6 +241,12 @@ body {
     <input type="text" id="roomInput" class="room-input" placeholder="例如：wedding_0510" value="test01">
     <button class="room-btn" id="roomBtn">確認</button>
   </div>
+  <div class="room-row mt8" id="staffRow">
+    <input type="password" id="staffKeyInput" class="room-input" placeholder="工作人員金鑰（每台裝置輸入一次）" autocomplete="off">
+    <button class="room-btn" id="staffKeyBtn" style="background:var(--surface2);color:var(--gold);border:1px solid rgba(201,168,76,0.5)">儲存金鑰</button>
+    <button class="room-btn" id="padLinkBtn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border)" title="含金鑰的副控網址，用 Handoff／AirDrop 貼到 iPad 就不用手打">複製副控連結</button>
+  </div>
+  <div class="audio-meta" id="staffStatus">🔑 登入中…</div>
 </div>
 
 <div class="section">
@@ -350,7 +357,7 @@ body {
 (function () {
 'use strict';
 
-const VERSION = 'v2026-09-05.3';
+const VERSION = 'v2026-09-05.4';
 const firebaseConfig = {
   apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
   authDomain: "storytrace-wedding.firebaseapp.com",
@@ -393,6 +400,9 @@ const loadTs = Date.now();
 const seenCommands = {};
 let commandsUnsub = null;
 let hostTimer = null;
+let fbApp = null;
+let authUid = null;
+let staffOk = false;
 
 // ── BANNER ──
 let bannerTimer = null;
@@ -412,7 +422,9 @@ async function connectFirebase() {
       import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js'),
     ]);
     const app = appMod.initializeApp(firebaseConfig);
+    fbApp = app;
     fb = { db: dbMod.getDatabase(app), ref: dbMod.ref, set: dbMod.set, update: dbMod.update, remove: dbMod.remove, onValue: dbMod.onValue, onChildAdded: dbMod.onChildAdded };
+    await staffSignIn();
     fbReady = true;
     fb.onValue(fb.ref(fb.db, '.info/connected'), (snap) => {
       const on = !!snap.val();
@@ -428,10 +440,38 @@ async function connectFirebase() {
     showBanner('Firebase 載入失敗：' + ((err && err.message) || err) + '。檢查網路後重新整理；選檔／預覽仍可用，但指令送不到手機。', 'error');
   }
 }
+// 匿名登入＋登記工作人員（storytrace-auth.js）。登入失敗＝Auth 沒啟用，照舊無驗證跑。
+async function staffSignIn() {
+  const A = window.StorytraceAuth;
+  const s = await A.signIn(fbApp);
+  authUid = s.uid;
+  if (!authUid) { staffOk = false; renderStaff(A.explain(s.reason)); return; }
+  const r = await A.registerStaff(fb, fb.db, authUid, A.getKey());
+  staffOk = r.ok;
+  renderStaff(r.ok ? '' : A.explain(r.reason));
+}
+function renderStaff(problem) {
+  const el = $('staffStatus'); if (!el) return;
+  const key = window.StorytraceAuth.getKey();
+  if (staffOk) el.textContent = '🔑 工作人員已登記（uid ' + String(authUid).slice(0, 6) + '…）' + (key ? '' : '，但這台沒存金鑰');
+  else if (!authUid) el.textContent = '🔑 ' + (problem || '未登入');
+  else el.textContent = '🔑 未登記：' + (problem || '');
+  el.style.color = staffOk ? 'var(--gold)' : (authUid ? '#f0a0a0' : 'var(--muted)');
+  $('staffKeyInput').placeholder = key ? '金鑰已存在這台（要換再輸入）' : '工作人員金鑰（每台裝置輸入一次）';
+}
+async function saveStaffKey() {
+  const k = $('staffKeyInput').value.trim();
+  if (!k) { showBanner('金鑰是空的', 'warn'); return; }
+  window.StorytraceAuth.setKey(k); $('staffKeyInput').value = '';
+  if (!fb) { renderStaff('等 Firebase 載入'); return; }
+  if (!authUid) await staffSignIn(); else { const r = await window.StorytraceAuth.registerStaff(fb, fb.db, authUid, k); staffOk = r.ok; renderStaff(r.ok ? '' : window.StorytraceAuth.explain(r.reason)); }
+  if (staffOk) { showBanner('金鑰已存、工作人員已登記，重新連線房間', 'info'); attachRoom(); }
+  else showBanner('金鑰存了但登記失敗：' + $('staffStatus').textContent, 'error');
+}
 function roomRef(path) { return fb.ref(fb.db, 'rooms/' + currentRoom + '/' + path); }
 function fbWrite(path, value) {
   if (!fbReady) { showBanner('Firebase 尚未連線，這個指令沒送出（' + path + '）', 'warn'); return Promise.resolve(); }
-  return fb.set(roomRef(path), value).catch(err => showBanner('寫入 Firebase 失敗（' + path + '）：' + err.message, 'error'));
+  return fb.set(roomRef(path), value).catch(err => showBanner('寫入 Firebase 失敗（' + path + '）：' + (/PERMISSION_DENIED/i.test(err.message) ? '沒有權限——資料庫已上鎖，請在「工作人員金鑰」輸入正確金鑰' : err.message), 'error'));
 }
 function writeControl(obj) { return fbWrite('control', Object.assign({}, obj, { ts: Date.now() })); }
 function writeLyrics(obj)  { return fbWrite('lyrics', obj); }
@@ -1039,6 +1079,14 @@ function init() {
   $('topbarRoom').textContent = 'Room: ' + currentRoom;
   renderHolder();
   $('revokeBtn').addEventListener('click', () => grantControl('host'));
+  $('staffKeyBtn').addEventListener('click', saveStaffKey);
+  $('staffKeyInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveStaffKey(); });
+  $('padLinkBtn').addEventListener('click', async () => {
+    const link = window.StorytraceAuth.padLink(currentRoom);
+    try { await navigator.clipboard.writeText(link); showBanner('副控連結已複製（含金鑰，room ' + currentRoom + '）。在 iPad 貼到 Safari 網址列開啟即可。', 'info'); }
+    catch (e) { showBanner('無法寫入剪貼簿：' + link, 'warn'); }
+  });
+  renderStaff('登入中…');
 
   const uploadArea = $('uploadArea'), fileInput = $('fileInput');
   uploadArea.addEventListener('click', () => { fileInput.value = ''; fileInput.click(); });
@@ -1115,7 +1163,7 @@ function init() {
 
   window.storytraceShow = {
     playShow, pauseShow, stopShow, seekTo, selectSong, loadShow, setRoom, setCueTime, grantControl, matchAudioFiles,
-    get state() { return { version: VERSION, playState, cued, currentRoom, currentSongIdx, pausedAtSec, audioReady, usingAudio, lightsOnlyOptIn, audioSrc: audio.getAttribute('src') ? audio.getAttribute('src').slice(0, 30) : '', audioPaused: audio.paused, audioError: audio.error && audio.error.code, fbReady, elapsed: getElapsedSec(), fired: Object.keys(lastCueFired).length, showId: showData && showData.showId, dirty, controlHolder, controlEpoch, hostId, songAudio: Object.keys(songAudio), previewCueId, previewLit: previewWords.filter(p => p.el.classList.contains('lit')).length, previewText: $('previewLine').textContent }; }
+    get state() { return { version: VERSION, authUid, staffOk, playState, cued, currentRoom, currentSongIdx, pausedAtSec, audioReady, usingAudio, lightsOnlyOptIn, audioSrc: audio.getAttribute('src') ? audio.getAttribute('src').slice(0, 30) : '', audioPaused: audio.paused, audioError: audio.error && audio.error.code, fbReady, elapsed: getElapsedSec(), fired: Object.keys(lastCueFired).length, showId: showData && showData.showId, dirty, controlHolder, controlEpoch, hostId, songAudio: Object.keys(songAudio), previewCueId, previewLit: previewWords.filter(p => p.el.classList.contains('lit')).length, previewText: $('previewLine').textContent }; }
   };
   console.log('Storytrace show console ' + VERSION);
   connectFirebase();

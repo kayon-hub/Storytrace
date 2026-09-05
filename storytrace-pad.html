@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>副控 iPad | Storytrace</title>
 <script src="storytrace-gate.js"></script>
+<script src="storytrace-auth.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
@@ -83,7 +84,7 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
 <body>
 <div class="topbar">
   <div class="topbar-title">STORYTRACE PAD</div>
-  <div class="topbar-ver" id="verTag">v2026-09-05.3</div>
+  <div class="topbar-ver" id="verTag">v2026-09-05.4</div>
   <div class="pill" id="connPill">連線中…</div>
   <div class="pill" id="hostPill">主控：—</div>
   <div class="pill" id="holderPill">操作權：—</div>
@@ -93,6 +94,11 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<div id="keyRow" hidden style="display:flex;gap:8px;align-items:center;padding:8px 16px;background:#33280a;border-bottom:1px solid rgba(201,168,76,0.5);font-size:13px;color:var(--gold);">
+  <span id="keyMsg">資料庫已上鎖，請輸入工作人員金鑰</span>
+  <input type="password" id="staffKeyInput" class="room-input" style="flex:1;max-width:320px" placeholder="工作人員金鑰" autocomplete="off">
+  <button class="room-btn" id="staffKeyBtn">儲存</button>
+</div>
 <div class="lock" id="lock" hidden></div>
 
 <div class="stage">
@@ -144,7 +150,7 @@ body { background: var(--bg); color: var(--text); font-family: -apple-system, Bl
 // ============================================================
 (function () {
 'use strict';
-const VERSION = 'v2026-09-05.3';
+const VERSION = 'v2026-09-05.4';
 const firebaseConfig = {
   apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
   authDomain: "storytrace-wedding.firebaseapp.com",
@@ -165,6 +171,7 @@ let lastSyncAt = 0;
 let unsubs = [];
 let stopArmedUntil = 0;
 let pendingCount = 0;
+let fbApp = null, authUid = null, staffOk = false;
 
 // ── toast ──
 let toastTimer = null;
@@ -184,7 +191,9 @@ async function connect() {
       import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js'),
     ]);
     const app = appMod.initializeApp(firebaseConfig);
+    fbApp = app;
     fb = { db: dbMod.getDatabase(app), ref: dbMod.ref, set: dbMod.set, push: dbMod.push, onValue: dbMod.onValue, goOffline: dbMod.goOffline, goOnline: dbMod.goOnline, off: dbMod.off };
+    await staffSignIn();
     fbReady = true;
     fb.onValue(fb.ref(fb.db, '.info/connected'), (snap) => { online = !!snap.val(); if (online) lastSyncAt = Date.now(); render(); });
     fb.onValue(fb.ref(fb.db, '.info/serverTimeOffset'), (snap) => { serverOffset = Number(snap.val()) || 0; });
@@ -193,6 +202,24 @@ async function connect() {
     $('connPill').textContent = 'Firebase 載入失敗'; $('connPill').className = 'pill bad';
     showLock('Firebase 載入失敗：' + ((err && err.message) || err) + '。檢查網路後重新整理。', 'bad');
   }
+}
+async function staffSignIn() {
+  const A = window.StorytraceAuth;
+  const s = await A.signIn(fbApp);
+  authUid = s.uid;
+  if (!authUid) { staffOk = false; showKeyRow(A.explain(s.reason), false); return; }
+  const r = await A.registerStaff(fb, fb.db, authUid, A.getKey());
+  staffOk = r.ok;
+  if (r.ok) hideKeyRow(); else showKeyRow(A.explain(r.reason), true);
+}
+function showKeyRow(msg, need) { const row = $('keyRow'); row.hidden = !need; if (need) $('keyMsg').textContent = msg; if (!need && msg) toast(msg, ''); }
+function hideKeyRow() { $('keyRow').hidden = true; }
+async function saveStaffKey() {
+  const k = $('staffKeyInput').value.trim(); if (!k) return;
+  window.StorytraceAuth.setKey(k); $('staffKeyInput').value = '';
+  if (!fb) return;
+  if (!authUid) await staffSignIn(); else { const r = await window.StorytraceAuth.registerStaff(fb, fb.db, authUid, k); staffOk = r.ok; if (r.ok) hideKeyRow(); else showKeyRow(window.StorytraceAuth.explain(r.reason), true); }
+  if (staffOk) { toast('金鑰已存、已登記', 'ok'); attachRoom(); } else toast('登記失敗：' + $('keyMsg').textContent, 'bad');
 }
 function roomRef(p) { return fb.ref(fb.db, 'rooms/' + currentRoom + '/' + p); }
 function attachRoom() {
@@ -298,7 +325,10 @@ function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '
 function init() {
   $('roomBtn').addEventListener('click', setRoom);
   $('roomInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') setRoom(); });
+  try { const qr = new URLSearchParams(location.search).get('room'); if (qr) $('roomInput').value = qr.trim(); } catch (e) {}
   currentRoom = $('roomInput').value.trim() || 'test01';
+  $('staffKeyBtn').addEventListener('click', saveStaffKey);
+  $('staffKeyInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveStaffKey(); });
   $('goBtn').addEventListener('click', () => send('GO'));
   $('holdBtn').addEventListener('click', () => send('HOLD'));
   $('stopBtn').addEventListener('click', () => {
@@ -319,7 +349,7 @@ function init() {
     send, setRoom,
     simulateOffline() { if (fb) fb.goOffline(fb.db); },
     simulateOnline() { if (fb) fb.goOnline(fb.db); },
-    get state() { return { version: VERSION, padId, currentRoom, online, hostAlive: hostAlive(), holder: holder(), epoch: epoch(), showState: show && show.state, songTitle: show && show.songTitle, canCommand: canCommand(), lock: $('lock').hidden ? '' : $('lock').textContent, goDisabled: $('goBtn').disabled, holdDisabled: $('holdBtn').disabled, takeDisabled: $('takeBtn').disabled, pendingCount, toast: $('toast').textContent }; }
+    get state() { return { version: VERSION, authUid, staffOk, padId, currentRoom, online, hostAlive: hostAlive(), holder: holder(), epoch: epoch(), showState: show && show.state, songTitle: show && show.songTitle, canCommand: canCommand(), lock: $('lock').hidden ? '' : $('lock').textContent, goDisabled: $('goBtn').disabled, holdDisabled: $('holdBtn').disabled, takeDisabled: $('takeBtn').disabled, pendingCount, toast: $('toast').textContent }; }
   };
   console.log('Storytrace pad ' + VERSION);
   connect();

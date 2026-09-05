@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>活動控台 | Storytrace</title>
 <script src="storytrace-gate.js"></script>
+<script src="storytrace-auth.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0a0a0a; color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; min-height: 100vh; padding: 32px 24px; }
@@ -418,7 +419,38 @@
   // ── 初始化 ──
   renderScenes();
   updateGuestLink();
-  listenGuests();
+
+  // 2026-09-05 上鎖：先匿名登入＋登記工作人員金鑰，再開始聽賓客名單（其餘邏輯不動）
+  async function staffInit() {
+    const A = window.StorytraceAuth;
+    const s = await A.signIn(app);
+    let problem = '';
+    if (s.uid) {
+      const r = await A.registerStaff({ set, ref }, db, s.uid, A.getKey());
+      if (!r.ok) problem = A.explain(r.reason);
+    } else problem = A.explain(s.reason);
+    if (problem && /金鑰/.test(problem)) showKeyBar(problem, s.uid);
+    listenGuests();
+  }
+  function showKeyBar(msg, uid) {
+    let bar = document.getElementById('staffKeyBar');
+    if (!bar) {
+      bar = document.createElement('div'); bar.id = 'staffKeyBar';
+      bar.style.cssText = 'position:sticky;top:0;z-index:200;display:flex;gap:8px;align-items:center;padding:10px 16px;background:#33280a;color:#C9A84C;font-size:13px;border-bottom:1px solid rgba(201,168,76,.5)';
+      bar.innerHTML = '<span id="staffKeyMsg"></span><input type="password" id="staffKeyInput" placeholder="工作人員金鑰" autocomplete="off" style="flex:1;max-width:320px;padding:8px 10px;background:#1a1a1a;border:1px solid rgba(201,168,76,.4);border-radius:8px;color:#fff"><button id="staffKeyBtn" style="padding:8px 14px;background:#C9A84C;color:#0D0D0D;border:none;border-radius:8px;font-weight:700;cursor:pointer">儲存</button>';
+      document.body.insertBefore(bar, document.body.firstChild);
+      const save = async () => {
+        const k = document.getElementById('staffKeyInput').value.trim(); if (!k) return;
+        window.StorytraceAuth.setKey(k);
+        const r = await window.StorytraceAuth.registerStaff({ set, ref }, db, uid, k);
+        if (r.ok) { bar.remove(); listenGuests(); } else document.getElementById('staffKeyMsg').textContent = window.StorytraceAuth.explain(r.reason);
+      };
+      document.getElementById('staffKeyBtn').addEventListener('click', save);
+      document.getElementById('staffKeyInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
+    }
+    document.getElementById('staffKeyMsg').textContent = msg;
+  }
+  staffInit();
 </script>
 </body>
 </html>

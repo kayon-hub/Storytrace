@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>活動燈光 | Storytrace</title>
+<script src="storytrace-auth.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -194,6 +195,14 @@
 
   // ── 核心：localStorage 記憶身份 ──
   let guestKey = null;
+  let authUid = null;
+  // 匿名登入（rules 上鎖後只能寫自己的 guests/{uid}）；Auth 沒啟用就回 null，照舊用 push key
+  async function ensureAuth() {
+    if (authUid) return authUid;
+    const s = await window.StorytraceAuth.signIn(app);
+    authUid = s.uid;
+    return authUid;
+  }
 
   function getSavedGuest() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; }
@@ -203,18 +212,24 @@
   }
 
   async function registerGuest(name) {
-    // 產生新的 key
-    const newRef = push(ref(db, `rooms/${roomId}/guests`));
-    guestKey = newRef.key;
-    await set(newRef, { name, joinedAt: Date.now() });
+    const uid = await ensureAuth();
+    if (uid) {
+      guestKey = uid;
+      await set(ref(db, `rooms/${roomId}/guests/${uid}`), { name, joinedAt: Date.now() });
+    } else {
+      const newRef = push(ref(db, `rooms/${roomId}/guests`));
+      guestKey = newRef.key;
+      await set(newRef, { name, joinedAt: Date.now() });
+    }
     saveGuest(guestKey, name);
     return guestKey;
   }
 
   async function reactivateGuest(savedKey, savedName) {
-    // 重新寫入同一個 key（Firebase 的 set 可以指定 key）
-    guestKey = savedKey;
-    await set(ref(db, `rooms/${roomId}/guests/${savedKey}`), { name: savedName, joinedAt: Date.now() });
+    const uid = await ensureAuth();
+    guestKey = uid || savedKey;
+    if (uid && uid !== savedKey) saveGuest(uid, savedName);
+    await set(ref(db, `rooms/${roomId}/guests/${guestKey}`), { name: savedName, joinedAt: Date.now() });
   }
 
   // ── 入場流程 ──
@@ -233,7 +248,6 @@
 
     listenToControl();
     listenToLyrics();
-    listenToShow();
     if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{});
   }
 
@@ -279,14 +293,6 @@
       if (first) { first = false; if (!cmd) hideLyrics(); return; }
       if (!cmd || cmd.type !== 'lyrics') { hideLyrics(); return; }
       showLyrics(cmd);
-    });
-  }
-
-  // ── 監聽演出狀態 ──
-  function listenToShow() {
-    onValue(ref(db, `rooms/${roomId}/show`), (snap) => {
-      const show = snap.val();
-      if (!show || show.state === 'stopped') return;
     });
   }
 

@@ -1,0 +1,27 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "secrets": {},
+    "staff": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid && newData.isString() && newData.val() === root.child('secrets/staffKey').val()"
+      }
+    },
+    "rooms": {
+      "$room": {
+        ".read": "auth != null && root.child('staff').child(auth.uid).exists()",
+        ".write": "auth != null && root.child('staff').child(auth.uid).exists()",
+        "control": { ".read": true },
+        "lyrics": { ".read": true },
+        "guests": {
+          "$gid": {
+            ".write": "auth != null && $gid === auth.uid",
+            ".validate": "!newData.exists() || (newData.hasChildren(['name', 'joinedAt']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('joinedAt').isNumber())"
+          }
+        }
+      }
+    }
+  }
+}
