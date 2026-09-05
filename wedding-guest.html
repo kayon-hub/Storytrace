@@ -117,131 +117,162 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-  let guestRef = null;
 
-  // ── 讀取網址參數 ──
+  // ── 網址參數 ──
   const params = new URLSearchParams(window.location.search);
-  const eventType = params.get('event') || 'wedding';   // wedding / corporate / concert / party
-  const roomId    = params.get('room')  || 'default';   // 不同場次用不同 room，互不干擾
+  const eventType = params.get('event') || 'wedding';
+  const roomId    = params.get('room')  || 'default';
 
-  // ── 活動類型預設值 ──
+  // ── localStorage key（per room，不同活動不互相影響）──
+  const STORAGE_KEY = `storytrace_guest_${roomId}`;
+
+  // ── 活動類型預設 ──
   const eventDefaults = {
-    wedding: {
-      logo: '💍', joinTitle: '加入婚禮燈海',
-      joinSub: '輸入你的名字<br>一起點亮這個美好的夜晚',
-      photo: '💑', title: params.get('title') || '新郎 & 新娘',
-      subtitle: params.get('subtitle') || 'FOREVER BEGINS TODAY',
-      winnerText: '恭喜你！', winnerSub: '你被選中了！'
-    },
-    corporate: {
-      logo: '🏢', joinTitle: '加入活動互動',
-      joinSub: '輸入你的名字<br>一起參與這場精彩活動',
-      photo: '⭐', title: params.get('title') || '企業活動',
-      subtitle: params.get('subtitle') || 'POWERED BY STORYTRACE',
-      winnerText: '恭喜得獎！', winnerSub: '請至台前領獎'
-    },
-    concert: {
-      logo: '🎤', joinTitle: '加入演唱會燈海',
-      joinSub: '輸入你的名字<br>一起成為今晚的主角',
-      photo: '🎵', title: params.get('title') || '演唱會',
-      subtitle: params.get('subtitle') || 'LIVE · STORYTRACE',
-      winnerText: '恭喜你！', winnerSub: '你被選中了！'
-    },
-    party: {
-      logo: '🎉', joinTitle: '加入派對燈海',
-      joinSub: '輸入你的名字<br>一起嗨起來！',
-      photo: '🎊', title: params.get('title') || '派對活動',
-      subtitle: params.get('subtitle') || "LET'S PARTY",
-      winnerText: '恭喜得獎！', winnerSub: '幸運的你！'
-    }
+    wedding:   { logo:'💍', joinTitle:'加入婚禮燈海',   joinSub:'輸入你的名字<br>一起點亮這個美好的夜晚', photo:'💑', title:params.get('title')||'新郎 & 新娘',  subtitle:params.get('subtitle')||'FOREVER BEGINS TODAY',    winnerText:'恭喜你！',   winnerSub:'你被選中了！' },
+    corporate: { logo:'🏢', joinTitle:'加入活動互動',   joinSub:'輸入你的名字<br>一起參與這場精彩活動',   photo:'⭐', title:params.get('title')||'企業活動',    subtitle:params.get('subtitle')||'POWERED BY STORYTRACE',   winnerText:'恭喜得獎！', winnerSub:'請至台前領獎' },
+    concert:   { logo:'🎤', joinTitle:'加入演唱會燈海', joinSub:'輸入你的名字<br>一起成為今晚的主角',     photo:'🎵', title:params.get('title')||'演唱會',      subtitle:params.get('subtitle')||'LIVE · STORYTRACE',       winnerText:'恭喜你！',   winnerSub:'你被選中了！' },
+    party:     { logo:'🎉', joinTitle:'加入派對燈海',   joinSub:'輸入你的名字<br>一起嗨起來！',           photo:'🎊', title:params.get('title')||'派對活動',    subtitle:params.get('subtitle')||"LET'S PARTY",            winnerText:'恭喜得獎！', winnerSub:'幸運的你！' },
   };
 
   const ev = eventDefaults[eventType] || eventDefaults.wedding;
-
-  // 套用文字
-  document.getElementById('joinLogo').textContent    = ev.logo;
-  document.getElementById('joinTitle').textContent   = ev.joinTitle;
-  document.getElementById('joinSub').innerHTML       = ev.joinSub;
-  document.getElementById('eventPhoto').textContent  = ev.photo;
-  document.getElementById('eventTitle').textContent  = ev.title;
+  document.getElementById('joinLogo').textContent      = ev.logo;
+  document.getElementById('joinTitle').textContent     = ev.joinTitle;
+  document.getElementById('joinSub').innerHTML         = ev.joinSub;
+  document.getElementById('eventPhoto').textContent    = ev.photo;
+  document.getElementById('eventTitle').textContent    = ev.title;
   document.getElementById('eventSubtitle').textContent = ev.subtitle;
-  document.getElementById('winnerText').textContent  = ev.winnerText;
-  document.getElementById('winnerSub').textContent   = ev.winnerSub;
-
-  // 動態 title
+  document.getElementById('winnerText').textContent    = ev.winnerText;
+  document.getElementById('winnerSub').textContent     = ev.winnerSub;
   document.title = ev.title + ' | Storytrace';
 
-  // ── Orb ──
+  // ── Orbs ──
   function createOrbs() {
-    const container = document.getElementById('lightOrbs');
-    container.innerHTML = '';
+    const c = document.getElementById('lightOrbs');
+    c.innerHTML = '';
     [{x:0,y:0,s:280},{x:55,y:0,s:260},{x:0,y:50,s:300},{x:55,y:50,s:280},{x:25,y:25,s:340}]
-      .forEach((pos, i) => {
-        const orb = document.createElement('div');
-        orb.className = 'orb';
-        orb.style.cssText = `left:${pos.x}%;top:${pos.y}%;width:${pos.s}px;height:${pos.s}px;background:white;animation-delay:${i*0.7}s;animation-duration:${3.5+i*0.4}s;`;
-        container.appendChild(orb);
+      .forEach((p,i) => {
+        const o = document.createElement('div');
+        o.className = 'orb';
+        o.style.cssText = `left:${p.x}%;top:${p.y}%;width:${p.s}px;height:${p.s}px;background:white;animation-delay:${i*0.7}s;animation-duration:${3.5+i*0.4}s;`;
+        c.appendChild(o);
       });
   }
   createOrbs();
 
-  // ── 加入 ──
-  window.joinEvent = function() {
-    const name = document.getElementById('nameInput').value.trim();
-    if (!name) { document.getElementById('nameInput').focus(); return; }
-    // room 隔離：不同活動用不同 Firebase 路徑
-    guestRef = push(ref(db, `rooms/${roomId}/guests`));
-    set(guestRef, { name, joinedAt: Date.now() });
-    window.addEventListener('beforeunload', () => { if (guestRef) set(guestRef, null); });
+  // ── 核心：localStorage 記憶身份 ──
+  let guestKey = null;
+
+  function getSavedGuest() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; }
+  }
+  function saveGuest(key, name) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ key, name }));
+  }
+
+  async function registerGuest(name) {
+    // 產生新的 key
+    const newRef = push(ref(db, `rooms/${roomId}/guests`));
+    guestKey = newRef.key;
+    await set(newRef, { name, joinedAt: Date.now() });
+    saveGuest(guestKey, name);
+    return guestKey;
+  }
+
+  async function reactivateGuest(savedKey, savedName) {
+    // 重新寫入同一個 key（Firebase 的 set 可以指定 key）
+    guestKey = savedKey;
+    await set(ref(db, `rooms/${roomId}/guests/${savedKey}`), { name: savedName, joinedAt: Date.now() });
+  }
+
+  // ── 入場流程 ──
+  async function enter(name) {
     document.getElementById('joinScreen').style.display = 'none';
     document.getElementById('mainScreen').style.display = 'flex';
-    document.getElementById('myId').textContent = `ID: ${guestRef.key.slice(-8)}`;
+    document.getElementById('myId').textContent = `ID: ${guestKey.slice(-8)}`;
+
+    // 頁面關閉時移除賓客（讓名單保持乾淨）
+    window.addEventListener('beforeunload', () => {
+      navigator.sendBeacon
+        ? navigator.sendBeacon('', '') // fallback
+        : set(ref(db, `rooms/${roomId}/guests/${guestKey}`), null);
+      set(ref(db, `rooms/${roomId}/guests/${guestKey}`), null);
+    });
+
     listenToControl();
     if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{});
+  }
+
+  // ── 加入按鈕 ──
+  window.joinEvent = async function() {
+    const name = document.getElementById('nameInput').value.trim();
+    if (!name) { document.getElementById('nameInput').focus(); return; }
+    await registerGuest(name);
+    await enter(name);
   };
+
+  // ── 頁面載入：檢查有沒有存過 ──
+  window.addEventListener('load', async () => {
+    const saved = getSavedGuest();
+    if (saved && saved.key && saved.name) {
+      // 直接復原，不需重填名字
+      await reactivateGuest(saved.key, saved.name);
+      await enter(saved.name);
+    }
+    // 沒有存過 → 顯示填名字畫面（預設）
+  });
 
   // ── 監聽控台 ──
   function listenToControl() {
     onValue(ref(db, `rooms/${roomId}/control`), (snap) => {
       const cmd = snap.val();
       if (!cmd) return;
-      if (cmd.type === 'color') setLight(cmd.color, cmd.message || '');
+      if (cmd.type === 'color' || cmd.type === 'scene') setLight(cmd.color, cmd.message || '', cmd.transition);
+      else if (cmd.type === 'message') showMessage(cmd.message);
       else if (cmd.type === 'off') lightsOff();
-      else if (cmd.type === 'lottery' && guestRef && cmd.winner === guestRef.key) showWinner();
+      else if (cmd.type === 'lottery' && guestKey && cmd.winner === guestKey) showWinner();
+      // reset：清除這個 room 的 localStorage，下次要重填名字
+      else if (cmd.type === 'reset') localStorage.removeItem(STORAGE_KEY);
     });
   }
 
-  // ── 亮燈 ──
-  function setLight(color, message) {
-    const bgGlow = document.getElementById('bgGlow');
-    const lightOrbs = document.getElementById('lightOrbs');
+  // ── 監聽演出狀態 ──
+  function listenToShow() {
+    onValue(ref(db, `rooms/${roomId}/show`), (snap) => {
+      const show = snap.val();
+      if (!show || show.state === 'stopped') return;
+      // 控台主動推送 control 指令，賓客接收即可
+    });
+  }
+
+  // ── 燈光 ──
+  function setLight(color, message, transitionSec) {
+    const t = (transitionSec != null ? transitionSec : 1.2) + 's';
+    const bg = document.getElementById('bgGlow');
+    bg.style.transition = `opacity ${t} ease, background-color ${t} ease`;
+    document.body.style.transition = `background ${t} ease`;
     document.body.style.background = color;
-    bgGlow.style.backgroundColor = color;
-    bgGlow.style.opacity = '1';
+    bg.style.backgroundColor = color;
+    bg.style.opacity = '1';
     document.querySelectorAll('.orb').forEach(o => o.style.background = color);
-    lightOrbs.style.opacity = '1';
+    document.getElementById('lightOrbs').style.opacity = '1';
     document.getElementById('eventPhoto').style.boxShadow = `0 0 80px ${color}, 0 0 160px ${color}`;
     if (message) showMessage(message);
   }
-
   function lightsOff() {
     document.getElementById('bgGlow').style.opacity = '0';
     document.getElementById('lightOrbs').style.opacity = '0';
     document.body.style.background = '#000';
     document.getElementById('eventPhoto').style.boxShadow = 'none';
   }
-
   function showMessage(msg) {
     const el = document.getElementById('sceneMessage');
     el.classList.remove('show');
     setTimeout(() => { el.textContent = msg; el.classList.add('show'); }, 100);
   }
-
   function showWinner() {
-    const overlay = document.getElementById('winnerOverlay');
-    overlay.style.display = 'flex';
+    document.getElementById('winnerOverlay').style.display = 'flex';
     if (navigator.vibrate) navigator.vibrate([300,100,300,100,500]);
-    setTimeout(() => { overlay.style.display = 'none'; }, 6000);
+    setTimeout(() => { document.getElementById('winnerOverlay').style.display = 'none'; }, 6000);
   }
 
   document.getElementById('nameInput').addEventListener('keypress', e => {

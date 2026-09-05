@@ -1,0 +1,180 @@
+{
+  "showId": "demo_wedding_v1",
+  "version": 1,
+  "note": "所有時間點為示範假設值，未對應真實音檔拍點",
+  "songs": [
+    {
+      "id": "song_01",
+      "title": "新人進場曲（待定）",
+      "filename": "（未選定）",
+      "durationSec": 180,
+      "fadeInSec": 2,
+      "fadeOutSec": 3,
+      "cues": [
+        {
+          "id": "s01_c01",
+          "timeSec": 0,
+          "type": "color",
+          "color": "hsl(0,0%,8%)",
+          "message": "",
+          "transitionSec": 0,
+          "oneShot": false,
+          "note": "開場前全暗",
+          "position": "新人在門口準備"
+        },
+        {
+          "id": "s01_c02",
+          "timeSec": 4,
+          "type": "color",
+          "color": "hsl(340,100%,50%)",
+          "message": "💍 新人入場",
+          "transitionSec": 2,
+          "oneShot": false,
+          "note": "玫瑰紅，新人開始移動",
+          "position": "新人從門口開始走向走道"
+        },
+        {
+          "id": "s01_c03",
+          "timeSec": 30,
+          "type": "color",
+          "color": "hsl(45,100%,55%)",
+          "message": "",
+          "transitionSec": 3,
+          "oneShot": false,
+          "note": "換金色，走到走道中段停點",
+          "position": "新人在走道中段停留合照"
+        },
+        {
+          "id": "s01_c04",
+          "timeSec": 60,
+          "type": "color",
+          "color": "hsl(0,0%,100%)",
+          "message": "✨",
+          "transitionSec": 2,
+          "oneShot": false,
+          "note": "純白，到達舞台",
+          "position": "新人抵達舞台站定"
+        }
+      ]
+    },
+    {
+      "id": "song_02",
+      "title": "專屬故事曲（待定）",
+      "filename": "（未選定）",
+      "durationSec": 240,
+      "fadeInSec": 3,
+      "fadeOutSec": 4,
+      "cues": [
+        {
+          "id": "s02_c01",
+          "timeSec": 0,
+          "type": "color",
+          "color": "hsl(270,80%,40%)",
+          "message": "",
+          "transitionSec": 3,
+          "oneShot": false,
+          "note": "主歌，深紫低亮",
+          "position": ""
+        },
+        {
+          "id": "s02_c02",
+          "timeSec": 45,
+          "type": "message",
+          "color": null,
+          "message": "我們的故事，從這裡開始",
+          "transitionSec": 0,
+          "oneShot": true,
+          "note": "關鍵歌詞出現，一次性訊息",
+          "position": ""
+        },
+        {
+          "id": "s02_c03",
+          "timeSec": 90,
+          "type": "color",
+          "color": "hsl(340,100%,55%)",
+          "message": "❤️",
+          "transitionSec": 1.5,
+          "oneShot": false,
+          "note": "副歌高潮，飽和玫瑰紅",
+          "position": ""
+        },
+        {
+          "id": "s02_c04",
+          "timeSec": 150,
+          "type": "color",
+          "color": "hsl(45,100%,50%)",
+          "message": "",
+          "transitionSec": 2,
+          "oneShot": false,
+          "note": "間奏，金色過渡",
+          "position": ""
+        },
+        {
+          "id": "s02_c05",
+          "timeSec": 190,
+          "type": "color",
+          "color": "hsl(340,100%,55%)",
+          "message": "💕 永遠在一起",
+          "transitionSec": 1,
+          "oneShot": false,
+          "note": "尾副歌，玫瑰紅回歸",
+          "position": ""
+        }
+      ]
+    },
+    {
+      "id": "song_03",
+      "title": "送客曲（待定）",
+      "filename": "（未選定）",
+      "durationSec": 200,
+      "fadeInSec": 2,
+      "fadeOutSec": 5,
+      "cues": [
+        {
+          "id": "s03_c01",
+          "timeSec": 0,
+          "type": "color",
+          "color": "hsl(325,100%,55%)",
+          "message": "✨ 謝謝大家",
+          "transitionSec": 2,
+          "oneShot": false,
+          "note": "送客開始，粉紅",
+          "position": "新人移動至出口方向"
+        },
+        {
+          "id": "s03_c02",
+          "timeSec": 60,
+          "type": "color",
+          "color": "hsl(45,100%,50%)",
+          "message": "",
+          "transitionSec": 3,
+          "oneShot": false,
+          "note": "換金色漸變",
+          "position": ""
+        },
+        {
+          "id": "s03_c03",
+          "timeSec": 120,
+          "type": "color",
+          "color": "hsl(195,100%,55%)",
+          "message": "",
+          "transitionSec": 4,
+          "oneShot": false,
+          "note": "天藍，段落銜接測試",
+          "position": ""
+        },
+        {
+          "id": "s03_c04",
+          "timeSec": 175,
+          "type": "off",
+          "color": null,
+          "message": "",
+          "transitionSec": 5,
+          "oneShot": true,
+          "note": "淡出關燈，演出結束",
+          "position": ""
+        }
+      ]
+    }
+  ]
+}

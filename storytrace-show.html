@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演出控台 | Storytrace</title>
+<script src="storytrace-gate.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080808;
+  --surface: #111;
+  --surface2: #1a1a1a;
+  --border: rgba(255,255,255,0.08);
+  --gold: #C9A84C;
+  --gold-dim: rgba(201,168,76,0.15);
+  --text: #f0f0f0;
+  --muted: rgba(240,240,240,0.35);
+  --green: #00E5A0;
+  --red: #ff4455;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+  padding: 0 0 80px;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,8,8,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.topbar-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--gold); flex: 1; }
+.topbar-room { font-size: 11px; color: var(--muted); }
+.conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.conn-dot.on { background: var(--green); }
+
+/* ── SECTIONS ── */
+.section { padding: 20px; border-bottom: 1px solid var(--border); }
+.sec-label {
+  font-size: 9px; letter-spacing: 2.5px; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+
+/* ── ROOM BAR ── */
+.room-row { display: flex; gap: 8px; }
+.room-input {
+  flex: 1; padding: 10px 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 14px; outline: none;
+}
+.room-input::placeholder { color: var(--muted); }
+.room-btn {
+  padding: 10px 18px; background: white; color: #000;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+
+/* ── PLAYER ── */
+.player-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+}
+.song-info { margin-bottom: 16px; }
+.song-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.song-meta { font-size: 11px; color: var(--muted); }
+
+.progress-wrap { margin-bottom: 16px; }
+.progress-bar-bg {
+  width: 100%; height: 4px; background: rgba(255,255,255,0.1);
+  border-radius: 2px; cursor: pointer; position: relative;
+}
+.progress-bar-fill {
+  height: 100%; background: var(--gold);
+  border-radius: 2px; width: 0%; transition: width 0.5s linear;
+  pointer-events: none;
+}
+.progress-markers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.cue-marker {
+  position: absolute; top: -3px; width: 2px; height: 10px;
+  background: rgba(201,168,76,0.7); border-radius: 1px;
+  transform: translateX(-50%);
+}
+
+.time-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--muted); margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-controls { display: flex; gap: 10px; align-items: center; }
+.ctrl-btn {
+  padding: 12px 20px; border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity 0.15s;
+}
+.ctrl-btn:active { opacity: 0.7; }
+.ctrl-play { background: var(--gold); color: #000; flex: 1; }
+.ctrl-pause { background: var(--surface2); border: 1px solid var(--border); color: var(--text); flex: 1; }
+.ctrl-stop { background: var(--surface2); border: 1px solid rgba(255,68,85,0.3); color: var(--red); }
+.ctrl-skip { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+
+/* ── SONG LIST ── */
+.song-list { display: flex; flex-direction: column; gap: 8px; }
+.song-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+  transition: border-color 0.15s;
+}
+.song-item:hover { border-color: rgba(201,168,76,0.3); }
+.song-item.active { border-color: var(--gold); background: var(--gold-dim); }
+.song-num { font-size: 11px; color: var(--muted); width: 18px; text-align: center; flex-shrink: 0; }
+.song-item-title { flex: 1; font-size: 14px; font-weight: 600; }
+.song-item-dur { font-size: 11px; color: var(--muted); }
+.song-cue-count { font-size: 10px; color: var(--gold); background: var(--gold-dim); padding: 2px 7px; border-radius: 10px; }
+
+/* ── CUE LIST ── */
+.cue-list { display: flex; flex-direction: column; gap: 6px; }
+.cue-row {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  transition: border-color 0.15s;
+}
+.cue-row.firing { border-color: var(--gold); background: var(--gold-dim); }
+.cue-time {
+  font-size: 12px; color: var(--gold); font-weight: 700;
+  min-width: 44px; font-variant-numeric: tabular-nums; flex-shrink: 0;
+}
+.cue-swatch { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; }
+.cue-body { flex: 1; min-width: 0; }
+.cue-type { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.cue-msg { font-size: 13px; margin-top: 2px; }
+.cue-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.cue-pos { font-size: 10px; color: rgba(201,168,76,0.5); margin-top: 3px; }
+
+/* ── STATUS ── */
+.show-status {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 16px;
+}
+.status-badge {
+  padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+}
+.badge-stopped { background: rgba(255,68,85,0.15); color: var(--red); }
+.badge-playing { background: rgba(0,229,160,0.15); color: var(--green); }
+.badge-paused  { background: rgba(201,168,76,0.15); color: var(--gold); }
+.badge-waiting { background: rgba(255,255,255,0.08); color: var(--muted); }
+.status-text { flex: 1; font-size: 12px; color: var(--muted); }
+
+/* ── MANUAL OVERRIDE ── */
+.override-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.ov-btn {
+  padding: 9px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--muted); font-size: 12px; cursor: pointer;
+}
+.ov-btn:active { opacity: 0.7; }
+
+/* ── IMPORT/EXPORT ── */
+.ie-row { display: flex; gap: 8px; }
+.ie-btn {
+  flex: 1; padding: 11px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  cursor: pointer; text-align: center;
+}
+.ie-import { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+.ie-export { background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); }
+
+/* ── UPLOAD AREA ── */
+.upload-area {
+  border: 2px dashed var(--border); border-radius: 10px;
+  padding: 28px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.upload-area:hover, .upload-area.drag { border-color: rgba(201,168,76,0.5); }
+.upload-text { font-size: 13px; color: var(--muted); }
+.upload-sub { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 6px; }
+
+/* ── UTILS ── */
+.mt8 { margin-top: 8px; }
+.mt12 { margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="conn-dot" id="connDot"></div>
+  <div class="topbar-title">STORYTRACE SHOW</div>
+  <div class="topbar-room" id="topbarRoom">Room: —</div>
+</div>
+
+<!-- ROOM -->
+<div class="section">
+  <div class="sec-label">場次 Room</div>
+  <div class="room-row">
+    <input type="text" id="roomInput" class="room-input" placeholder="例如：wedding_0510" value="test01">
+    <button class="room-btn" onclick="setRoom()">確認</button>
+  </div>
+</div>
+
+<!-- SHOW STATUS -->
+<div class="section">
+  <div class="sec-label">演出狀態</div>
+  <div class="show-status">
+    <div class="status-badge badge-stopped" id="statusBadge">STOPPED</div>
+    <div class="status-text" id="statusText">尚未開始</div>
+  </div>
+</div>
+
+<!-- PLAYER -->
+<div class="section">
+  <div class="sec-label">播放器</div>
+  <div class="player-card">
+    <div class="song-info">
+      <div class="song-title" id="playerSongTitle">— 尚未選擇歌曲 —</div>
+      <div class="song-meta" id="playerSongMeta">載入演出資料後選擇歌曲</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-bg" id="progressBg" onclick="seekToClick(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+        <div class="progress-markers" id="progressMarkers"></div>
+      </div>
+      <div class="time-row">
+        <span id="timeNow">0:00</span>
+        <span id="timeTotal">0:00</span>
+      </div>
+    </div>
+    <div class="player-controls">
+      <button class="ctrl-btn ctrl-play" onclick="playShow()">▶ 開始演出</button>
+      <button class="ctrl-btn ctrl-pause" onclick="pauseShow()">⏸ 暫停</button>
+      <button class="ctrl-btn ctrl-stop" onclick="stopShow()">■</button>
+    </div>
+    <div class="player-controls mt8">
+      <button class="ctrl-btn ctrl-skip" onclick="prevSong()" style="flex:1">← 上一首</button>
+      <button class="ctrl-btn ctrl-skip" onclick="nextSong()" style="flex:1">下一首 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SONG LIST -->
+<div class="section">
+  <div class="sec-label">曲目</div>
+  <div class="song-list" id="songList">
+    <div style="font-size:13px;color:var(--muted);padding:12px 0;">尚未載入演出資料</div>
+  </div>
+</div>
+
+<!-- CUE LIST -->
+<div class="section">
+  <div class="sec-label">Cue 時間軸 <span id="cueCount" style="color:var(--gold);"></span></div>
+  <div class="cue-list" id="cueList">
+    <div style="font-size:13px;color:var(--muted);padding:12px 0;">選擇歌曲後顯示 cue 列表</div>
+  </div>
+</div>
+
+<!-- MANUAL OVERRIDE -->
+<div class="section">
+  <div class="sec-label">手動接管</div>
+  <div class="override-row">
+    <button class="ov-btn" onclick="manualColor('hsl(340,100%,50%)')">● 玫瑰紅</button>
+    <button class="ov-btn" onclick="manualColor('hsl(45,100%,50%)')">● 金色</button>
+    <button class="ov-btn" onclick="manualColor('hsl(0,0%,100%)')">● 純白</button>
+    <button class="ov-btn" onclick="manualColor('hsl(325,100%,55%)')">● 粉紅</button>
+    <button class="ov-btn" onclick="manualOff()">⬛ 關燈</button>
+  </div>
+</div>
+
+<!-- IMPORT/EXPORT -->
+<div class="section">
+  <div class="sec-label">演出資料</div>
+  <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()"
+    ondragover="event.preventDefault();this.classList.add('drag')"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="handleDrop(event)">
+    <div class="upload-text">📂 點擊或拖入 show.json</div>
+    <div class="upload-sub">每場婚禮更換 JSON 即可，不需改程式碼</div>
+  </div>
+  <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleFileInput(event)">
+  <div class="ie-row mt8">
+    <button class="ie-btn ie-export" onclick="exportShow()">↓ 匯出目前演出資料</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
+  authDomain: "storytrace-wedding.firebaseapp.com",
+  databaseURL: "https://storytrace-wedding-default-rtdb.firebaseio.com",
+  projectId: "storytrace-wedding",
+  storageBucket: "storytrace-wedding.firebasestorage.app",
+  messagingSenderId: "865058497448",
+  appId: "1:865058497448:web:f604e62c4c7407f464b39d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ── STATE ──
+let currentRoom = 'test01';
+let showData = null;       // 完整 JSON
+let currentSongIdx = 0;
+let playState = 'stopped'; // stopped | playing | paused
+let startedAt = null;      // 開始播放的 Date.now()
+let pausedAtSec = 0;       // 暫停時音樂播到第幾秒
+let rafId = null;
+let lastCueFired = {};     // { cueId: true } 已觸發的 oneShot
+
+// ── ROOM ──
+window.setRoom = function() {
+  const val = document.getElementById('roomInput').value.trim().replace(/\s+/g,'_') || 'test01';
+  currentRoom = val;
+  document.getElementById('roomInput').value = val;
+  document.getElementById('topbarRoom').textContent = 'Room: ' + val;
+};
+setRoom();
+
+// ── FIREBASE 連線 ──
+document.getElementById('connDot').classList.add('on');
+
+function writeControl(obj) {
+  set(ref(db, `rooms/${currentRoom}/control`), { ...obj, ts: Date.now() });
+}
+
+function writeShow(obj) {
+  set(ref(db, `rooms/${currentRoom}/show`), { ...obj, updatedAt: Date.now() });
+}
+
+// ── 載入 JSON ──
+function loadShow(data) {
+  showData = data;
+  currentSongIdx = 0;
+  lastCueFired = {};
+  renderSongList();
+  selectSong(0);
+  updateStatus('stopped', '演出資料已載入，按「開始演出」');
+}
+
+function renderSongList() {
+  if (!showData) return;
+  const list = document.getElementById('songList');
+  list.innerHTML = showData.songs.map((s, i) => `
+    <div class="song-item ${i===currentSongIdx?'active':''}" onclick="selectSong(${i})">
+      <div class="song-num">${i+1}</div>
+      <div class="song-item-title">${s.title}</div>
+      <div class="song-item-dur">${fmtSec(s.durationSec)}</div>
+      <div class="song-cue-count">${s.cues.length} cues</div>
+    </div>
+  `).join('');
+}
+
+window.selectSong = function(idx) {
+  if (!showData) return;
+  currentSongIdx = idx;
+  renderSongList();
+  renderCueList();
+  renderProgressMarkers();
+  const song = showData.songs[idx];
+  document.getElementById('playerSongTitle').textContent = song.title;
+  document.getElementById('playerSongMeta').textContent =
+    `時長 ${fmtSec(song.durationSec)}  ·  ${song.cues.length} 個 cue  ·  ${song.filename}`;
+  document.getElementById('timeTotal').textContent = fmtSec(song.durationSec);
+};
+
+function renderCueList() {
+  if (!showData) return;
+  const song = showData.songs[currentSongIdx];
+  const list = document.getElementById('cueList');
+  document.getElementById('cueCount').textContent = `(${song.cues.length})`;
+  list.innerHTML = song.cues.map(cue => {
+    const swatchStyle = cue.color
+      ? `background:${cue.color};border:1px solid rgba(255,255,255,0.2)`
+      : `background:rgba(255,255,255,0.1);border:1px dashed rgba(255,255,255,0.2)`;
+    return `
+      <div class="cue-row" id="cue_${cue.id}">
+        <div class="cue-time">${fmtSec(cue.timeSec)}</div>
+        <div class="cue-swatch" style="${swatchStyle}"></div>
+        <div class="cue-body">
+          <div class="cue-type">${cue.type}${cue.oneShot?' · 一次性':''}</div>
+          ${cue.message ? `<div class="cue-msg">${cue.message}</div>` : ''}
+          ${cue.note ? `<div class="cue-note">📋 ${cue.note}</div>` : ''}
+          ${cue.position ? `<div class="cue-pos">📍 ${cue.position}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderProgressMarkers() {
+  if (!showData) return;
+  const song = showData.songs[currentSongIdx];
+  const container = document.getElementById('progressMarkers');
+  container.innerHTML = song.cues.map(cue => {
+    const pct = (cue.timeSec / song.durationSec) * 100;
+    return `<div class="cue-marker" style="left:${pct}%" title="${fmtSec(cue.timeSec)} ${cue.note||''}"></div>`;
+  }).join('');
+}
+
+// ── PLAYBACK ──
+window.playShow = function() {
+  if (!showData) { alert('請先載入演出資料（JSON）'); return; }
+  const song = showData.songs[currentSongIdx];
+
+  if (playState === 'paused') {
+    // 從暫停位置繼續
+    startedAt = Date.now() - pausedAtSec * 1000;
+  } else {
+    // 重新開始
+    startedAt = Date.now();
+    pausedAtSec = 0;
+    lastCueFired = {};
+  }
+
+  playState = 'playing';
+  updateStatus('playing', `▶ ${song.title}`);
+
+  // 寫入 Firebase，讓賓客端知道演出開始
+  writeShow({
+    state: 'playing',
+    showId: showData.showId,
+    songId: song.id,
+    songIdx: currentSongIdx,
+    startedAt: startedAt,
+    durationSec: song.durationSec
+  });
+
+  startLoop();
+};
+
+window.pauseShow = function() {
+  if (playState !== 'playing') return;
+  pausedAtSec = getElapsedSec();
+  playState = 'paused';
+  stopLoop();
+  updateStatus('paused', `⏸ ${fmtSec(pausedAtSec)} 暫停`);
+  writeShow({ state: 'paused', pausedAtSec });
+};
+
+window.stopShow = function() {
+  playState = 'stopped';
+  startedAt = null;
+  pausedAtSec = 0;
+  lastCueFired = {};
+  stopLoop();
+  updateStatus('stopped', '已停止');
+  writeShow({ state: 'stopped' });
+  writeControl({ type: 'off' });
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('timeNow').textContent = '0:00';
+  document.querySelectorAll('.cue-row').forEach(el => el.classList.remove('firing'));
+};
+
+window.nextSong = function() {
+  if (!showData) return;
+  stopShow();
+  selectSong((currentSongIdx + 1) % showData.songs.length);
+};
+
+window.prevSong = function() {
+  if (!showData) return;
+  stopShow();
+  selectSong((currentSongIdx - 1 + showData.songs.length) % showData.songs.length);
+};
+
+window.seekToClick = function(e) {
+  if (!showData || playState === 'stopped') return;
+  const bg = document.getElementById('progressBg');
+  const rect = bg.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  const song = showData.songs[currentSongIdx];
+  const targetSec = pct * song.durationSec;
+  seekTo(targetSec);
+};
+
+function seekTo(sec) {
+  const song = showData.songs[currentSongIdx];
+  pausedAtSec = Math.max(0, Math.min(sec, song.durationSec));
+  if (playState === 'playing') {
+    startedAt = Date.now() - pausedAtSec * 1000;
+    // 重設 oneShot cues 在 seek 點之前的已觸發狀態
+    lastCueFired = {};
+    song.cues.filter(c => c.timeSec < pausedAtSec && !c.oneShot).forEach(c => {
+      lastCueFired[c.id] = true; // 標記為已觸發，不重播
+    });
+    writeShow({ state: 'playing', showId: showData.showId, songId: song.id, songIdx: currentSongIdx, startedAt, durationSec: song.durationSec });
+  }
+}
+
+// ── LOOP ──
+function startLoop() {
+  stopLoop();
+  function tick() {
+    if (playState !== 'playing') return;
+    const elapsed = getElapsedSec();
+    const song = showData.songs[currentSongIdx];
+
+    // 進度條
+    const pct = Math.min((elapsed / song.durationSec) * 100, 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('timeNow').textContent = fmtSec(elapsed);
+
+    // 觸發 cues
+    song.cues.forEach(cue => {
+      if (elapsed >= cue.timeSec && !lastCueFired[cue.id]) {
+        lastCueFired[cue.id] = true;
+        fireCue(cue);
+      }
+    });
+
+    // 高亮當前 cue
+    const activeCue = [...song.cues].reverse().find(c => elapsed >= c.timeSec);
+    document.querySelectorAll('.cue-row').forEach(el => el.classList.remove('firing'));
+    if (activeCue) {
+      const el = document.getElementById('cue_' + activeCue.id);
+      if (el) el.classList.add('firing');
+    }
+
+    // 歌曲結束
+    if (elapsed >= song.durationSec) {
+      if (currentSongIdx < showData.songs.length - 1) {
+        nextSong();
+        setTimeout(() => playShow(), 500);
+      } else {
+        stopShow();
+        updateStatus('stopped', '演出結束');
+      }
+      return;
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+}
+
+function stopLoop() {
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+}
+
+function getElapsedSec() {
+  if (!startedAt) return pausedAtSec;
+  return (Date.now() - startedAt) / 1000;
+}
+
+// ── FIRE CUE → Firebase ──
+function fireCue(cue) {
+  if (cue.type === 'color') {
+    writeControl({ type: 'color', color: cue.color, message: cue.message || '', transition: cue.transitionSec || 1.2 });
+  } else if (cue.type === 'off') {
+    writeControl({ type: 'off' });
+  } else if (cue.type === 'message') {
+    writeControl({ type: 'message', message: cue.message });
+  }
+}
+
+// ── MANUAL OVERRIDE ──
+window.manualColor = function(color) {
+  if (playState === 'playing') pauseShow();
+  writeControl({ type: 'color', color, message: '' });
+};
+window.manualOff = function() {
+  if (playState === 'playing') pauseShow();
+  writeControl({ type: 'off' });
+};
+
+// ── STATUS UI ──
+function updateStatus(state, text) {
+  const badge = document.getElementById('statusBadge');
+  badge.className = 'status-badge';
+  if (state === 'playing') badge.classList.add('badge-playing');
+  else if (state === 'paused') badge.classList.add('badge-paused');
+  else badge.classList.add('badge-stopped');
+  badge.textContent = state.toUpperCase();
+  document.getElementById('statusText').textContent = text;
+}
+
+// ── FILE IMPORT ──
+window.handleDrop = function(e) {
+  e.preventDefault();
+  document.getElementById('uploadArea').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) readShowFile(file);
+};
+window.handleFileInput = function(e) {
+  const file = e.target.files[0];
+  if (file) readShowFile(file);
+};
+function readShowFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.songs || !Array.isArray(data.songs)) throw new Error('格式錯誤：缺少 songs 陣列');
+      loadShow(data);
+      document.getElementById('uploadArea').querySelector('.upload-text').textContent = '✅ ' + (data.showId || file.name);
+    } catch(err) {
+      alert('載入失敗：' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ── EXPORT ──
+window.exportShow = function() {
+  if (!showData) { alert('尚未載入演出資料'); return; }
+  const blob = new Blob([JSON.stringify(showData, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (showData.showId || 'show') + '.json';
+  a.click();
+};
+
+// ── UTILS ──
+function fmtSec(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+// 初始化
+document.getElementById('topbarRoom').textContent = 'Room: ' + currentRoom;
+</script>
+</body>
+</html>
