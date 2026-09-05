@@ -74,10 +74,35 @@
   @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
   .winner-text { font-size: 32px; font-weight: 800; color: gold; margin-bottom: 12px; }
   .winner-sub { font-size: 16px; color: rgba(255,255,255,0.6); }
+
+  /* ── 逐字歌詞 ── */
+  #lyricsDisplay {
+    position: fixed; bottom: 80px; left: 0; right: 0;
+    z-index: 50; text-align: center; padding: 0 24px;
+    pointer-events: none;
+    opacity: 0; transition: opacity 0.4s ease;
+  }
+  #lyricsDisplay.show { opacity: 1; }
+  .lyric-line {
+    font-size: 28px; font-weight: 800;
+    line-height: 1.4; letter-spacing: 2px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 2px;
+  }
+  .lyric-word {
+    display: inline-block;
+    color: rgba(255,255,255,0.25);
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+  }
+  .lyric-word.lit {
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 60px rgba(255,255,255,0.4);
+  }
 </style>
 </head>
 <body>
 <div id="bgGlow"></div>
+<div id="lyricsDisplay"><div class="lyric-line" id="lyricLine"></div></div>
 <div id="lightOrbs"></div>
 <div id="winnerOverlay" class="winner-overlay">
   <div class="winner-emoji">🎉</div>
@@ -227,6 +252,7 @@
       const cmd = snap.val();
       if (!cmd) return;
       if (cmd.type === 'color' || cmd.type === 'scene') setLight(cmd.color, cmd.message || '', cmd.transition);
+      else if (cmd.type === 'lyrics') showLyrics(cmd);
       else if (cmd.type === 'message') showMessage(cmd.message);
       else if (cmd.type === 'off') lightsOff();
       else if (cmd.type === 'lottery' && guestKey && cmd.winner === guestKey) showWinner();
@@ -273,6 +299,49 @@
     document.getElementById('winnerOverlay').style.display = 'flex';
     if (navigator.vibrate) navigator.vibrate([300,100,300,100,500]);
     setTimeout(() => { document.getElementById('winnerOverlay').style.display = 'none'; }, 6000);
+  }
+
+  // ── 逐字歌詞顯示 ──
+  let lyricsTimers = [];
+
+  function showLyrics(cmd) {
+    // 清掉上一句的 timer
+    lyricsTimers.forEach(t => clearTimeout(t));
+    lyricsTimers = [];
+
+    const display = document.getElementById('lyricsDisplay');
+    const line = document.getElementById('lyricLine');
+
+    if (!cmd.words || cmd.words.length === 0) {
+      display.classList.remove('show');
+      return;
+    }
+
+    // 建立字元 DOM
+    line.innerHTML = cmd.words.map((w, i) =>
+      `<span class="lyric-word" id="lw_${i}">${w.word}</span>`
+    ).join('');
+
+    display.classList.add('show');
+
+    // 逐字點亮
+    cmd.words.forEach((w, i) => {
+      const delay = (w.offsetSec || 0) * 1000;
+      const tid = setTimeout(() => {
+        const el = document.getElementById(`lw_${i}`);
+        if (el) el.classList.add('lit');
+      }, delay);
+      lyricsTimers.push(tid);
+    });
+
+    // 整句結束後淡出
+    const lineDuration = cmd.words.length > 0
+      ? (cmd.words[cmd.words.length - 1].offsetSec || 0) + 1.5
+      : 2;
+    const fadeTimer = setTimeout(() => {
+      display.classList.remove('show');
+    }, lineDuration * 1000);
+    lyricsTimers.push(fadeTimer);
   }
 
   document.getElementById('nameInput').addEventListener('keypress', e => {

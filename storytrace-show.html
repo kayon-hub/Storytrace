@@ -381,12 +381,17 @@ function renderCueList() {
     const swatchStyle = cue.color
       ? `background:${cue.color};border:1px solid rgba(255,255,255,0.2)`
       : `background:rgba(255,255,255,0.1);border:1px dashed rgba(255,255,255,0.2)`;
+    const lyricsPreview = cue.type === 'lyrics' && cue.text
+      ? `<div style="font-size:13px;margin-top:4px;color:rgba(255,255,255,0.8);">${cue.text}</div>
+         <div style="font-size:10px;color:var(--gold);margin-top:2px;">${cue.words ? cue.words.length + ' 個字' : ''}</div>`
+      : '';
     return `
       <div class="cue-row" id="cue_${cue.id}">
         <div class="cue-time">${fmtSec(cue.timeSec)}</div>
         <div class="cue-swatch" style="${swatchStyle}"></div>
         <div class="cue-body">
-          <div class="cue-type">${cue.type}${cue.oneShot?' · 一次性':''}</div>
+          <div class="cue-type">${cue.type === 'lyrics' ? '🎤 lyrics' : cue.type}${cue.oneShot?' · 一次性':''}</div>
+          ${lyricsPreview}
           ${cue.message ? `<div class="cue-msg">${cue.message}</div>` : ''}
           ${cue.note ? `<div class="cue-note">📋 ${cue.note}</div>` : ''}
           ${cue.position ? `<div class="cue-pos">📍 ${cue.position}</div>` : ''}
@@ -559,6 +564,21 @@ function fireCue(cue) {
     writeControl({ type: 'off' });
   } else if (cue.type === 'message') {
     writeControl({ type: 'message', message: cue.message });
+  } else if (cue.type === 'lyrics') {
+    // 送出背景顏色 + 逐字歌詞
+    if (cue.color) {
+      writeControl({ type: 'color', color: cue.color, message: '', transition: cue.transitionSec || 0.3 });
+    }
+    // 稍微延遲再送歌詞，讓顏色先換
+    setTimeout(() => {
+      writeControl({
+        type: 'lyrics',
+        text: cue.text,
+        words: cue.words,
+        color: cue.color,
+        highlightColor: cue.highlightColor || '#ffffff',
+      });
+    }, 100);
   }
 }
 
