@@ -1,20 +1,20 @@
 {
-  "showId": "naxer_before_you_found_me_v3",
-  "version": 3,
-  "note": "NÄXER《在你找到我以前》v3｜逐字時間＝人聲 stem（0 Lead Vocals.wav）mlx-whisper large-v3-turbo 字級起音＋NW 對位，句首提前 0.3 秒；243~283 秒加回歌詞單漏掉的一輪副歌 12 句（文字皆為既有句複製）；歌詞文字逐字未改。2026-09-05 AX",
+  "showId": "naxer_before_you_found_me_v2",
+  "version": 2,
+  "note": "NÄXER《在你找到我以前》v2 — 每句換色，轉場速度依段落調整",
   "songs": [
     {
       "id": "song_naxer_01",
       "title": "在你找到我以前",
       "artist": "NÄXER",
       "filename": "NÄXER<在你找到我以前>杜比音效.wav",
-      "durationSec": 331.68,
+      "durationSec": 326.88,
       "fadeInSec": 1.0,
       "fadeOutSec": 3.0,
       "cues": [
         {
           "id": "naxer_001",
-          "timeSec": 0.68,
+          "timeSec": 1.0,
           "type": "lyrics",
           "text": "城市睡了　風還醒著",
           "color": "hsl(270,60%,28%)",
@@ -22,35 +22,35 @@
           "words": [
             {
               "word": "城",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "市",
-              "offsetSec": 0.64
+              "offsetSec": 0.505
             },
             {
               "word": "睡",
-              "offsetSec": 1.04
+              "offsetSec": 1.01
             },
             {
               "word": "了",
-              "offsetSec": 1.44
+              "offsetSec": 1.515
             },
             {
               "word": "風",
-              "offsetSec": 2.1
+              "offsetSec": 2.02
             },
             {
               "word": "還",
-              "offsetSec": 2.72
+              "offsetSec": 2.525
             },
             {
               "word": "醒",
-              "offsetSec": 3.46
+              "offsetSec": 3.03
             },
             {
               "word": "著",
-              "offsetSec": 4.0
+              "offsetSec": 3.535
             }
           ],
           "transitionSec": 1.5,
@@ -59,7 +59,7 @@
         },
         {
           "id": "naxer_002",
-          "timeSec": 4.96,
+          "timeSec": 5.04,
           "type": "lyrics",
           "text": "我沿著沒有名字的街",
           "color": "hsl(250,60%,32%)",
@@ -67,39 +67,39 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "沿",
-              "offsetSec": 1.14
+              "offsetSec": 0.624
             },
             {
               "word": "著",
-              "offsetSec": 1.48
+              "offsetSec": 1.249
             },
             {
               "word": "沒",
-              "offsetSec": 1.78
+              "offsetSec": 1.873
             },
             {
               "word": "有",
-              "offsetSec": 2.1
+              "offsetSec": 2.498
             },
             {
               "word": "名",
-              "offsetSec": 2.42
+              "offsetSec": 3.122
             },
             {
               "word": "字",
-              "offsetSec": 2.88
+              "offsetSec": 3.747
             },
             {
               "word": "的",
-              "offsetSec": 3.48
+              "offsetSec": 4.371
             },
             {
               "word": "街",
-              "offsetSec": 3.88
+              "offsetSec": 4.996
             }
           ],
           "transitionSec": 1.5,
@@ -108,7 +108,7 @@
         },
         {
           "id": "naxer_003",
-          "timeSec": 10.06,
+          "timeSec": 10.66,
           "type": "lyrics",
           "text": "找一盞為我亮著的燈",
           "color": "hsl(270,60%,28%)",
@@ -116,39 +116,39 @@
           "words": [
             {
               "word": "找",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "一",
-              "offsetSec": 1.1
+              "offsetSec": 0.778
             },
             {
               "word": "盞",
-              "offsetSec": 1.48
+              "offsetSec": 1.556
             },
             {
               "word": "為",
-              "offsetSec": 1.86
+              "offsetSec": 2.333
             },
             {
               "word": "我",
-              "offsetSec": 2.2
+              "offsetSec": 3.111
             },
             {
               "word": "亮",
-              "offsetSec": 2.58
+              "offsetSec": 3.889
             },
             {
               "word": "著",
-              "offsetSec": 2.98
+              "offsetSec": 4.667
             },
             {
               "word": "的",
-              "offsetSec": 3.66
+              "offsetSec": 5.444
             },
             {
               "word": "燈",
-              "offsetSec": 4.48
+              "offsetSec": 6.222
             }
           ],
           "transitionSec": 1.5,
@@ -157,7 +157,7 @@
         },
         {
           "id": "naxer_004",
-          "timeSec": 17.08,
+          "timeSec": 17.66,
           "type": "lyrics",
           "text": "我記得下雨的屋簷",
           "color": "hsl(240,55%,30%)",
@@ -165,35 +165,35 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "記",
-              "offsetSec": 1.1
+              "offsetSec": 0.317
             },
             {
               "word": "得",
-              "offsetSec": 1.3
+              "offsetSec": 0.635
             },
             {
               "word": "下",
-              "offsetSec": 1.46
+              "offsetSec": 0.952
             },
             {
               "word": "雨",
-              "offsetSec": 1.7
+              "offsetSec": 1.27
             },
             {
               "word": "的",
-              "offsetSec": 2.04
+              "offsetSec": 1.587
             },
             {
               "word": "屋",
-              "offsetSec": 2.24
+              "offsetSec": 1.905
             },
             {
               "word": "簷",
-              "offsetSec": 2.5
+              "offsetSec": 2.222
             }
           ],
           "transitionSec": 1.5,
@@ -202,7 +202,7 @@
         },
         {
           "id": "naxer_005",
-          "timeSec": 19.63,
+          "timeSec": 20.2,
           "type": "lyrics",
           "text": "記得便利商店的夜",
           "color": "hsl(270,60%,28%)",
@@ -210,35 +210,35 @@
           "words": [
             {
               "word": "記",
-              "offsetSec": 0.29
+              "offsetSec": 0.0
             },
             {
               "word": "得",
-              "offsetSec": 1.21
+              "offsetSec": 0.29
             },
             {
               "word": "便",
-              "offsetSec": 1.43
+              "offsetSec": 0.58
             },
             {
               "word": "利",
-              "offsetSec": 1.55
+              "offsetSec": 0.87
             },
             {
               "word": "商",
-              "offsetSec": 1.73
+              "offsetSec": 1.16
             },
             {
               "word": "店",
-              "offsetSec": 2.01
+              "offsetSec": 1.45
             },
             {
               "word": "的",
-              "offsetSec": 2.35
+              "offsetSec": 1.74
             },
             {
               "word": "夜",
-              "offsetSec": 2.71
+              "offsetSec": 2.03
             }
           ],
           "transitionSec": 1.5,
@@ -247,7 +247,7 @@
         },
         {
           "id": "naxer_006",
-          "timeSec": 22.44,
+          "timeSec": 22.52,
           "type": "lyrics",
           "text": "有人經過放慢腳步",
           "color": "hsl(250,60%,32%)",
@@ -255,35 +255,35 @@
           "words": [
             {
               "word": "有",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "人",
-              "offsetSec": 0.84
+              "offsetSec": 0.402
             },
             {
               "word": "經",
-              "offsetSec": 1.38
+              "offsetSec": 0.805
             },
             {
               "word": "過",
-              "offsetSec": 1.58
+              "offsetSec": 1.207
             },
             {
               "word": "放",
-              "offsetSec": 1.78
+              "offsetSec": 1.61
             },
             {
               "word": "慢",
-              "offsetSec": 2.02
+              "offsetSec": 2.012
             },
             {
               "word": "腳",
-              "offsetSec": 2.38
+              "offsetSec": 2.415
             },
             {
               "word": "步",
-              "offsetSec": 2.78
+              "offsetSec": 2.817
             }
           ],
           "transitionSec": 1.5,
@@ -292,7 +292,7 @@
         },
         {
           "id": "naxer_007",
-          "timeSec": 25.32,
+          "timeSec": 25.74,
           "type": "lyrics",
           "text": "卻又匆匆走遠",
           "color": "hsl(270,60%,28%)",
@@ -300,27 +300,27 @@
           "words": [
             {
               "word": "卻",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "又",
-              "offsetSec": 0.94
+              "offsetSec": 0.477
             },
             {
               "word": "匆",
-              "offsetSec": 1.24
+              "offsetSec": 0.953
             },
             {
               "word": "匆",
-              "offsetSec": 1.84
+              "offsetSec": 1.43
             },
             {
               "word": "走",
-              "offsetSec": 2.32
+              "offsetSec": 1.907
             },
             {
               "word": "遠",
-              "offsetSec": 2.66
+              "offsetSec": 2.383
             }
           ],
           "transitionSec": 1.5,
@@ -329,7 +329,7 @@
         },
         {
           "id": "naxer_008",
-          "timeSec": 28.16,
+          "timeSec": 28.6,
           "type": "lyrics",
           "text": "我學會不追著誰跑",
           "color": "hsl(240,55%,30%)",
@@ -337,35 +337,35 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "學",
-              "offsetSec": 0.94
+              "offsetSec": 0.345
             },
             {
               "word": "會",
-              "offsetSec": 1.16
+              "offsetSec": 0.69
             },
             {
               "word": "不",
-              "offsetSec": 1.34
+              "offsetSec": 1.035
             },
             {
               "word": "追",
-              "offsetSec": 1.56
+              "offsetSec": 1.38
             },
             {
               "word": "著",
-              "offsetSec": 1.92
+              "offsetSec": 1.725
             },
             {
               "word": "誰",
-              "offsetSec": 2.24
+              "offsetSec": 2.07
             },
             {
               "word": "跑",
-              "offsetSec": 2.64
+              "offsetSec": 2.415
             }
           ],
           "transitionSec": 1.5,
@@ -374,7 +374,7 @@
         },
         {
           "id": "naxer_009",
-          "timeSec": 30.88,
+          "timeSec": 31.36,
           "type": "lyrics",
           "text": "學會把尾巴藏好",
           "color": "hsl(270,60%,28%)",
@@ -382,31 +382,31 @@
           "words": [
             {
               "word": "學",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "會",
-              "offsetSec": 0.92
+              "offsetSec": 0.406
             },
             {
               "word": "把",
-              "offsetSec": 1.28
+              "offsetSec": 0.811
             },
             {
               "word": "尾",
-              "offsetSec": 1.62
+              "offsetSec": 1.217
             },
             {
               "word": "巴",
-              "offsetSec": 2.06
+              "offsetSec": 1.623
             },
             {
               "word": "藏",
-              "offsetSec": 2.36
+              "offsetSec": 2.029
             },
             {
               "word": "好",
-              "offsetSec": 2.8
+              "offsetSec": 2.434
             }
           ],
           "transitionSec": 1.5,
@@ -415,7 +415,7 @@
         },
         {
           "id": "naxer_010",
-          "timeSec": 33.76,
+          "timeSec": 34.2,
           "type": "lyrics",
           "text": "每一雙溫柔的眼睛",
           "color": "hsl(250,60%,32%)",
@@ -423,35 +423,35 @@
           "words": [
             {
               "word": "每",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "一",
-              "offsetSec": 1.0
+              "offsetSec": 0.345
             },
             {
               "word": "雙",
-              "offsetSec": 1.3
+              "offsetSec": 0.69
             },
             {
               "word": "溫",
-              "offsetSec": 1.62
+              "offsetSec": 1.035
             },
             {
               "word": "柔",
-              "offsetSec": 2.02
+              "offsetSec": 1.38
             },
             {
               "word": "的",
-              "offsetSec": 2.3
+              "offsetSec": 1.725
             },
             {
               "word": "眼",
-              "offsetSec": 2.46
+              "offsetSec": 2.07
             },
             {
               "word": "睛",
-              "offsetSec": 2.74
+              "offsetSec": 2.415
             }
           ],
           "transitionSec": 1.5,
@@ -460,7 +460,7 @@
         },
         {
           "id": "naxer_011",
-          "timeSec": 36.62,
+          "timeSec": 36.96,
           "type": "lyrics",
           "text": "我都不敢看太久",
           "color": "hsl(270,60%,28%)",
@@ -468,31 +468,31 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "都",
-              "offsetSec": 0.84
+              "offsetSec": 0.423
             },
             {
               "word": "不",
-              "offsetSec": 1.0
+              "offsetSec": 0.846
             },
             {
               "word": "敢",
-              "offsetSec": 1.28
+              "offsetSec": 1.269
             },
             {
               "word": "看",
-              "offsetSec": 1.58
+              "offsetSec": 1.691
             },
             {
               "word": "太",
-              "offsetSec": 1.98
+              "offsetSec": 2.114
             },
             {
               "word": "久",
-              "offsetSec": 2.78
+              "offsetSec": 2.537
             }
           ],
           "transitionSec": 1.5,
@@ -501,7 +501,7 @@
         },
         {
           "id": "naxer_012",
-          "timeSec": 39.6,
+          "timeSec": 39.92,
           "type": "lyrics",
           "text": "如果明天",
           "color": "hsl(240,55%,30%)",
@@ -509,19 +509,19 @@
           "words": [
             {
               "word": "如",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "果",
-              "offsetSec": 0.81
+              "offsetSec": 0.51
             },
             {
               "word": "明",
-              "offsetSec": 1.32
+              "offsetSec": 1.02
             },
             {
               "word": "天",
-              "offsetSec": 1.84
+              "offsetSec": 1.53
             }
           ],
           "transitionSec": 1.5,
@@ -530,7 +530,7 @@
         },
         {
           "id": "naxer_013",
-          "timeSec": 41.86,
+          "timeSec": 41.96,
           "type": "lyrics",
           "text": "還是一樣遙遠",
           "color": "hsl(270,60%,28%)",
@@ -538,27 +538,27 @@
           "words": [
             {
               "word": "還",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "是",
-              "offsetSec": 0.67
+              "offsetSec": 0.617
             },
             {
               "word": "一",
-              "offsetSec": 1.04
+              "offsetSec": 1.233
             },
             {
               "word": "樣",
-              "offsetSec": 1.3
+              "offsetSec": 1.85
             },
             {
               "word": "遙",
-              "offsetSec": 1.42
+              "offsetSec": 2.467
             },
             {
               "word": "遠",
-              "offsetSec": 1.74
+              "offsetSec": 3.083
             }
           ],
           "transitionSec": 1.5,
@@ -567,7 +567,7 @@
         },
         {
           "id": "naxer_014",
-          "timeSec": 45.52,
+          "timeSec": 45.66,
           "type": "lyrics",
           "text": "我就陪著自己的影子",
           "color": "hsl(250,60%,32%)",
@@ -575,39 +575,39 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "就",
-              "offsetSec": 0.68
+              "offsetSec": 0.418
             },
             {
               "word": "陪",
-              "offsetSec": 1.06
+              "offsetSec": 0.836
             },
             {
               "word": "著",
-              "offsetSec": 1.58
+              "offsetSec": 1.253
             },
             {
               "word": "自",
-              "offsetSec": 1.86
+              "offsetSec": 1.671
             },
             {
               "word": "己",
-              "offsetSec": 2.15
+              "offsetSec": 2.089
             },
             {
               "word": "的",
-              "offsetSec": 2.44
+              "offsetSec": 2.507
             },
             {
               "word": "影",
-              "offsetSec": 3.08
+              "offsetSec": 2.924
             },
             {
               "word": "子",
-              "offsetSec": 3.62
+              "offsetSec": 3.342
             }
           ],
           "transitionSec": 1.5,
@@ -616,7 +616,7 @@
         },
         {
           "id": "naxer_015",
-          "timeSec": 49.3,
+          "timeSec": 49.42,
           "type": "lyrics",
           "text": "再走一遍",
           "color": "hsl(270,60%,28%)",
@@ -624,19 +624,19 @@
           "words": [
             {
               "word": "再",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "走",
-              "offsetSec": 0.9
+              "offsetSec": 0.52
             },
             {
               "word": "一",
-              "offsetSec": 1.24
+              "offsetSec": 1.04
             },
             {
               "word": "遍",
-              "offsetSec": 1.62
+              "offsetSec": 1.56
             }
           ],
           "transitionSec": 1.5,
@@ -645,7 +645,7 @@
         },
         {
           "id": "naxer_016",
-          "timeSec": 50.97,
+          "timeSec": 51.5,
           "type": "lyrics",
           "text": "在你找到我以前",
           "color": "hsl(340,100%,45%)",
@@ -653,31 +653,31 @@
           "words": [
             {
               "word": "在",
-              "offsetSec": 0.23
+              "offsetSec": 0.0
             },
             {
               "word": "你",
-              "offsetSec": 1.03
+              "offsetSec": 0.343
             },
             {
               "word": "找",
-              "offsetSec": 1.35
+              "offsetSec": 0.686
             },
             {
               "word": "到",
-              "offsetSec": 1.77
+              "offsetSec": 1.029
             },
             {
               "word": "我",
-              "offsetSec": 2.07
+              "offsetSec": 1.371
             },
             {
               "word": "以",
-              "offsetSec": 2.39
+              "offsetSec": 1.714
             },
             {
               "word": "前",
-              "offsetSec": 2.65
+              "offsetSec": 2.057
             }
           ],
           "transitionSec": 0.8,
@@ -686,7 +686,7 @@
         },
         {
           "id": "naxer_017",
-          "timeSec": 53.67,
+          "timeSec": 53.9,
           "type": "lyrics",
           "text": "我把每個黃昏都走了一遍",
           "color": "hsl(30,100%,48%)",
@@ -694,47 +694,47 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.21
+              "offsetSec": 0.0
             },
             {
               "word": "把",
-              "offsetSec": 0.73
+              "offsetSec": 0.296
             },
             {
               "word": "每",
-              "offsetSec": 0.91
+              "offsetSec": 0.593
             },
             {
               "word": "個",
-              "offsetSec": 1.09
+              "offsetSec": 0.889
             },
             {
               "word": "黃",
-              "offsetSec": 1.25
+              "offsetSec": 1.185
             },
             {
               "word": "昏",
-              "offsetSec": 1.45
+              "offsetSec": 1.482
             },
             {
               "word": "都",
-              "offsetSec": 1.59
+              "offsetSec": 1.778
             },
             {
               "word": "走",
-              "offsetSec": 1.83
+              "offsetSec": 2.075
             },
             {
               "word": "了",
-              "offsetSec": 2.11
+              "offsetSec": 2.371
             },
             {
               "word": "一",
-              "offsetSec": 2.39
+              "offsetSec": 2.667
             },
             {
               "word": "遍",
-              "offsetSec": 2.89
+              "offsetSec": 2.964
             }
           ],
           "transitionSec": 0.8,
@@ -743,7 +743,7 @@
         },
         {
           "id": "naxer_018",
-          "timeSec": 56.61,
+          "timeSec": 57.16,
           "type": "lyrics",
           "text": "不敢相信伸來的手",
           "color": "hsl(340,100%,45%)",
@@ -751,35 +751,35 @@
           "words": [
             {
               "word": "不",
-              "offsetSec": 0.23
+              "offsetSec": 0.0
             },
             {
               "word": "敢",
-              "offsetSec": 1.05
+              "offsetSec": 0.288
             },
             {
               "word": "相",
-              "offsetSec": 1.35
+              "offsetSec": 0.575
             },
             {
               "word": "信",
-              "offsetSec": 1.69
+              "offsetSec": 0.863
             },
             {
               "word": "伸",
-              "offsetSec": 2.03
+              "offsetSec": 1.15
             },
             {
               "word": "來",
-              "offsetSec": 2.31
+              "offsetSec": 1.438
             },
             {
               "word": "的",
-              "offsetSec": 2.55
+              "offsetSec": 1.725
             },
             {
               "word": "手",
-              "offsetSec": 2.803
+              "offsetSec": 2.013
             }
           ],
           "transitionSec": 0.8,
@@ -796,39 +796,39 @@
           "words": [
             {
               "word": "會",
-              "offsetSec": 0.08
+              "offsetSec": 0.0
             },
             {
               "word": "不",
-              "offsetSec": 0.68
+              "offsetSec": 0.369
             },
             {
               "word": "會",
-              "offsetSec": 0.91
+              "offsetSec": 0.738
             },
             {
               "word": "又",
-              "offsetSec": 1.14
+              "offsetSec": 1.107
             },
             {
               "word": "消",
-              "offsetSec": 1.44
+              "offsetSec": 1.476
             },
             {
               "word": "失",
-              "offsetSec": 1.72
+              "offsetSec": 1.844
             },
             {
               "word": "在",
-              "offsetSec": 1.98
+              "offsetSec": 2.213
             },
             {
               "word": "明",
-              "offsetSec": 2.28
+              "offsetSec": 2.582
             },
             {
               "word": "天",
-              "offsetSec": 2.6
+              "offsetSec": 2.951
             }
           ],
           "transitionSec": 0.8,
@@ -837,7 +837,7 @@
         },
         {
           "id": "naxer_020",
-          "timeSec": 62.38,
+          "timeSec": 62.78,
           "type": "lyrics",
           "text": "在我找到你那一天",
           "color": "hsl(345,100%,42%)",
@@ -845,35 +845,35 @@
           "words": [
             {
               "word": "在",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "我",
-              "offsetSec": 0.88
+              "offsetSec": 0.287
             },
             {
               "word": "找",
-              "offsetSec": 1.26
+              "offsetSec": 0.575
             },
             {
               "word": "到",
-              "offsetSec": 1.54
+              "offsetSec": 0.862
             },
             {
               "word": "你",
-              "offsetSec": 1.74
+              "offsetSec": 1.15
             },
             {
               "word": "那",
-              "offsetSec": 1.96
+              "offsetSec": 1.437
             },
             {
               "word": "一",
-              "offsetSec": 2.28
+              "offsetSec": 1.725
             },
             {
               "word": "天",
-              "offsetSec": 2.62
+              "offsetSec": 2.012
             }
           ],
           "transitionSec": 0.8,
@@ -882,7 +882,7 @@
         },
         {
           "id": "naxer_021",
-          "timeSec": 65.05,
+          "timeSec": 65.08,
           "type": "lyrics",
           "text": "才知道你也孤單了好多年",
           "color": "hsl(45,100%,45%)",
@@ -890,47 +890,47 @@
           "words": [
             {
               "word": "才",
-              "offsetSec": 0.25
+              "offsetSec": 0.0
             },
             {
               "word": "知",
-              "offsetSec": 0.65
+              "offsetSec": 0.267
             },
             {
               "word": "道",
-              "offsetSec": 0.78
+              "offsetSec": 0.535
             },
             {
               "word": "你",
-              "offsetSec": 0.91
+              "offsetSec": 0.802
             },
             {
               "word": "也",
-              "offsetSec": 1.17
+              "offsetSec": 1.069
             },
             {
               "word": "孤",
-              "offsetSec": 1.43
+              "offsetSec": 1.336
             },
             {
               "word": "單",
-              "offsetSec": 1.53
+              "offsetSec": 1.604
             },
             {
               "word": "了",
-              "offsetSec": 1.79
+              "offsetSec": 1.871
             },
             {
               "word": "好",
-              "offsetSec": 2.11
+              "offsetSec": 2.138
             },
             {
               "word": "多",
-              "offsetSec": 2.47
+              "offsetSec": 2.405
             },
             {
               "word": "年",
-              "offsetSec": 2.71
+              "offsetSec": 2.673
             }
           ],
           "transitionSec": 0.8,
@@ -939,7 +939,7 @@
         },
         {
           "id": "naxer_022",
-          "timeSec": 68.0,
+          "timeSec": 68.02,
           "type": "lyrics",
           "text": "不是誰把誰拯救",
           "color": "hsl(340,100%,45%)",
@@ -947,31 +947,31 @@
           "words": [
             {
               "word": "不",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "是",
-              "offsetSec": 0.73
+              "offsetSec": 0.383
             },
             {
               "word": "誰",
-              "offsetSec": 1.16
+              "offsetSec": 0.766
             },
             {
               "word": "把",
-              "offsetSec": 1.68
+              "offsetSec": 1.149
             },
             {
               "word": "誰",
-              "offsetSec": 1.96
+              "offsetSec": 1.531
             },
             {
               "word": "拯",
-              "offsetSec": 2.38
+              "offsetSec": 1.914
             },
             {
               "word": "救",
-              "offsetSec": 2.64
+              "offsetSec": 2.297
             }
           ],
           "transitionSec": 0.8,
@@ -980,7 +980,7 @@
         },
         {
           "id": "naxer_023",
-          "timeSec": 70.69,
+          "timeSec": 70.7,
           "type": "lyrics",
           "text": "是兩顆流浪的心",
           "color": "hsl(30,100%,48%)",
@@ -988,31 +988,31 @@
           "words": [
             {
               "word": "是",
-              "offsetSec": 0.23
+              "offsetSec": 0.0
             },
             {
               "word": "兩",
-              "offsetSec": 0.71
+              "offsetSec": 0.471
             },
             {
               "word": "顆",
-              "offsetSec": 1.03
+              "offsetSec": 0.943
             },
             {
               "word": "流",
-              "offsetSec": 1.41
+              "offsetSec": 1.414
             },
             {
               "word": "浪",
-              "offsetSec": 1.87
+              "offsetSec": 1.886
             },
             {
               "word": "的",
-              "offsetSec": 2.47
+              "offsetSec": 2.357
             },
             {
               "word": "心",
-              "offsetSec": 2.79
+              "offsetSec": 2.829
             }
           ],
           "transitionSec": 0.8,
@@ -1021,7 +1021,7 @@
         },
         {
           "id": "naxer_024",
-          "timeSec": 73.72,
+          "timeSec": 74.0,
           "type": "lyrics",
           "text": "終於成為彼此的家",
           "color": "hsl(340,100%,45%)",
@@ -1029,35 +1029,35 @@
           "words": [
             {
               "word": "終",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "於",
-              "offsetSec": 0.94
+              "offsetSec": 0.49
             },
             {
               "word": "成",
-              "offsetSec": 1.22
+              "offsetSec": 0.98
             },
             {
               "word": "為",
-              "offsetSec": 1.6
+              "offsetSec": 1.47
             },
             {
               "word": "彼",
-              "offsetSec": 2.62
+              "offsetSec": 1.96
             },
             {
               "word": "此",
-              "offsetSec": 3.16
+              "offsetSec": 2.45
             },
             {
               "word": "的",
-              "offsetSec": 3.64
+              "offsetSec": 2.94
             },
             {
               "word": "家",
-              "offsetSec": 4.02
+              "offsetSec": 3.43
             }
           ],
           "transitionSec": 0.8,
@@ -1066,7 +1066,7 @@
         },
         {
           "id": "naxer_025",
-          "timeSec": 77.82,
+          "timeSec": 77.92,
           "type": "lyrics",
           "text": "帶我回家",
           "color": "hsl(45,100%,48%)",
@@ -1074,19 +1074,19 @@
           "words": [
             {
               "word": "帶",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "我",
-              "offsetSec": 0.58
+              "offsetSec": 0.35
             },
             {
               "word": "回",
-              "offsetSec": 0.78
+              "offsetSec": 0.7
             },
             {
               "word": "家",
-              "offsetSec": 1.0
+              "offsetSec": 1.05
             }
           ],
           "transitionSec": 0.8,
@@ -1095,7 +1095,7 @@
         },
         {
           "id": "naxer_026",
-          "timeSec": 79.02,
+          "timeSec": 79.32,
           "type": "lyrics",
           "text": "You found me, I found home",
           "color": "hsl(340,100%,45%)",
@@ -1103,27 +1103,27 @@
           "words": [
             {
               "word": "You",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "found",
-              "offsetSec": 0.8
+              "offsetSec": 0.47
             },
             {
               "word": "me",
-              "offsetSec": 1.28
+              "offsetSec": 0.94
             },
             {
               "word": "I",
-              "offsetSec": 1.58
+              "offsetSec": 1.41
             },
             {
               "word": "found",
-              "offsetSec": 2.06
+              "offsetSec": 1.88
             },
             {
               "word": "home",
-              "offsetSec": 2.84
+              "offsetSec": 2.35
             }
           ],
           "transitionSec": 0.8,
@@ -1132,7 +1132,7 @@
         },
         {
           "id": "naxer_027",
-          "timeSec": 82.06,
+          "timeSec": 82.14,
           "type": "lyrics",
           "text": "也讓我帶你回家",
           "color": "hsl(45,100%,48%)",
@@ -1140,31 +1140,31 @@
           "words": [
             {
               "word": "也",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "讓",
-              "offsetSec": 0.64
+              "offsetSec": 0.523
             },
             {
               "word": "我",
-              "offsetSec": 0.96
+              "offsetSec": 1.046
             },
             {
               "word": "帶",
-              "offsetSec": 1.36
+              "offsetSec": 1.569
             },
             {
               "word": "你",
-              "offsetSec": 1.9
+              "offsetSec": 2.091
             },
             {
               "word": "回",
-              "offsetSec": 2.32
+              "offsetSec": 2.614
             },
             {
               "word": "家",
-              "offsetSec": 2.68
+              "offsetSec": 3.137
             }
           ],
           "transitionSec": 0.8,
@@ -1173,7 +1173,7 @@
         },
         {
           "id": "naxer_028",
-          "timeSec": 85.4,
+          "timeSec": 85.8,
           "type": "lyrics",
           "text": "We don't have to run anymore",
           "color": "hsl(340,100%,45%)",
@@ -1181,27 +1181,27 @@
           "words": [
             {
               "word": "We",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "don't",
-              "offsetSec": 0.92
+              "offsetSec": 0.277
             },
             {
               "word": "have",
-              "offsetSec": 0.98
+              "offsetSec": 0.553
             },
             {
               "word": "to",
-              "offsetSec": 1.14
+              "offsetSec": 0.83
             },
             {
               "word": "run",
-              "offsetSec": 1.28
+              "offsetSec": 1.107
             },
             {
               "word": "anymore",
-              "offsetSec": 1.56
+              "offsetSec": 1.383
             }
           ],
           "transitionSec": 0.8,
@@ -1210,7 +1210,7 @@
         },
         {
           "id": "naxer_029",
-          "timeSec": 87.38,
+          "timeSec": 87.46,
           "type": "lyrics",
           "text": "괜찮아, 이제 혼자가 아니야",
           "color": "hsl(45,100%,48%)",
@@ -1218,47 +1218,47 @@
           "words": [
             {
               "word": "괜",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "찮",
-              "offsetSec": 0.74
+              "offsetSec": 0.264
             },
             {
               "word": "아",
-              "offsetSec": 0.92
+              "offsetSec": 0.527
             },
             {
               "word": "이",
-              "offsetSec": 1.1
+              "offsetSec": 0.791
             },
             {
               "word": "제",
-              "offsetSec": 1.34
+              "offsetSec": 1.055
             },
             {
               "word": "혼",
-              "offsetSec": 1.42
+              "offsetSec": 1.318
             },
             {
               "word": "자",
-              "offsetSec": 1.62
+              "offsetSec": 1.582
             },
             {
               "word": "가",
-              "offsetSec": 1.8
+              "offsetSec": 1.845
             },
             {
               "word": "아",
-              "offsetSec": 2.0
+              "offsetSec": 2.109
             },
             {
               "word": "니",
-              "offsetSec": 2.54
+              "offsetSec": 2.373
             },
             {
               "word": "야",
-              "offsetSec": 2.72
+              "offsetSec": 2.636
             }
           ],
           "transitionSec": 0.8,
@@ -1267,7 +1267,7 @@
         },
         {
           "id": "naxer_030",
-          "timeSec": 90.24,
+          "timeSec": 90.36,
           "type": "lyrics",
           "text": "沒關係　我們不再孤單",
           "color": "hsl(340,100%,45%)",
@@ -1275,39 +1275,39 @@
           "words": [
             {
               "word": "沒",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "關",
-              "offsetSec": 0.94
+              "offsetSec": 0.631
             },
             {
               "word": "係",
-              "offsetSec": 1.26
+              "offsetSec": 1.262
             },
             {
               "word": "我",
-              "offsetSec": 1.62
+              "offsetSec": 1.893
             },
             {
               "word": "們",
-              "offsetSec": 2.06
+              "offsetSec": 2.524
             },
             {
               "word": "不",
-              "offsetSec": 2.5
+              "offsetSec": 3.156
             },
             {
               "word": "再",
-              "offsetSec": 3.48
+              "offsetSec": 3.787
             },
             {
               "word": "孤",
-              "offsetSec": 4.06
+              "offsetSec": 4.418
             },
             {
               "word": "單",
-              "offsetSec": 4.52
+              "offsetSec": 5.049
             }
           ],
           "transitionSec": 0.8,
@@ -1316,7 +1316,7 @@
         },
         {
           "id": "naxer_031",
-          "timeSec": 95.8,
+          "timeSec": 96.04,
           "type": "lyrics",
           "text": "你蹲下來沒有催促",
           "color": "hsl(220,80%,38%)",
@@ -1324,35 +1324,35 @@
           "words": [
             {
               "word": "你",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "蹲",
-              "offsetSec": 0.76
+              "offsetSec": 0.207
             },
             {
               "word": "下",
-              "offsetSec": 0.96
+              "offsetSec": 0.415
             },
             {
               "word": "來",
-              "offsetSec": 1.14
+              "offsetSec": 0.622
             },
             {
               "word": "沒",
-              "offsetSec": 1.32
+              "offsetSec": 0.83
             },
             {
               "word": "有",
-              "offsetSec": 1.47
+              "offsetSec": 1.037
             },
             {
               "word": "催",
-              "offsetSec": 1.62
+              "offsetSec": 1.245
             },
             {
               "word": "促",
-              "offsetSec": 1.84
+              "offsetSec": 1.452
             }
           ],
           "transitionSec": 0.5,
@@ -1361,7 +1361,7 @@
         },
         {
           "id": "naxer_032",
-          "timeSec": 97.69,
+          "timeSec": 97.7,
           "type": "lyrics",
           "text": "只是輕聲叫著我",
           "color": "hsl(200,90%,35%)",
@@ -1369,31 +1369,31 @@
           "words": [
             {
               "word": "只",
-              "offsetSec": 0.17
+              "offsetSec": 0.0
             },
             {
               "word": "是",
-              "offsetSec": 0.38
+              "offsetSec": 0.197
             },
             {
               "word": "輕",
-              "offsetSec": 0.59
+              "offsetSec": 0.394
             },
             {
               "word": "聲",
-              "offsetSec": 0.85
+              "offsetSec": 0.591
             },
             {
               "word": "叫",
-              "offsetSec": 0.99
+              "offsetSec": 0.789
             },
             {
               "word": "著",
-              "offsetSec": 1.17
+              "offsetSec": 0.986
             },
             {
               "word": "我",
-              "offsetSec": 1.37
+              "offsetSec": 1.183
             }
           ],
           "transitionSec": 0.5,
@@ -1402,7 +1402,7 @@
         },
         {
           "id": "naxer_033",
-          "timeSec": 99.11,
+          "timeSec": 99.08,
           "type": "lyrics",
           "text": "像是早已認識很久",
           "color": "hsl(240,70%,40%)",
@@ -1410,35 +1410,35 @@
           "words": [
             {
               "word": "像",
-              "offsetSec": 0.17
+              "offsetSec": 0.0
             },
             {
               "word": "是",
-              "offsetSec": 0.47
+              "offsetSec": 0.193
             },
             {
               "word": "早",
-              "offsetSec": 0.65
+              "offsetSec": 0.385
             },
             {
               "word": "已",
-              "offsetSec": 0.85
+              "offsetSec": 0.578
             },
             {
               "word": "認",
-              "offsetSec": 1.01
+              "offsetSec": 0.77
             },
             {
               "word": "識",
-              "offsetSec": 1.19
+              "offsetSec": 0.963
             },
             {
               "word": "很",
-              "offsetSec": 1.33
+              "offsetSec": 1.155
             },
             {
               "word": "久",
-              "offsetSec": 1.55
+              "offsetSec": 1.348
             }
           ],
           "transitionSec": 0.5,
@@ -1447,7 +1447,7 @@
         },
         {
           "id": "naxer_034",
-          "timeSec": 100.71,
+          "timeSec": 100.62,
           "type": "lyrics",
           "text": "等我自己走向你",
           "color": "hsl(260,75%,38%)",
@@ -1455,31 +1455,31 @@
           "words": [
             {
               "word": "等",
-              "offsetSec": 0.11
+              "offsetSec": 0.0
             },
             {
               "word": "我",
-              "offsetSec": 0.27
+              "offsetSec": 0.137
             },
             {
               "word": "自",
-              "offsetSec": 0.45
+              "offsetSec": 0.274
             },
             {
               "word": "己",
-              "offsetSec": 0.62
+              "offsetSec": 0.411
             },
             {
               "word": "走",
-              "offsetSec": 0.79
+              "offsetSec": 0.549
             },
             {
               "word": "向",
-              "offsetSec": 0.97
+              "offsetSec": 0.686
             },
             {
               "word": "你",
-              "offsetSec": 1.17
+              "offsetSec": 0.823
             }
           ],
           "transitionSec": 0.5,
@@ -1488,7 +1488,7 @@
         },
         {
           "id": "naxer_035",
-          "timeSec": 101.69,
+          "timeSec": 101.58,
           "type": "lyrics",
           "text": "第一次坐進你的車",
           "color": "hsl(280,80%,38%)",
@@ -1496,35 +1496,35 @@
           "words": [
             {
               "word": "第",
-              "offsetSec": 0.05
+              "offsetSec": 0.0
             },
             {
               "word": "一",
-              "offsetSec": 0.39
+              "offsetSec": 0.213
             },
             {
               "word": "次",
-              "offsetSec": 0.63
+              "offsetSec": 0.425
             },
             {
               "word": "坐",
-              "offsetSec": 0.87
+              "offsetSec": 0.638
             },
             {
               "word": "進",
-              "offsetSec": 1.05
+              "offsetSec": 0.85
             },
             {
               "word": "你",
-              "offsetSec": 1.23
+              "offsetSec": 1.063
             },
             {
               "word": "的",
-              "offsetSec": 1.39
+              "offsetSec": 1.275
             },
             {
               "word": "車",
-              "offsetSec": 1.55
+              "offsetSec": 1.488
             }
           ],
           "transitionSec": 0.5,
@@ -1533,7 +1533,7 @@
         },
         {
           "id": "naxer_036",
-          "timeSec": 103.29,
+          "timeSec": 103.28,
           "type": "lyrics",
           "text": "窗外的街慢慢退後",
           "color": "hsl(300,70%,35%)",
@@ -1541,35 +1541,35 @@
           "words": [
             {
               "word": "窗",
-              "offsetSec": 0.23
+              "offsetSec": 0.0
             },
             {
               "word": "外",
-              "offsetSec": 0.53
+              "offsetSec": 0.207
             },
             {
               "word": "的",
-              "offsetSec": 0.71
+              "offsetSec": 0.415
             },
             {
               "word": "街",
-              "offsetSec": 0.91
+              "offsetSec": 0.622
             },
             {
               "word": "慢",
-              "offsetSec": 1.03
+              "offsetSec": 0.83
             },
             {
               "word": "慢",
-              "offsetSec": 1.19
+              "offsetSec": 1.037
             },
             {
               "word": "退",
-              "offsetSec": 1.35
+              "offsetSec": 1.245
             },
             {
               "word": "後",
-              "offsetSec": 1.59
+              "offsetSec": 1.452
             }
           ],
           "transitionSec": 0.5,
@@ -1578,7 +1578,7 @@
         },
         {
           "id": "naxer_037",
-          "timeSec": 104.93,
+          "timeSec": 104.94,
           "type": "lyrics",
           "text": "我不知道路的盡頭",
           "color": "hsl(220,80%,38%)",
@@ -1586,35 +1586,35 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.27
+              "offsetSec": 0.0
             },
             {
               "word": "不",
-              "offsetSec": 0.41
+              "offsetSec": 0.293
             },
             {
               "word": "知",
-              "offsetSec": 0.55
+              "offsetSec": 0.585
             },
             {
               "word": "道",
-              "offsetSec": 0.69
+              "offsetSec": 0.878
             },
             {
               "word": "路",
-              "offsetSec": 0.83
+              "offsetSec": 1.17
             },
             {
               "word": "的",
-              "offsetSec": 1.39
+              "offsetSec": 1.463
             },
             {
               "word": "盡",
-              "offsetSec": 1.79
+              "offsetSec": 1.755
             },
             {
               "word": "頭",
-              "offsetSec": 2.13
+              "offsetSec": 2.048
             }
           ],
           "transitionSec": 0.5,
@@ -1623,7 +1623,7 @@
         },
         {
           "id": "naxer_038",
-          "timeSec": 107.22,
+          "timeSec": 107.28,
           "type": "lyrics",
           "text": "原來有飯香和等候",
           "color": "hsl(200,90%,35%)",
@@ -1631,35 +1631,35 @@
           "words": [
             {
               "word": "原",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "來",
-              "offsetSec": 0.64
+              "offsetSec": 0.258
             },
             {
               "word": "有",
-              "offsetSec": 0.84
+              "offsetSec": 0.515
             },
             {
               "word": "飯",
-              "offsetSec": 1.02
+              "offsetSec": 0.773
             },
             {
               "word": "香",
-              "offsetSec": 1.26
+              "offsetSec": 1.03
             },
             {
               "word": "和",
-              "offsetSec": 1.52
+              "offsetSec": 1.288
             },
             {
               "word": "等",
-              "offsetSec": 1.7
+              "offsetSec": 1.545
             },
             {
               "word": "候",
-              "offsetSec": 1.96
+              "offsetSec": 1.803
             }
           ],
           "transitionSec": 0.5,
@@ -1668,7 +1668,7 @@
         },
         {
           "id": "naxer_039",
-          "timeSec": 109.24,
+          "timeSec": 109.34,
           "type": "lyrics",
           "text": "門邊放著新的名字",
           "color": "hsl(240,70%,40%)",
@@ -1676,35 +1676,35 @@
           "words": [
             {
               "word": "門",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "邊",
-              "offsetSec": 0.58
+              "offsetSec": 0.192
             },
             {
               "word": "放",
-              "offsetSec": 0.72
+              "offsetSec": 0.385
             },
             {
               "word": "著",
-              "offsetSec": 0.94
+              "offsetSec": 0.577
             },
             {
               "word": "新",
-              "offsetSec": 1.1
+              "offsetSec": 0.77
             },
             {
               "word": "的",
-              "offsetSec": 1.26
+              "offsetSec": 0.962
             },
             {
               "word": "名",
-              "offsetSec": 1.44
+              "offsetSec": 1.155
             },
             {
               "word": "字",
-              "offsetSec": 1.6
+              "offsetSec": 1.347
             }
           ],
           "transitionSec": 0.5,
@@ -1713,7 +1713,7 @@
         },
         {
           "id": "naxer_040",
-          "timeSec": 110.89,
+          "timeSec": 110.88,
           "type": "lyrics",
           "text": "小小的床靠著窗",
           "color": "hsl(260,75%,38%)",
@@ -1721,31 +1721,31 @@
           "words": [
             {
               "word": "小",
-              "offsetSec": 0.19
+              "offsetSec": 0.0
             },
             {
               "word": "小",
-              "offsetSec": 0.49
+              "offsetSec": 0.234
             },
             {
               "word": "的",
-              "offsetSec": 0.69
+              "offsetSec": 0.469
             },
             {
               "word": "床",
-              "offsetSec": 0.85
+              "offsetSec": 0.703
             },
             {
               "word": "靠",
-              "offsetSec": 1.13
+              "offsetSec": 0.937
             },
             {
               "word": "著",
-              "offsetSec": 1.43
+              "offsetSec": 1.171
             },
             {
               "word": "窗",
-              "offsetSec": 1.57
+              "offsetSec": 1.406
             }
           ],
           "transitionSec": 0.5,
@@ -1754,7 +1754,7 @@
         },
         {
           "id": "naxer_041",
-          "timeSec": 112.51,
+          "timeSec": 112.52,
           "type": "lyrics",
           "text": "你說這裡不用流浪",
           "color": "hsl(280,80%,38%)",
@@ -1762,35 +1762,35 @@
           "words": [
             {
               "word": "你",
-              "offsetSec": 0.21
+              "offsetSec": 0.0
             },
             {
               "word": "說",
-              "offsetSec": 0.42
+              "offsetSec": 0.22
             },
             {
               "word": "這",
-              "offsetSec": 0.63
+              "offsetSec": 0.44
             },
             {
               "word": "裡",
-              "offsetSec": 0.8
+              "offsetSec": 0.66
             },
             {
               "word": "不",
-              "offsetSec": 0.97
+              "offsetSec": 0.88
             },
             {
               "word": "用",
-              "offsetSec": 1.16
+              "offsetSec": 1.1
             },
             {
               "word": "流",
-              "offsetSec": 1.35
+              "offsetSec": 1.32
             },
             {
               "word": "浪",
-              "offsetSec": 1.65
+              "offsetSec": 1.54
             }
           ],
           "transitionSec": 0.5,
@@ -1799,7 +1799,7 @@
         },
         {
           "id": "naxer_042",
-          "timeSec": 114.21,
+          "timeSec": 114.28,
           "type": "lyrics",
           "text": "累了就安心睡吧",
           "color": "hsl(300,70%,35%)",
@@ -1807,31 +1807,31 @@
           "words": [
             {
               "word": "累",
-              "offsetSec": 0.25
+              "offsetSec": 0.0
             },
             {
               "word": "了",
-              "offsetSec": 0.65
+              "offsetSec": 0.68
             },
             {
               "word": "就",
-              "offsetSec": 0.99
+              "offsetSec": 1.36
             },
             {
               "word": "安",
-              "offsetSec": 1.31
+              "offsetSec": 2.04
             },
             {
               "word": "心",
-              "offsetSec": 1.75
+              "offsetSec": 2.72
             },
             {
               "word": "睡",
-              "offsetSec": 2.33
+              "offsetSec": 3.4
             },
             {
               "word": "吧",
-              "offsetSec": 2.73
+              "offsetSec": 4.08
             }
           ],
           "transitionSec": 0.5,
@@ -1840,7 +1840,7 @@
         },
         {
           "id": "naxer_043",
-          "timeSec": 118.92,
+          "timeSec": 119.04,
           "type": "lyrics",
           "text": "如果幸福",
           "color": "hsl(220,80%,38%)",
@@ -1848,19 +1848,19 @@
           "words": [
             {
               "word": "如",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "果",
-              "offsetSec": 0.68
+              "offsetSec": 0.49
             },
             {
               "word": "幸",
-              "offsetSec": 1.06
+              "offsetSec": 0.98
             },
             {
               "word": "福",
-              "offsetSec": 1.64
+              "offsetSec": 1.47
             }
           ],
           "transitionSec": 0.5,
@@ -1869,7 +1869,7 @@
         },
         {
           "id": "naxer_044",
-          "timeSec": 120.9,
+          "timeSec": 121.0,
           "type": "lyrics",
           "text": "也需要一點勇敢",
           "color": "hsl(200,90%,35%)",
@@ -1877,31 +1877,31 @@
           "words": [
             {
               "word": "也",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "需",
-              "offsetSec": 0.7
+              "offsetSec": 0.506
             },
             {
               "word": "要",
-              "offsetSec": 0.88
+              "offsetSec": 1.011
             },
             {
               "word": "一",
-              "offsetSec": 1.06
+              "offsetSec": 1.517
             },
             {
               "word": "點",
-              "offsetSec": 1.23
+              "offsetSec": 2.023
             },
             {
               "word": "勇",
-              "offsetSec": 1.4
+              "offsetSec": 2.529
             },
             {
               "word": "敢",
-              "offsetSec": 1.78
+              "offsetSec": 3.034
             }
           ],
           "transitionSec": 0.5,
@@ -1910,7 +1910,7 @@
         },
         {
           "id": "naxer_045",
-          "timeSec": 124.0,
+          "timeSec": 124.54,
           "type": "lyrics",
           "text": "我願把剩下的生命",
           "color": "hsl(240,70%,40%)",
@@ -1918,35 +1918,35 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "願",
-              "offsetSec": 1.06
+              "offsetSec": 0.427
             },
             {
               "word": "把",
-              "offsetSec": 1.42
+              "offsetSec": 0.855
             },
             {
               "word": "剩",
-              "offsetSec": 1.74
+              "offsetSec": 1.282
             },
             {
               "word": "下",
-              "offsetSec": 2.1
+              "offsetSec": 1.71
             },
             {
               "word": "的",
-              "offsetSec": 2.48
+              "offsetSec": 2.137
             },
             {
               "word": "生",
-              "offsetSec": 2.8
+              "offsetSec": 2.565
             },
             {
               "word": "命",
-              "offsetSec": 3.26
+              "offsetSec": 2.992
             }
           ],
           "transitionSec": 0.5,
@@ -1955,7 +1955,7 @@
         },
         {
           "id": "naxer_046",
-          "timeSec": 127.64,
+          "timeSec": 127.96,
           "type": "lyrics",
           "text": "交給你的陪伴",
           "color": "hsl(260,75%,38%)",
@@ -1963,27 +1963,27 @@
           "words": [
             {
               "word": "交",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "給",
-              "offsetSec": 0.84
+              "offsetSec": 0.433
             },
             {
               "word": "你",
-              "offsetSec": 1.06
+              "offsetSec": 0.867
             },
             {
               "word": "的",
-              "offsetSec": 1.44
+              "offsetSec": 1.3
             },
             {
               "word": "陪",
-              "offsetSec": 1.82
+              "offsetSec": 1.733
             },
             {
               "word": "伴",
-              "offsetSec": 2.4
+              "offsetSec": 2.167
             }
           ],
           "transitionSec": 0.5,
@@ -1992,7 +1992,7 @@
         },
         {
           "id": "naxer_047",
-          "timeSec": 130.16,
+          "timeSec": 130.56,
           "type": "lyrics",
           "text": "在你找到我以前",
           "color": "hsl(30,100%,48%)",
@@ -2000,31 +2000,31 @@
           "words": [
             {
               "word": "在",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "你",
-              "offsetSec": 0.88
+              "offsetSec": 0.343
             },
             {
               "word": "找",
-              "offsetSec": 1.24
+              "offsetSec": 0.686
             },
             {
               "word": "到",
-              "offsetSec": 1.62
+              "offsetSec": 1.029
             },
             {
               "word": "我",
-              "offsetSec": 1.96
+              "offsetSec": 1.371
             },
             {
               "word": "以",
-              "offsetSec": 2.26
+              "offsetSec": 1.714
             },
             {
               "word": "前",
-              "offsetSec": 2.53
+              "offsetSec": 2.057
             }
           ],
           "transitionSec": 0.8,
@@ -2033,7 +2033,7 @@
         },
         {
           "id": "naxer_048",
-          "timeSec": 132.74,
+          "timeSec": 132.96,
           "type": "lyrics",
           "text": "我把每個黃昏都走了一遍",
           "color": "hsl(340,100%,45%)",
@@ -2041,47 +2041,47 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.22
+              "offsetSec": 0.0
             },
             {
               "word": "把",
-              "offsetSec": 0.74
+              "offsetSec": 0.298
             },
             {
               "word": "每",
-              "offsetSec": 0.9
+              "offsetSec": 0.596
             },
             {
               "word": "個",
-              "offsetSec": 1.08
+              "offsetSec": 0.895
             },
             {
               "word": "黃",
-              "offsetSec": 1.24
+              "offsetSec": 1.193
             },
             {
               "word": "昏",
-              "offsetSec": 1.44
+              "offsetSec": 1.491
             },
             {
               "word": "都",
-              "offsetSec": 1.6
+              "offsetSec": 1.789
             },
             {
               "word": "走",
-              "offsetSec": 1.86
+              "offsetSec": 2.087
             },
             {
               "word": "了",
-              "offsetSec": 2.14
+              "offsetSec": 2.385
             },
             {
               "word": "一",
-              "offsetSec": 2.42
+              "offsetSec": 2.684
             },
             {
               "word": "遍",
-              "offsetSec": 2.88
+              "offsetSec": 2.982
             }
           ],
           "transitionSec": 0.8,
@@ -2090,7 +2090,7 @@
         },
         {
           "id": "naxer_049",
-          "timeSec": 135.67,
+          "timeSec": 136.24,
           "type": "lyrics",
           "text": "不敢相信伸來的手",
           "color": "hsl(340,100%,45%)",
@@ -2098,35 +2098,35 @@
           "words": [
             {
               "word": "不",
-              "offsetSec": 0.21
+              "offsetSec": 0.0
             },
             {
               "word": "敢",
-              "offsetSec": 1.05
+              "offsetSec": 0.305
             },
             {
               "word": "相",
-              "offsetSec": 1.35
+              "offsetSec": 0.61
             },
             {
               "word": "信",
-              "offsetSec": 1.69
+              "offsetSec": 0.915
             },
             {
               "word": "伸",
-              "offsetSec": 2.03
+              "offsetSec": 1.22
             },
             {
               "word": "來",
-              "offsetSec": 2.33
+              "offsetSec": 1.525
             },
             {
               "word": "的",
-              "offsetSec": 2.57
+              "offsetSec": 1.83
             },
             {
               "word": "手",
-              "offsetSec": 2.877
+              "offsetSec": 2.135
             }
           ],
           "transitionSec": 0.8,
@@ -2135,7 +2135,7 @@
         },
         {
           "id": "naxer_050",
-          "timeSec": 138.6,
+          "timeSec": 138.68,
           "type": "lyrics",
           "text": "會不會又消失在明天",
           "color": "hsl(345,100%,42%)",
@@ -2143,39 +2143,39 @@
           "words": [
             {
               "word": "會",
-              "offsetSec": 0.1
+              "offsetSec": 0.0
             },
             {
               "word": "不",
-              "offsetSec": 0.58
+              "offsetSec": 0.351
             },
             {
               "word": "會",
-              "offsetSec": 0.79
+              "offsetSec": 0.702
             },
             {
               "word": "又",
-              "offsetSec": 1.0
+              "offsetSec": 1.053
             },
             {
               "word": "消",
-              "offsetSec": 1.36
+              "offsetSec": 1.404
             },
             {
               "word": "失",
-              "offsetSec": 1.62
+              "offsetSec": 1.756
             },
             {
               "word": "在",
-              "offsetSec": 1.9
+              "offsetSec": 2.107
             },
             {
               "word": "明",
-              "offsetSec": 2.18
+              "offsetSec": 2.458
             },
             {
               "word": "天",
-              "offsetSec": 2.52
+              "offsetSec": 2.809
             }
           ],
           "transitionSec": 0.8,
@@ -2184,7 +2184,7 @@
         },
         {
           "id": "naxer_051",
-          "timeSec": 141.38,
+          "timeSec": 141.84,
           "type": "lyrics",
           "text": "在我找到你那一天",
           "color": "hsl(45,100%,45%)",
@@ -2192,35 +2192,35 @@
           "words": [
             {
               "word": "在",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "我",
-              "offsetSec": 0.94
+              "offsetSec": 0.282
             },
             {
               "word": "找",
-              "offsetSec": 1.3
+              "offsetSec": 0.565
             },
             {
               "word": "到",
-              "offsetSec": 1.62
+              "offsetSec": 0.847
             },
             {
               "word": "你",
-              "offsetSec": 1.82
+              "offsetSec": 1.13
             },
             {
               "word": "那",
-              "offsetSec": 2.0
+              "offsetSec": 1.412
             },
             {
               "word": "一",
-              "offsetSec": 2.34
+              "offsetSec": 1.695
             },
             {
               "word": "天",
-              "offsetSec": 2.62
+              "offsetSec": 1.977
             }
           ],
           "transitionSec": 0.8,
@@ -2229,7 +2229,7 @@
         },
         {
           "id": "naxer_052",
-          "timeSec": 144.05,
+          "timeSec": 144.1,
           "type": "lyrics",
           "text": "才知道你也孤單了好多年",
           "color": "hsl(340,100%,45%)",
@@ -2237,47 +2237,47 @@
           "words": [
             {
               "word": "才",
-              "offsetSec": 0.27
+              "offsetSec": 0.0
             },
             {
               "word": "知",
-              "offsetSec": 0.71
+              "offsetSec": 0.281
             },
             {
               "word": "道",
-              "offsetSec": 0.87
+              "offsetSec": 0.562
             },
             {
               "word": "你",
-              "offsetSec": 1.03
+              "offsetSec": 0.843
             },
             {
               "word": "也",
-              "offsetSec": 1.25
+              "offsetSec": 1.124
             },
             {
               "word": "孤",
-              "offsetSec": 1.51
+              "offsetSec": 1.405
             },
             {
               "word": "單",
-              "offsetSec": 1.61
+              "offsetSec": 1.685
             },
             {
               "word": "了",
-              "offsetSec": 1.85
+              "offsetSec": 1.966
             },
             {
               "word": "好",
-              "offsetSec": 2.17
+              "offsetSec": 2.247
             },
             {
               "word": "多",
-              "offsetSec": 2.53
+              "offsetSec": 2.528
             },
             {
               "word": "年",
-              "offsetSec": 2.77
+              "offsetSec": 2.809
             }
           ],
           "transitionSec": 0.8,
@@ -2286,7 +2286,7 @@
         },
         {
           "id": "naxer_053",
-          "timeSec": 147.04,
+          "timeSec": 147.19,
           "type": "lyrics",
           "text": "不是誰把誰拯救",
           "color": "hsl(30,100%,48%)",
@@ -2294,31 +2294,31 @@
           "words": [
             {
               "word": "不",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "是",
-              "offsetSec": 0.73
+              "offsetSec": 0.373
             },
             {
               "word": "誰",
-              "offsetSec": 1.16
+              "offsetSec": 0.746
             },
             {
               "word": "把",
-              "offsetSec": 1.72
+              "offsetSec": 1.119
             },
             {
               "word": "誰",
-              "offsetSec": 2.0
+              "offsetSec": 1.491
             },
             {
               "word": "拯",
-              "offsetSec": 2.44
+              "offsetSec": 1.864
             },
             {
               "word": "救",
-              "offsetSec": 2.68
+              "offsetSec": 2.237
             }
           ],
           "transitionSec": 0.8,
@@ -2327,7 +2327,7 @@
         },
         {
           "id": "naxer_054",
-          "timeSec": 149.77,
+          "timeSec": 149.8,
           "type": "lyrics",
           "text": "是兩顆流浪的心",
           "color": "hsl(340,100%,45%)",
@@ -2335,31 +2335,31 @@
           "words": [
             {
               "word": "是",
-              "offsetSec": 0.19
+              "offsetSec": 0.0
             },
             {
               "word": "兩",
-              "offsetSec": 0.69
+              "offsetSec": 0.474
             },
             {
               "word": "顆",
-              "offsetSec": 1.03
+              "offsetSec": 0.949
             },
             {
               "word": "流",
-              "offsetSec": 1.41
+              "offsetSec": 1.423
             },
             {
               "word": "浪",
-              "offsetSec": 1.89
+              "offsetSec": 1.897
             },
             {
               "word": "的",
-              "offsetSec": 2.41
+              "offsetSec": 2.371
             },
             {
               "word": "心",
-              "offsetSec": 2.77
+              "offsetSec": 2.846
             }
           ],
           "transitionSec": 0.8,
@@ -2368,7 +2368,7 @@
         },
         {
           "id": "naxer_055",
-          "timeSec": 152.7,
+          "timeSec": 153.12,
           "type": "lyrics",
           "text": "終於成為彼此的家",
           "color": "hsl(340,100%,45%)",
@@ -2376,35 +2376,35 @@
           "words": [
             {
               "word": "終",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "於",
-              "offsetSec": 1.02
+              "offsetSec": 0.662
             },
             {
               "word": "成",
-              "offsetSec": 1.3
+              "offsetSec": 1.325
             },
             {
               "word": "為",
-              "offsetSec": 1.7
+              "offsetSec": 1.987
             },
             {
               "word": "彼",
-              "offsetSec": 2.64
+              "offsetSec": 2.65
             },
             {
               "word": "此",
-              "offsetSec": 3.26
+              "offsetSec": 3.312
             },
             {
               "word": "的",
-              "offsetSec": 3.68
+              "offsetSec": 3.975
             },
             {
               "word": "家",
-              "offsetSec": 4.1
+              "offsetSec": 4.637
             }
           ],
           "transitionSec": 0.8,
@@ -2413,7 +2413,7 @@
         },
         {
           "id": "naxer_056",
-          "timeSec": 157.92,
+          "timeSec": 158.42,
           "type": "lyrics",
           "text": "後來你哭著抱住我",
           "color": "hsl(200,90%,35%)",
@@ -2421,35 +2421,35 @@
           "words": [
             {
               "word": "後",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "來",
-              "offsetSec": 1.02
+              "offsetSec": 0.358
             },
             {
               "word": "你",
-              "offsetSec": 1.4
+              "offsetSec": 0.715
             },
             {
               "word": "哭",
-              "offsetSec": 1.66
+              "offsetSec": 1.073
             },
             {
               "word": "著",
-              "offsetSec": 2.12
+              "offsetSec": 1.43
             },
             {
               "word": "抱",
-              "offsetSec": 2.42
+              "offsetSec": 1.788
             },
             {
               "word": "住",
-              "offsetSec": 2.8
+              "offsetSec": 2.145
             },
             {
               "word": "我",
-              "offsetSec": 3.12
+              "offsetSec": 2.503
             }
           ],
           "transitionSec": 0.4,
@@ -2458,7 +2458,7 @@
         },
         {
           "id": "naxer_057",
-          "timeSec": 161.2,
+          "timeSec": 161.28,
           "type": "lyrics",
           "text": "說謝謝我來到身邊",
           "color": "hsl(240,70%,40%)",
@@ -2466,35 +2466,35 @@
           "words": [
             {
               "word": "說",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "謝",
-              "offsetSec": 0.64
+              "offsetSec": 0.407
             },
             {
               "word": "謝",
-              "offsetSec": 0.8
+              "offsetSec": 0.815
             },
             {
               "word": "我",
-              "offsetSec": 0.96
+              "offsetSec": 1.222
             },
             {
               "word": "來",
-              "offsetSec": 1.62
+              "offsetSec": 1.63
             },
             {
               "word": "到",
-              "offsetSec": 2.0
+              "offsetSec": 2.037
             },
             {
               "word": "身",
-              "offsetSec": 2.34
+              "offsetSec": 2.445
             },
             {
               "word": "邊",
-              "offsetSec": 2.6
+              "offsetSec": 2.852
             }
           ],
           "transitionSec": 0.4,
@@ -2503,7 +2503,7 @@
         },
         {
           "id": "naxer_058",
-          "timeSec": 163.85,
+          "timeSec": 164.54,
           "type": "lyrics",
           "text": "긴 밤을 지나 너를 만났어",
           "color": "hsl(260,75%,38%)",
@@ -2511,43 +2511,43 @@
           "words": [
             {
               "word": "긴",
-              "offsetSec": 0.27
+              "offsetSec": 0.0
             },
             {
               "word": "밤",
-              "offsetSec": 0.61
+              "offsetSec": 0.494
             },
             {
               "word": "을",
-              "offsetSec": 0.83
+              "offsetSec": 0.988
             },
             {
               "word": "지",
-              "offsetSec": 1.19
+              "offsetSec": 1.482
             },
             {
               "word": "나",
-              "offsetSec": 1.41
+              "offsetSec": 1.976
             },
             {
               "word": "너",
-              "offsetSec": 1.77
+              "offsetSec": 2.47
             },
             {
               "word": "를",
-              "offsetSec": 2.39
+              "offsetSec": 2.964
             },
             {
               "word": "만",
-              "offsetSec": 2.81
+              "offsetSec": 3.458
             },
             {
               "word": "났",
-              "offsetSec": 3.03
+              "offsetSec": 3.952
             },
             {
               "word": "어",
-              "offsetSec": 3.31
+              "offsetSec": 4.446
             }
           ],
           "transitionSec": 0.4,
@@ -2556,7 +2556,7 @@
         },
         {
           "id": "naxer_059",
-          "timeSec": 168.44,
+          "timeSec": 169.48,
           "type": "lyrics",
           "text": "穿過漫長的夜　我終於遇見你",
           "color": "hsl(280,80%,38%)",
@@ -2564,51 +2564,51 @@
           "words": [
             {
               "word": "穿",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "過",
-              "offsetSec": 1.02
+              "offsetSec": 0.242
             },
             {
               "word": "漫",
-              "offsetSec": 1.74
+              "offsetSec": 0.483
             },
             {
               "word": "長",
-              "offsetSec": 1.92
+              "offsetSec": 0.725
             },
             {
               "word": "的",
-              "offsetSec": 2.12
+              "offsetSec": 0.967
             },
             {
               "word": "夜",
-              "offsetSec": 2.28
+              "offsetSec": 1.208
             },
             {
               "word": "我",
-              "offsetSec": 2.44
+              "offsetSec": 1.45
             },
             {
               "word": "終",
-              "offsetSec": 2.6
+              "offsetSec": 1.692
             },
             {
               "word": "於",
-              "offsetSec": 2.82
+              "offsetSec": 1.933
             },
             {
               "word": "遇",
-              "offsetSec": 3.26
+              "offsetSec": 2.175
             },
             {
               "word": "見",
-              "offsetSec": 3.48
+              "offsetSec": 2.417
             },
             {
               "word": "你",
-              "offsetSec": 3.82
+              "offsetSec": 2.658
             }
           ],
           "transitionSec": 0.4,
@@ -2617,7 +2617,7 @@
         },
         {
           "id": "naxer_060",
-          "timeSec": 172.36,
+          "timeSec": 172.38,
           "type": "lyrics",
           "text": "其實我也想告訴你",
           "color": "hsl(300,70%,35%)",
@@ -2625,35 +2625,35 @@
           "words": [
             {
               "word": "其",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "實",
-              "offsetSec": 0.53
+              "offsetSec": 0.365
             },
             {
               "word": "我",
-              "offsetSec": 0.76
+              "offsetSec": 0.73
             },
             {
               "word": "也",
-              "offsetSec": 1.01
+              "offsetSec": 1.095
             },
             {
               "word": "想",
-              "offsetSec": 1.26
+              "offsetSec": 1.46
             },
             {
               "word": "告",
-              "offsetSec": 1.96
+              "offsetSec": 1.825
             },
             {
               "word": "訴",
-              "offsetSec": 2.31
+              "offsetSec": 2.19
             },
             {
               "word": "你",
-              "offsetSec": 4.24
+              "offsetSec": 2.555
             }
           ],
           "transitionSec": 0.4,
@@ -2662,7 +2662,7 @@
         },
         {
           "id": "naxer_061",
-          "timeSec": 176.76,
+          "timeSec": 175.3,
           "type": "lyrics",
           "text": "那天是你讓世界改變",
           "color": "hsl(220,80%,38%)",
@@ -2670,39 +2670,39 @@
           "words": [
             {
               "word": "那",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "天",
-              "offsetSec": 0.48
+              "offsetSec": 0.542
             },
             {
               "word": "是",
-              "offsetSec": 0.84
+              "offsetSec": 1.084
             },
             {
               "word": "你",
-              "offsetSec": 1.14
+              "offsetSec": 1.627
             },
             {
               "word": "讓",
-              "offsetSec": 1.48
+              "offsetSec": 2.169
             },
             {
               "word": "世",
-              "offsetSec": 1.72
+              "offsetSec": 2.711
             },
             {
               "word": "界",
-              "offsetSec": 1.97
+              "offsetSec": 3.253
             },
             {
               "word": "改",
-              "offsetSec": 2.22
+              "offsetSec": 3.796
             },
             {
               "word": "變",
-              "offsetSec": 2.56
+              "offsetSec": 4.338
             }
           ],
           "transitionSec": 0.4,
@@ -2711,7 +2711,7 @@
         },
         {
           "id": "naxer_062",
-          "timeSec": 179.56,
+          "timeSec": 180.18,
           "type": "lyrics",
           "text": "You gave my wandering heart a name",
           "color": "hsl(200,90%,35%)",
@@ -2719,31 +2719,31 @@
           "words": [
             {
               "word": "You",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "gave",
-              "offsetSec": 1.04
+              "offsetSec": 0.28
             },
             {
               "word": "my",
-              "offsetSec": 1.2
+              "offsetSec": 0.56
             },
             {
               "word": "wandering",
-              "offsetSec": 1.4
+              "offsetSec": 0.84
             },
             {
               "word": "heart",
-              "offsetSec": 1.72
+              "offsetSec": 1.12
             },
             {
               "word": "a",
-              "offsetSec": 2.28
+              "offsetSec": 1.4
             },
             {
               "word": "name",
-              "offsetSec": 2.46
+              "offsetSec": 1.68
             }
           ],
           "transitionSec": 0.4,
@@ -2752,7 +2752,7 @@
         },
         {
           "id": "naxer_063",
-          "timeSec": 182.07,
+          "timeSec": 182.14,
           "type": "lyrics",
           "text": "從那天起　我不再流浪",
           "color": "hsl(240,70%,40%)",
@@ -2760,39 +2760,39 @@
           "words": [
             {
               "word": "從",
-              "offsetSec": 0.25
+              "offsetSec": 0.0
             },
             {
               "word": "那",
-              "offsetSec": 0.63
+              "offsetSec": 0.26
             },
             {
               "word": "天",
-              "offsetSec": 0.83
+              "offsetSec": 0.52
             },
             {
               "word": "起",
-              "offsetSec": 1.01
+              "offsetSec": 0.78
             },
             {
               "word": "我",
-              "offsetSec": 1.19
+              "offsetSec": 1.04
             },
             {
               "word": "不",
-              "offsetSec": 1.41
+              "offsetSec": 1.3
             },
             {
               "word": "再",
-              "offsetSec": 1.63
+              "offsetSec": 1.56
             },
             {
               "word": "流",
-              "offsetSec": 1.91
+              "offsetSec": 1.82
             },
             {
               "word": "浪",
-              "offsetSec": 2.21
+              "offsetSec": 2.08
             }
           ],
           "transitionSec": 0.4,
@@ -2801,7 +2801,7 @@
         },
         {
           "id": "naxer_064",
-          "timeSec": 184.4,
+          "timeSec": 184.48,
           "type": "lyrics",
           "text": "我們都曾被夜遺忘",
           "color": "hsl(260,75%,38%)",
@@ -2809,35 +2809,35 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "們",
-              "offsetSec": 0.78
+              "offsetSec": 0.35
             },
             {
               "word": "都",
-              "offsetSec": 1.26
+              "offsetSec": 0.7
             },
             {
               "word": "曾",
-              "offsetSec": 1.48
+              "offsetSec": 1.05
             },
             {
               "word": "被",
-              "offsetSec": 1.74
+              "offsetSec": 1.4
             },
             {
               "word": "夜",
-              "offsetSec": 2.12
+              "offsetSec": 1.75
             },
             {
               "word": "遺",
-              "offsetSec": 2.46
+              "offsetSec": 2.1
             },
             {
               "word": "忘",
-              "offsetSec": 2.68
+              "offsetSec": 2.45
             }
           ],
           "transitionSec": 0.4,
@@ -2846,7 +2846,7 @@
         },
         {
           "id": "naxer_065",
-          "timeSec": 187.22,
+          "timeSec": 187.28,
           "type": "lyrics",
           "text": "都曾在人群裡躲藏",
           "color": "hsl(280,80%,38%)",
@@ -2854,35 +2854,35 @@
           "words": [
             {
               "word": "都",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "曾",
-              "offsetSec": 0.68
+              "offsetSec": 0.375
             },
             {
               "word": "在",
-              "offsetSec": 1.08
+              "offsetSec": 0.75
             },
             {
               "word": "人",
-              "offsetSec": 1.38
+              "offsetSec": 1.125
             },
             {
               "word": "群",
-              "offsetSec": 1.76
+              "offsetSec": 1.5
             },
             {
               "word": "裡",
-              "offsetSec": 2.12
+              "offsetSec": 1.875
             },
             {
               "word": "躲",
-              "offsetSec": 2.4
+              "offsetSec": 2.25
             },
             {
               "word": "藏",
-              "offsetSec": 2.68
+              "offsetSec": 2.625
             }
           ],
           "transitionSec": 0.4,
@@ -2891,7 +2891,7 @@
         },
         {
           "id": "naxer_066",
-          "timeSec": 190.16,
+          "timeSec": 190.28,
           "type": "lyrics",
           "text": "而愛不是從天而降",
           "color": "hsl(300,70%,35%)",
@@ -2899,35 +2899,35 @@
           "words": [
             {
               "word": "而",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "愛",
-              "offsetSec": 0.56
+              "offsetSec": 0.41
             },
             {
               "word": "不",
-              "offsetSec": 0.96
+              "offsetSec": 0.82
             },
             {
               "word": "是",
-              "offsetSec": 1.22
+              "offsetSec": 1.23
             },
             {
               "word": "從",
-              "offsetSec": 1.48
+              "offsetSec": 1.64
             },
             {
               "word": "天",
-              "offsetSec": 1.98
+              "offsetSec": 2.05
             },
             {
               "word": "而",
-              "offsetSec": 2.4
+              "offsetSec": 2.46
             },
             {
               "word": "降",
-              "offsetSec": 3.2
+              "offsetSec": 2.87
             }
           ],
           "transitionSec": 0.4,
@@ -2936,7 +2936,7 @@
         },
         {
           "id": "naxer_067",
-          "timeSec": 193.46,
+          "timeSec": 193.56,
           "type": "lyrics",
           "text": "是你願意停下",
           "color": "hsl(220,80%,38%)",
@@ -2944,27 +2944,27 @@
           "words": [
             {
               "word": "是",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "你",
-              "offsetSec": 0.72
+              "offsetSec": 0.303
             },
             {
               "word": "願",
-              "offsetSec": 0.94
+              "offsetSec": 0.607
             },
             {
               "word": "意",
-              "offsetSec": 1.2
+              "offsetSec": 0.91
             },
             {
               "word": "停",
-              "offsetSec": 1.46
+              "offsetSec": 1.213
             },
             {
               "word": "下",
-              "offsetSec": 1.7
+              "offsetSec": 1.517
             }
           ],
           "transitionSec": 0.4,
@@ -2973,7 +2973,7 @@
         },
         {
           "id": "naxer_068",
-          "timeSec": 195.26,
+          "timeSec": 195.38,
           "type": "lyrics",
           "text": "我願意相信",
           "color": "hsl(200,90%,35%)",
@@ -2981,23 +2981,23 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "願",
-              "offsetSec": 0.54
+              "offsetSec": 0.24
             },
             {
               "word": "意",
-              "offsetSec": 0.76
+              "offsetSec": 0.48
             },
             {
               "word": "相",
-              "offsetSec": 1.06
+              "offsetSec": 0.72
             },
             {
               "word": "信",
-              "offsetSec": 1.3
+              "offsetSec": 0.96
             }
           ],
           "transitionSec": 0.4,
@@ -3006,7 +3006,7 @@
         },
         {
           "id": "naxer_069",
-          "timeSec": 196.37,
+          "timeSec": 196.58,
           "type": "lyrics",
           "text": "一起走向有光的地方",
           "color": "hsl(240,70%,40%)",
@@ -3014,39 +3014,39 @@
           "words": [
             {
               "word": "一",
-              "offsetSec": 0.05
+              "offsetSec": 0.0
             },
             {
               "word": "起",
-              "offsetSec": 0.41
+              "offsetSec": 0.309
             },
             {
               "word": "走",
-              "offsetSec": 0.77
+              "offsetSec": 0.618
             },
             {
               "word": "向",
-              "offsetSec": 1.01
+              "offsetSec": 0.927
             },
             {
               "word": "有",
-              "offsetSec": 1.19
+              "offsetSec": 1.236
             },
             {
               "word": "光",
-              "offsetSec": 1.39
+              "offsetSec": 1.544
             },
             {
               "word": "的",
-              "offsetSec": 1.99
+              "offsetSec": 1.853
             },
             {
               "word": "地",
-              "offsetSec": 2.43
+              "offsetSec": 2.162
             },
             {
               "word": "方",
-              "offsetSec": 2.73
+              "offsetSec": 2.471
             }
           ],
           "transitionSec": 0.4,
@@ -3055,7 +3055,7 @@
         },
         {
           "id": "naxer_070",
-          "timeSec": 199.15,
+          "timeSec": 199.36,
           "type": "lyrics",
           "text": "너의 곁이 나의 집이야",
           "color": "hsl(340,100%,45%)",
@@ -3063,39 +3063,39 @@
           "words": [
             {
               "word": "너",
-              "offsetSec": 0.25
+              "offsetSec": 0.0
             },
             {
               "word": "의",
-              "offsetSec": 0.71
+              "offsetSec": 0.293
             },
             {
               "word": "곁",
-              "offsetSec": 0.91
+              "offsetSec": 0.587
             },
             {
               "word": "이",
-              "offsetSec": 1.07
+              "offsetSec": 0.88
             },
             {
               "word": "나",
-              "offsetSec": 1.41
+              "offsetSec": 1.173
             },
             {
               "word": "의",
-              "offsetSec": 1.85
+              "offsetSec": 1.467
             },
             {
               "word": "집",
-              "offsetSec": 2.15
+              "offsetSec": 1.76
             },
             {
               "word": "이",
-              "offsetSec": 2.35
+              "offsetSec": 2.053
             },
             {
               "word": "야",
-              "offsetSec": 2.71
+              "offsetSec": 2.347
             }
           ],
           "transitionSec": 0.6,
@@ -3104,7 +3104,7 @@
         },
         {
           "id": "naxer_071",
-          "timeSec": 201.94,
+          "timeSec": 202.0,
           "type": "lyrics",
           "text": "你的身邊　就是我的家",
           "color": "hsl(10,100%,48%)",
@@ -3112,39 +3112,39 @@
           "words": [
             {
               "word": "你",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "的",
-              "offsetSec": 0.59
+              "offsetSec": 0.302
             },
             {
               "word": "身",
-              "offsetSec": 0.88
+              "offsetSec": 0.604
             },
             {
               "word": "邊",
-              "offsetSec": 1.06
+              "offsetSec": 0.907
             },
             {
               "word": "就",
-              "offsetSec": 1.22
+              "offsetSec": 1.209
             },
             {
               "word": "是",
-              "offsetSec": 1.35
+              "offsetSec": 1.511
             },
             {
               "word": "我",
-              "offsetSec": 1.48
+              "offsetSec": 1.813
             },
             {
               "word": "的",
-              "offsetSec": 1.97
+              "offsetSec": 2.116
             },
             {
               "word": "家",
-              "offsetSec": 2.46
+              "offsetSec": 2.418
             }
           ],
           "transitionSec": 0.6,
@@ -3153,7 +3153,7 @@
         },
         {
           "id": "naxer_072",
-          "timeSec": 204.66,
+          "timeSec": 204.72,
           "type": "lyrics",
           "text": "一起走向有光的地方",
           "color": "hsl(45,100%,48%)",
@@ -3161,39 +3161,39 @@
           "words": [
             {
               "word": "一",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "起",
-              "offsetSec": 0.64
+              "offsetSec": 0.238
             },
             {
               "word": "走",
-              "offsetSec": 0.98
+              "offsetSec": 0.476
             },
             {
               "word": "向",
-              "offsetSec": 1.18
+              "offsetSec": 0.713
             },
             {
               "word": "有",
-              "offsetSec": 1.36
+              "offsetSec": 0.951
             },
             {
               "word": "光",
-              "offsetSec": 1.433
+              "offsetSec": 1.189
             },
             {
               "word": "的",
-              "offsetSec": 1.507
+              "offsetSec": 1.427
             },
             {
               "word": "地",
-              "offsetSec": 1.58
+              "offsetSec": 1.664
             },
             {
               "word": "方",
-              "offsetSec": 2.08
+              "offsetSec": 1.902
             }
           ],
           "transitionSec": 0.6,
@@ -3202,7 +3202,7 @@
         },
         {
           "id": "naxer_073",
-          "timeSec": 206.79,
+          "timeSec": 206.86,
           "type": "lyrics",
           "text": "在你找到我以後",
           "color": "hsl(340,100%,45%)",
@@ -3210,31 +3210,31 @@
           "words": [
             {
               "word": "在",
-              "offsetSec": 0.25
+              "offsetSec": 0.0
             },
             {
               "word": "你",
-              "offsetSec": 0.55
+              "offsetSec": 0.326
             },
             {
               "word": "找",
-              "offsetSec": 0.91
+              "offsetSec": 0.651
             },
             {
               "word": "到",
-              "offsetSec": 1.25
+              "offsetSec": 0.977
             },
             {
               "word": "我",
-              "offsetSec": 1.57
+              "offsetSec": 1.303
             },
             {
               "word": "以",
-              "offsetSec": 1.91
+              "offsetSec": 1.629
             },
             {
               "word": "後",
-              "offsetSec": 2.15
+              "offsetSec": 1.954
             }
           ],
           "transitionSec": 0.6,
@@ -3243,7 +3243,7 @@
         },
         {
           "id": "naxer_074",
-          "timeSec": 209.04,
+          "timeSec": 209.14,
           "type": "lyrics",
           "text": "每個清晨都有熟悉的笑臉",
           "color": "hsl(45,100%,48%)",
@@ -3251,47 +3251,47 @@
           "words": [
             {
               "word": "每",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "個",
-              "offsetSec": 0.68
+              "offsetSec": 0.256
             },
             {
               "word": "清",
-              "offsetSec": 0.84
+              "offsetSec": 0.513
             },
             {
               "word": "晨",
-              "offsetSec": 1.02
+              "offsetSec": 0.769
             },
             {
               "word": "都",
-              "offsetSec": 1.2
+              "offsetSec": 1.025
             },
             {
               "word": "有",
-              "offsetSec": 1.31
+              "offsetSec": 1.282
             },
             {
               "word": "熟",
-              "offsetSec": 1.42
+              "offsetSec": 1.538
             },
             {
               "word": "悉",
-              "offsetSec": 1.82
+              "offsetSec": 1.795
             },
             {
               "word": "的",
-              "offsetSec": 2.16
+              "offsetSec": 2.051
             },
             {
               "word": "笑",
-              "offsetSec": 2.42
+              "offsetSec": 2.307
             },
             {
               "word": "臉",
-              "offsetSec": 2.74
+              "offsetSec": 2.564
             }
           ],
           "transitionSec": 0.6,
@@ -3300,7 +3300,7 @@
         },
         {
           "id": "naxer_075",
-          "timeSec": 211.86,
+          "timeSec": 211.96,
           "type": "lyrics",
           "text": "我終於敢伸出小手",
           "color": "hsl(325,100%,50%)",
@@ -3308,35 +3308,35 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "終",
-              "offsetSec": 0.74
+              "offsetSec": 0.355
             },
             {
               "word": "於",
-              "offsetSec": 1.16
+              "offsetSec": 0.71
             },
             {
               "word": "敢",
-              "offsetSec": 1.48
+              "offsetSec": 1.065
             },
             {
               "word": "伸",
-              "offsetSec": 1.8
+              "offsetSec": 1.42
             },
             {
               "word": "出",
-              "offsetSec": 2.14
+              "offsetSec": 1.775
             },
             {
               "word": "小",
-              "offsetSec": 2.46
+              "offsetSec": 2.13
             },
             {
               "word": "手",
-              "offsetSec": 2.76
+              "offsetSec": 2.485
             }
           ],
           "transitionSec": 0.6,
@@ -3345,7 +3345,7 @@
         },
         {
           "id": "naxer_076",
-          "timeSec": 214.68,
+          "timeSec": 214.8,
           "type": "lyrics",
           "text": "把夢安穩放在你手邊",
           "color": "hsl(340,100%,45%)",
@@ -3353,39 +3353,39 @@
           "words": [
             {
               "word": "把",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "夢",
-              "offsetSec": 0.76
+              "offsetSec": 0.367
             },
             {
               "word": "安",
-              "offsetSec": 1.06
+              "offsetSec": 0.733
             },
             {
               "word": "穩",
-              "offsetSec": 1.36
+              "offsetSec": 1.1
             },
             {
               "word": "放",
-              "offsetSec": 1.56
+              "offsetSec": 1.467
             },
             {
               "word": "在",
-              "offsetSec": 1.82
+              "offsetSec": 1.833
             },
             {
               "word": "你",
-              "offsetSec": 2.12
+              "offsetSec": 2.2
             },
             {
               "word": "手",
-              "offsetSec": 2.36
+              "offsetSec": 2.567
             },
             {
               "word": "邊",
-              "offsetSec": 2.7
+              "offsetSec": 2.933
             }
           ],
           "transitionSec": 0.6,
@@ -3394,7 +3394,7 @@
         },
         {
           "id": "naxer_077",
-          "timeSec": 217.52,
+          "timeSec": 218.1,
           "type": "lyrics",
           "text": "在我找到你以後",
           "color": "hsl(10,100%,48%)",
@@ -3402,31 +3402,31 @@
           "words": [
             {
               "word": "在",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "我",
-              "offsetSec": 1.1
+              "offsetSec": 0.334
             },
             {
               "word": "找",
-              "offsetSec": 1.46
+              "offsetSec": 0.669
             },
             {
               "word": "到",
-              "offsetSec": 1.76
+              "offsetSec": 1.003
             },
             {
               "word": "你",
-              "offsetSec": 2.06
+              "offsetSec": 1.337
             },
             {
               "word": "以",
-              "offsetSec": 2.36
+              "offsetSec": 1.671
             },
             {
               "word": "後",
-              "offsetSec": 2.68
+              "offsetSec": 2.006
             }
           ],
           "transitionSec": 0.6,
@@ -3435,7 +3435,7 @@
         },
         {
           "id": "naxer_078",
-          "timeSec": 220.32,
+          "timeSec": 220.44,
           "type": "lyrics",
           "text": "你的房間也有了新的晴天",
           "color": "hsl(45,100%,48%)",
@@ -3443,47 +3443,47 @@
           "words": [
             {
               "word": "你",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "的",
-              "offsetSec": 0.57
+              "offsetSec": 0.298
             },
             {
               "word": "房",
-              "offsetSec": 0.84
+              "offsetSec": 0.596
             },
             {
               "word": "間",
-              "offsetSec": 1.04
+              "offsetSec": 0.895
             },
             {
               "word": "也",
-              "offsetSec": 1.22
+              "offsetSec": 1.193
             },
             {
               "word": "有",
-              "offsetSec": 1.4
+              "offsetSec": 1.491
             },
             {
               "word": "了",
-              "offsetSec": 1.58
+              "offsetSec": 1.789
             },
             {
               "word": "新",
-              "offsetSec": 1.8
+              "offsetSec": 2.087
             },
             {
               "word": "的",
-              "offsetSec": 2.16
+              "offsetSec": 2.385
             },
             {
               "word": "晴",
-              "offsetSec": 2.46
+              "offsetSec": 2.684
             },
             {
               "word": "天",
-              "offsetSec": 2.82
+              "offsetSec": 2.982
             }
           ],
           "transitionSec": 0.6,
@@ -3492,7 +3492,7 @@
         },
         {
           "id": "naxer_079",
-          "timeSec": 223.19,
+          "timeSec": 223.72,
           "type": "lyrics",
           "text": "原來所謂的拯救",
           "color": "hsl(340,100%,45%)",
@@ -3500,31 +3500,31 @@
           "words": [
             {
               "word": "原",
-              "offsetSec": 0.25
+              "offsetSec": 0.0
             },
             {
               "word": "來",
-              "offsetSec": 1.05
+              "offsetSec": 0.329
             },
             {
               "word": "所",
-              "offsetSec": 1.43
+              "offsetSec": 0.657
             },
             {
               "word": "謂",
-              "offsetSec": 1.77
+              "offsetSec": 0.986
             },
             {
               "word": "的",
-              "offsetSec": 2.19
+              "offsetSec": 1.314
             },
             {
               "word": "拯",
-              "offsetSec": 2.45
+              "offsetSec": 1.643
             },
             {
               "word": "救",
-              "offsetSec": 2.77
+              "offsetSec": 1.971
             }
           ],
           "transitionSec": 0.6,
@@ -3533,7 +3533,7 @@
         },
         {
           "id": "naxer_080",
-          "timeSec": 226.01,
+          "timeSec": 226.02,
           "type": "lyrics",
           "text": "不是英雄的故事",
           "color": "hsl(45,100%,48%)",
@@ -3541,31 +3541,31 @@
           "words": [
             {
               "word": "不",
-              "offsetSec": 0.21
+              "offsetSec": 0.0
             },
             {
               "word": "是",
-              "offsetSec": 0.57
+              "offsetSec": 0.423
             },
             {
               "word": "英",
-              "offsetSec": 0.93
+              "offsetSec": 0.846
             },
             {
               "word": "雄",
-              "offsetSec": 1.51
+              "offsetSec": 1.269
             },
             {
               "word": "的",
-              "offsetSec": 1.87
+              "offsetSec": 1.691
             },
             {
               "word": "故",
-              "offsetSec": 2.31
+              "offsetSec": 2.114
             },
             {
               "word": "事",
-              "offsetSec": 2.79
+              "offsetSec": 2.537
             }
           ],
           "transitionSec": 0.6,
@@ -3574,7 +3574,7 @@
         },
         {
           "id": "naxer_081",
-          "timeSec": 228.85,
+          "timeSec": 228.98,
           "type": "lyrics",
           "text": "是我們選擇彼此",
           "color": "hsl(325,100%,50%)",
@@ -3582,31 +3582,31 @@
           "words": [
             {
               "word": "是",
-              "offsetSec": 0.29
+              "offsetSec": 0.0
             },
             {
               "word": "我",
-              "offsetSec": 0.63
+              "offsetSec": 0.517
             },
             {
               "word": "們",
-              "offsetSec": 0.98
+              "offsetSec": 1.034
             },
             {
               "word": "選",
-              "offsetSec": 1.33
+              "offsetSec": 1.551
             },
             {
               "word": "擇",
-              "offsetSec": 1.81
+              "offsetSec": 2.069
             },
             {
               "word": "彼",
-              "offsetSec": 2.47
+              "offsetSec": 2.586
             },
             {
               "word": "此",
-              "offsetSec": 2.87
+              "offsetSec": 3.103
             }
           ],
           "transitionSec": 0.6,
@@ -3615,7 +3615,7 @@
         },
         {
           "id": "naxer_082",
-          "timeSec": 231.84,
+          "timeSec": 232.6,
           "type": "lyrics",
           "text": "一天又一天",
           "color": "hsl(340,100%,45%)",
@@ -3623,23 +3623,23 @@
           "words": [
             {
               "word": "一",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "天",
-              "offsetSec": 1.24
+              "offsetSec": 0.42
             },
             {
               "word": "又",
-              "offsetSec": 1.66
+              "offsetSec": 0.84
             },
             {
               "word": "一",
-              "offsetSec": 2.12
+              "offsetSec": 1.26
             },
             {
               "word": "天",
-              "offsetSec": 2.62
+              "offsetSec": 1.68
             }
           ],
           "transitionSec": 0.6,
@@ -3648,7 +3648,7 @@
         },
         {
           "id": "naxer_083",
-          "timeSec": 234.62,
+          "timeSec": 234.7,
           "type": "lyrics",
           "text": "You found me, I found home",
           "color": "hsl(10,100%,48%)",
@@ -3656,27 +3656,27 @@
           "words": [
             {
               "word": "You",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "found",
-              "offsetSec": 0.54
+              "offsetSec": 0.453
             },
             {
               "word": "me",
-              "offsetSec": 1.04
+              "offsetSec": 0.907
             },
             {
               "word": "I",
-              "offsetSec": 1.28
+              "offsetSec": 1.36
             },
             {
               "word": "found",
-              "offsetSec": 1.9
+              "offsetSec": 1.813
             },
             {
               "word": "home",
-              "offsetSec": 2.52
+              "offsetSec": 2.267
             }
           ],
           "transitionSec": 0.6,
@@ -3685,7 +3685,7 @@
         },
         {
           "id": "naxer_084",
-          "timeSec": 237.24,
+          "timeSec": 237.42,
           "type": "lyrics",
           "text": "우리 함께 집으로 가",
           "color": "hsl(45,100%,48%)",
@@ -3693,35 +3693,35 @@
           "words": [
             {
               "word": "우",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "리",
-              "offsetSec": 0.78
+              "offsetSec": 0.36
             },
             {
               "word": "함",
-              "offsetSec": 0.92
+              "offsetSec": 0.72
             },
             {
               "word": "께",
-              "offsetSec": 1.18
+              "offsetSec": 1.08
             },
             {
               "word": "집",
-              "offsetSec": 1.5
+              "offsetSec": 1.44
             },
             {
               "word": "으",
-              "offsetSec": 1.82
+              "offsetSec": 1.8
             },
             {
               "word": "로",
-              "offsetSec": 2.4
+              "offsetSec": 2.16
             },
             {
               "word": "가",
-              "offsetSec": 2.92
+              "offsetSec": 2.52
             }
           ],
           "transitionSec": 0.6,
@@ -3730,7 +3730,7 @@
         },
         {
           "id": "naxer_085",
-          "timeSec": 240.21,
+          "timeSec": 240.3,
           "type": "lyrics",
           "text": "讓所有等待的眼睛",
           "color": "hsl(340,100%,45%)",
@@ -3738,35 +3738,35 @@
           "words": [
             {
               "word": "讓",
-              "offsetSec": 0.29
+              "offsetSec": 0.0
             },
             {
               "word": "所",
-              "offsetSec": 0.63
+              "offsetSec": 0.348
             },
             {
               "word": "有",
-              "offsetSec": 0.93
+              "offsetSec": 0.695
             },
             {
               "word": "等",
-              "offsetSec": 1.23
+              "offsetSec": 1.043
             },
             {
               "word": "待",
-              "offsetSec": 1.65
+              "offsetSec": 1.39
             },
             {
               "word": "的",
-              "offsetSec": 2.11
+              "offsetSec": 1.738
             },
             {
               "word": "眼",
-              "offsetSec": 2.35
+              "offsetSec": 2.085
             },
             {
               "word": "睛",
-              "offsetSec": 2.63
+              "offsetSec": 2.433
             }
           ],
           "transitionSec": 0.6,
@@ -3775,7 +3775,7 @@
         },
         {
           "id": "naxer_086",
-          "timeSec": 242.98,
+          "timeSec": 243.08,
           "type": "lyrics",
           "text": "都能遇見為牠停留的人",
           "color": "hsl(0,0%,90%)",
@@ -3783,43 +3783,43 @@
           "words": [
             {
               "word": "都",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "能",
-              "offsetSec": 0.64
+              "offsetSec": 4.005
             },
             {
               "word": "遇",
-              "offsetSec": 0.82
+              "offsetSec": 8.01
             },
             {
               "word": "見",
-              "offsetSec": 1.0
+              "offsetSec": 12.015
             },
             {
               "word": "為",
-              "offsetSec": 1.18
+              "offsetSec": 16.02
             },
             {
               "word": "牠",
-              "offsetSec": 1.34
+              "offsetSec": 20.025
             },
             {
               "word": "停",
-              "offsetSec": 1.52
+              "offsetSec": 24.03
             },
             {
               "word": "留",
-              "offsetSec": 1.72
+              "offsetSec": 28.035
             },
             {
               "word": "的",
-              "offsetSec": 2.16
+              "offsetSec": 32.04
             },
             {
               "word": "人",
-              "offsetSec": 2.48
+              "offsetSec": 36.045
             }
           ],
           "transitionSec": 1.2,
@@ -3828,7 +3828,7 @@
         },
         {
           "id": "naxer_087",
-          "timeSec": 245.51,
+          "timeSec": 283.13,
           "type": "lyrics",
           "text": "讓每顆流浪的心",
           "color": "hsl(45,100%,48%)",
@@ -3836,519 +3836,31 @@
           "words": [
             {
               "word": "讓",
-              "offsetSec": 0.27
+              "offsetSec": 0.0
             },
             {
               "word": "每",
-              "offsetSec": 0.99
+              "offsetSec": 0.304
             },
             {
               "word": "顆",
-              "offsetSec": 1.35
+              "offsetSec": 0.609
             },
             {
               "word": "流",
-              "offsetSec": 1.65
+              "offsetSec": 0.913
             },
             {
               "word": "浪",
-              "offsetSec": 2.07
+              "offsetSec": 1.217
             },
             {
               "word": "的",
-              "offsetSec": 2.45
+              "offsetSec": 1.521
             },
             {
               "word": "心",
-              "offsetSec": 2.71
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 87 句｜重複段第一輪（243~283 秒，歌詞單原本沒寫）"
-        },
-        {
-          "id": "naxer_088",
-          "timeSec": 248.32,
-          "type": "lyrics",
-          "text": "都有名字",
-          "color": "hsl(0,0%,90%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "都",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "有",
-              "offsetSec": 0.53
-            },
-            {
-              "word": "名",
-              "offsetSec": 0.76
-            },
-            {
-              "word": "字",
-              "offsetSec": 1.24
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 88 句｜重複段第一輪（243~283 秒，歌詞單原本沒寫）"
-        },
-        {
-          "id": "naxer_089",
-          "timeSec": 249.82,
-          "type": "lyrics",
-          "text": "都有擁抱",
-          "color": "hsl(45,100%,48%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "都",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "有",
-              "offsetSec": 0.62
-            },
-            {
-              "word": "擁",
-              "offsetSec": 0.94
-            },
-            {
-              "word": "抱",
-              "offsetSec": 2.2
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 89 句｜重複段第一輪（243~283 秒，歌詞單原本沒寫）"
-        },
-        {
-          "id": "naxer_090",
-          "timeSec": 252.84,
-          "type": "lyrics",
-          "text": "都有一扇回家的門",
-          "color": "hsl(0,0%,90%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "都",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "有",
-              "offsetSec": 0.68
-            },
-            {
-              "word": "一",
-              "offsetSec": 0.78
-            },
-            {
-              "word": "扇",
-              "offsetSec": 0.88
-            },
-            {
-              "word": "回",
-              "offsetSec": 1.3
-            },
-            {
-              "word": "家",
-              "offsetSec": 1.82
-            },
-            {
-              "word": "的",
-              "offsetSec": 2.42
-            },
-            {
-              "word": "門",
-              "offsetSec": 2.82
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 90 句｜重複段第一輪（243~283 秒，歌詞單原本沒寫）"
-        },
-        {
-          "id": "naxer_091",
-          "timeSec": 255.72,
-          "type": "lyrics",
-          "text": "不是誰把誰拯救",
-          "color": "hsl(0,0%,90%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "不",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "是",
-              "offsetSec": 0.5
-            },
-            {
-              "word": "誰",
-              "offsetSec": 0.7
-            },
-            {
-              "word": "把",
-              "offsetSec": 1.04
-            },
-            {
-              "word": "誰",
-              "offsetSec": 1.32
-            },
-            {
-              "word": "拯",
-              "offsetSec": 1.9
-            },
-            {
-              "word": "救",
-              "offsetSec": 2.46
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 91 句｜重複段第一輪（243~283 秒，歌詞單原本沒寫）"
-        },
-        {
-          "id": "naxer_092",
-          "timeSec": 258.3,
-          "type": "lyrics",
-          "text": "是兩顆流浪的心",
-          "color": "hsl(0,0%,95%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "是",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "兩",
-              "offsetSec": 0.74
-            },
-            {
-              "word": "顆",
-              "offsetSec": 0.94
-            },
-            {
-              "word": "流",
-              "offsetSec": 1.32
-            },
-            {
-              "word": "浪",
-              "offsetSec": 1.62
-            },
-            {
-              "word": "的",
-              "offsetSec": 2.1
-            },
-            {
-              "word": "心",
-              "offsetSec": 2.62
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 92 句｜重複段第一輪（243~283 秒，歌詞單原本沒寫）"
-        },
-        {
-          "id": "naxer_093",
-          "timeSec": 261.1,
-          "type": "lyrics",
-          "text": "終於成為彼此的家",
-          "color": "hsl(0,0%,80%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "終",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "於",
-              "offsetSec": 1.02
-            },
-            {
-              "word": "成",
-              "offsetSec": 1.32
-            },
-            {
-              "word": "為",
-              "offsetSec": 1.62
-            },
-            {
-              "word": "彼",
-              "offsetSec": 2.26
-            },
-            {
-              "word": "此",
-              "offsetSec": 2.92
-            },
-            {
-              "word": "的",
-              "offsetSec": 3.48
-            },
-            {
-              "word": "家",
-              "offsetSec": 5.46
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 93 句｜重複段第一輪（243~283 秒，歌詞單原本沒寫）"
-        },
-        {
-          "id": "naxer_094",
-          "timeSec": 266.82,
-          "type": "lyrics",
-          "text": "You found me, I found home",
-          "color": "hsl(10,100%,48%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "You",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "found",
-              "offsetSec": 0.82
-            },
-            {
-              "word": "me",
-              "offsetSec": 1.34
-            },
-            {
-              "word": "I",
-              "offsetSec": 1.58
-            },
-            {
-              "word": "found",
-              "offsetSec": 2.14
-            },
-            {
-              "word": "home",
-              "offsetSec": 2.82
-            }
-          ],
-          "transitionSec": 0.6,
-          "oneShot": true,
-          "note": "第 83 句｜重複段第一輪"
-        },
-        {
-          "id": "naxer_095",
-          "timeSec": 269.9,
-          "type": "lyrics",
-          "text": "You found me, I found home",
-          "color": "hsl(10,100%,48%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "You",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "found",
-              "offsetSec": 0.52
-            },
-            {
-              "word": "me",
-              "offsetSec": 1.02
-            },
-            {
-              "word": "I",
-              "offsetSec": 1.36
-            },
-            {
-              "word": "found",
-              "offsetSec": 1.9
-            },
-            {
-              "word": "home",
-              "offsetSec": 2.52
-            }
-          ],
-          "transitionSec": 0.6,
-          "oneShot": true,
-          "note": "第 83 句｜重複段第一輪（第二次）"
-        },
-        {
-          "id": "naxer_096",
-          "timeSec": 273.06,
-          "type": "lyrics",
-          "text": "우리 함께 집으로 가",
-          "color": "hsl(45,100%,48%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "우",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "리",
-              "offsetSec": 0.76
-            },
-            {
-              "word": "함",
-              "offsetSec": 0.92
-            },
-            {
-              "word": "께",
-              "offsetSec": 1.2
-            },
-            {
-              "word": "집",
-              "offsetSec": 2.58
-            },
-            {
-              "word": "으",
-              "offsetSec": 2.88
-            },
-            {
-              "word": "로",
-              "offsetSec": 3.3
-            },
-            {
-              "word": "가",
-              "offsetSec": 3.78
-            }
-          ],
-          "transitionSec": 0.6,
-          "oneShot": true,
-          "note": "第 84 句｜重複段第一輪"
-        },
-        {
-          "id": "naxer_097",
-          "timeSec": 277.08,
-          "type": "lyrics",
-          "text": "讓所有等待的眼睛",
-          "color": "hsl(340,100%,45%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "讓",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "所",
-              "offsetSec": 1.24
-            },
-            {
-              "word": "有",
-              "offsetSec": 1.44
-            },
-            {
-              "word": "等",
-              "offsetSec": 1.64
-            },
-            {
-              "word": "待",
-              "offsetSec": 1.82
-            },
-            {
-              "word": "的",
-              "offsetSec": 2.04
-            },
-            {
-              "word": "眼",
-              "offsetSec": 2.22
-            },
-            {
-              "word": "睛",
-              "offsetSec": 2.5
-            }
-          ],
-          "transitionSec": 0.6,
-          "oneShot": true,
-          "note": "第 85 句｜重複段第一輪"
-        },
-        {
-          "id": "naxer_098",
-          "timeSec": 279.74,
-          "type": "lyrics",
-          "text": "都能遇見為牠停留的人",
-          "color": "hsl(0,0%,90%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "都",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "能",
-              "offsetSec": 0.64
-            },
-            {
-              "word": "遇",
-              "offsetSec": 0.8
-            },
-            {
-              "word": "見",
-              "offsetSec": 1.0
-            },
-            {
-              "word": "為",
-              "offsetSec": 1.16
-            },
-            {
-              "word": "牠",
-              "offsetSec": 1.34
-            },
-            {
-              "word": "停",
-              "offsetSec": 1.5
-            },
-            {
-              "word": "留",
-              "offsetSec": 1.74
-            },
-            {
-              "word": "的",
-              "offsetSec": 2.16
-            },
-            {
-              "word": "人",
-              "offsetSec": 2.59
-            }
-          ],
-          "transitionSec": 1.2,
-          "oneShot": true,
-          "note": "第 86 句｜重複段第一輪"
-        },
-        {
-          "id": "naxer_099",
-          "timeSec": 282.98,
-          "type": "lyrics",
-          "text": "讓每顆流浪的心",
-          "color": "hsl(45,100%,48%)",
-          "highlightColor": "#ffffff",
-          "words": [
-            {
-              "word": "讓",
-              "offsetSec": 0.3
-            },
-            {
-              "word": "每",
-              "offsetSec": 0.74
-            },
-            {
-              "word": "顆",
-              "offsetSec": 0.94
-            },
-            {
-              "word": "流",
-              "offsetSec": 1.08
-            },
-            {
-              "word": "浪",
-              "offsetSec": 1.4
-            },
-            {
-              "word": "的",
-              "offsetSec": 1.72
-            },
-            {
-              "word": "心",
-              "offsetSec": 1.96
+              "offsetSec": 1.826
             }
           ],
           "transitionSec": 1.2,
@@ -4356,8 +3868,8 @@
           "note": "第 87 句"
         },
         {
-          "id": "naxer_100",
-          "timeSec": 285.1,
+          "id": "naxer_088",
+          "timeSec": 285.26,
           "type": "lyrics",
           "text": "都有名字",
           "color": "hsl(0,0%,90%)",
@@ -4365,19 +3877,19 @@
           "words": [
             {
               "word": "都",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "有",
-              "offsetSec": 0.67
+              "offsetSec": 0.37
             },
             {
               "word": "名",
-              "offsetSec": 1.04
+              "offsetSec": 0.74
             },
             {
               "word": "字",
-              "offsetSec": 1.36
+              "offsetSec": 1.11
             }
           ],
           "transitionSec": 1.2,
@@ -4385,8 +3897,8 @@
           "note": "第 88 句"
         },
         {
-          "id": "naxer_101",
-          "timeSec": 286.7,
+          "id": "naxer_089",
+          "timeSec": 286.74,
           "type": "lyrics",
           "text": "都有擁抱",
           "color": "hsl(45,100%,48%)",
@@ -4394,19 +3906,19 @@
           "words": [
             {
               "word": "都",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "有",
-              "offsetSec": 0.58
+              "offsetSec": 0.415
             },
             {
               "word": "擁",
-              "offsetSec": 0.86
+              "offsetSec": 0.83
             },
             {
               "word": "抱",
-              "offsetSec": 1.24
+              "offsetSec": 1.245
             }
           ],
           "transitionSec": 1.2,
@@ -4414,8 +3926,8 @@
           "note": "第 89 句"
         },
         {
-          "id": "naxer_102",
-          "timeSec": 288.02,
+          "id": "naxer_090",
+          "timeSec": 288.4,
           "type": "lyrics",
           "text": "都有一扇回家的門",
           "color": "hsl(0,0%,90%)",
@@ -4423,35 +3935,35 @@
           "words": [
             {
               "word": "都",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "有",
-              "offsetSec": 0.66
+              "offsetSec": 0.513
             },
             {
               "word": "一",
-              "offsetSec": 1.02
+              "offsetSec": 1.025
             },
             {
               "word": "扇",
-              "offsetSec": 1.38
+              "offsetSec": 1.538
             },
             {
               "word": "回",
-              "offsetSec": 1.72
+              "offsetSec": 2.05
             },
             {
               "word": "家",
-              "offsetSec": 2.08
+              "offsetSec": 2.563
             },
             {
               "word": "的",
-              "offsetSec": 2.72
+              "offsetSec": 3.075
             },
             {
               "word": "門",
-              "offsetSec": 3.14
+              "offsetSec": 3.588
             }
           ],
           "transitionSec": 1.2,
@@ -4459,8 +3971,8 @@
           "note": "第 90 句"
         },
         {
-          "id": "naxer_103",
-          "timeSec": 292.06,
+          "id": "naxer_091",
+          "timeSec": 292.5,
           "type": "lyrics",
           "text": "不是誰把誰拯救",
           "color": "hsl(0,0%,90%)",
@@ -4468,31 +3980,31 @@
           "words": [
             {
               "word": "不",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "是",
-              "offsetSec": 0.93
+              "offsetSec": 0.674
             },
             {
               "word": "誰",
-              "offsetSec": 1.56
+              "offsetSec": 1.349
             },
             {
               "word": "把",
-              "offsetSec": 2.04
+              "offsetSec": 2.023
             },
             {
               "word": "誰",
-              "offsetSec": 2.5
+              "offsetSec": 2.697
             },
             {
               "word": "拯",
-              "offsetSec": 3.92
+              "offsetSec": 3.371
             },
             {
               "word": "救",
-              "offsetSec": 4.88
+              "offsetSec": 4.046
             }
           ],
           "transitionSec": 1.2,
@@ -4500,8 +4012,8 @@
           "note": "第 91 句"
         },
         {
-          "id": "naxer_104",
-          "timeSec": 296.99,
+          "id": "naxer_092",
+          "timeSec": 297.22,
           "type": "lyrics",
           "text": "是兩顆流浪的心",
           "color": "hsl(0,0%,95%)",
@@ -4509,31 +4021,31 @@
           "words": [
             {
               "word": "是",
-              "offsetSec": 0.27
+              "offsetSec": 0.0
             },
             {
               "word": "兩",
-              "offsetSec": 0.79
+              "offsetSec": 0.406
             },
             {
               "word": "顆",
-              "offsetSec": 1.01
+              "offsetSec": 0.811
             },
             {
               "word": "流",
-              "offsetSec": 1.37
+              "offsetSec": 1.217
             },
             {
               "word": "浪",
-              "offsetSec": 1.85
+              "offsetSec": 1.623
             },
             {
               "word": "的",
-              "offsetSec": 2.39
+              "offsetSec": 2.029
             },
             {
               "word": "心",
-              "offsetSec": 2.73
+              "offsetSec": 2.434
             }
           ],
           "transitionSec": 1.2,
@@ -4541,8 +4053,8 @@
           "note": "第 92 句"
         },
         {
-          "id": "naxer_105",
-          "timeSec": 299.82,
+          "id": "naxer_093",
+          "timeSec": 300.06,
           "type": "lyrics",
           "text": "終於成為彼此的家",
           "color": "hsl(0,0%,80%)",
@@ -4550,35 +4062,35 @@
           "words": [
             {
               "word": "終",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "於",
-              "offsetSec": 0.76
+              "offsetSec": 1.038
             },
             {
               "word": "成",
-              "offsetSec": 1.04
+              "offsetSec": 2.075
             },
             {
               "word": "為",
-              "offsetSec": 1.32
+              "offsetSec": 3.113
             },
             {
               "word": "彼",
-              "offsetSec": 2.02
+              "offsetSec": 4.15
             },
             {
               "word": "此",
-              "offsetSec": 2.66
+              "offsetSec": 5.188
             },
             {
               "word": "的",
-              "offsetSec": 3.24
+              "offsetSec": 6.225
             },
             {
               "word": "家",
-              "offsetSec": 7.68
+              "offsetSec": 7.263
             }
           ],
           "transitionSec": 1.2,
@@ -4586,8 +4098,8 @@
           "note": "第 93 句"
         },
         {
-          "id": "naxer_106",
-          "timeSec": 307.9,
+          "id": "naxer_094",
+          "timeSec": 308.36,
           "type": "lyrics",
           "text": "You found me",
           "color": "hsl(0,0%,85%)",
@@ -4595,15 +4107,15 @@
           "words": [
             {
               "word": "You",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "found",
-              "offsetSec": 0.98
+              "offsetSec": 0.333
             },
             {
               "word": "me",
-              "offsetSec": 1.42
+              "offsetSec": 0.667
             }
           ],
           "transitionSec": 1.2,
@@ -4611,8 +4123,8 @@
           "note": "第 94 句"
         },
         {
-          "id": "naxer_107",
-          "timeSec": 309.37,
+          "id": "naxer_095",
+          "timeSec": 309.36,
           "type": "lyrics",
           "text": "I found home",
           "color": "hsl(0,0%,90%)",
@@ -4620,15 +4132,15 @@
           "words": [
             {
               "word": "I",
-              "offsetSec": 0.19
+              "offsetSec": 0.0
             },
             {
               "word": "found",
-              "offsetSec": 0.41
+              "offsetSec": 1.28
             },
             {
               "word": "home",
-              "offsetSec": 0.97
+              "offsetSec": 2.56
             }
           ],
           "transitionSec": 1.2,
@@ -4636,8 +4148,8 @@
           "note": "第 95 句"
         },
         {
-          "id": "naxer_108",
-          "timeSec": 312.72,
+          "id": "naxer_096",
+          "timeSec": 313.2,
           "type": "lyrics",
           "text": "你帶我回家",
           "color": "hsl(0,0%,95%)",
@@ -4645,23 +4157,23 @@
           "words": [
             {
               "word": "你",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "帶",
-              "offsetSec": 1.1
+              "offsetSec": 0.712
             },
             {
               "word": "我",
-              "offsetSec": 1.82
+              "offsetSec": 1.424
             },
             {
               "word": "回",
-              "offsetSec": 2.38
+              "offsetSec": 2.136
             },
             {
               "word": "家",
-              "offsetSec": 3.04
+              "offsetSec": 2.848
             }
           ],
           "transitionSec": 1.2,
@@ -4669,8 +4181,8 @@
           "note": "第 96 句"
         },
         {
-          "id": "naxer_109",
-          "timeSec": 316.16,
+          "id": "naxer_097",
+          "timeSec": 316.76,
           "type": "lyrics",
           "text": "我也帶你回家",
           "color": "hsl(0,0%,80%)",
@@ -4678,27 +4190,27 @@
           "words": [
             {
               "word": "我",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "也",
-              "offsetSec": 0.82
+              "offsetSec": 0.26
             },
             {
               "word": "帶",
-              "offsetSec": 1.34
+              "offsetSec": 0.52
             },
             {
               "word": "你",
-              "offsetSec": 1.62
+              "offsetSec": 0.78
             },
             {
               "word": "回",
-              "offsetSec": 1.74
+              "offsetSec": 1.04
             },
             {
               "word": "家",
-              "offsetSec": 1.94
+              "offsetSec": 1.3
             }
           ],
           "transitionSec": 1.2,
@@ -4706,8 +4218,8 @@
           "note": "第 97 句"
         },
         {
-          "id": "naxer_110",
-          "timeSec": 318.22,
+          "id": "naxer_098",
+          "timeSec": 318.32,
           "type": "lyrics",
           "text": "這顆浪浪星",
           "color": "hsl(0,0%,85%)",
@@ -4715,23 +4227,23 @@
           "words": [
             {
               "word": "這",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "顆",
-              "offsetSec": 0.56
+              "offsetSec": 0.276
             },
             {
               "word": "浪",
-              "offsetSec": 0.76
+              "offsetSec": 0.552
             },
             {
               "word": "浪",
-              "offsetSec": 1.06
+              "offsetSec": 0.828
             },
             {
               "word": "星",
-              "offsetSec": 1.32
+              "offsetSec": 1.104
             }
           ],
           "transitionSec": 1.2,
@@ -4739,8 +4251,8 @@
           "note": "第 98 句"
         },
         {
-          "id": "naxer_111",
-          "timeSec": 319.6,
+          "id": "naxer_099",
+          "timeSec": 319.7,
           "type": "lyrics",
           "text": "從此為我們發光",
           "color": "hsl(0,0%,90%)",
@@ -4748,31 +4260,31 @@
           "words": [
             {
               "word": "從",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "此",
-              "offsetSec": 0.58
+              "offsetSec": 0.454
             },
             {
               "word": "為",
-              "offsetSec": 0.8
+              "offsetSec": 0.909
             },
             {
               "word": "我",
-              "offsetSec": 1.0
+              "offsetSec": 1.363
             },
             {
               "word": "們",
-              "offsetSec": 1.35
+              "offsetSec": 1.817
             },
             {
               "word": "發",
-              "offsetSec": 1.7
+              "offsetSec": 2.271
             },
             {
               "word": "光",
-              "offsetSec": 2.38
+              "offsetSec": 2.726
             }
           ],
           "transitionSec": 1.2,
@@ -4780,8 +4292,8 @@
           "note": "第 99 句"
         },
         {
-          "id": "naxer_112",
-          "timeSec": 323.08,
+          "id": "naxer_100",
+          "timeSec": 322.88,
           "type": "lyrics",
           "text": "이제 우리, 함께 집으로",
           "color": "hsl(0,0%,95%)",
@@ -4789,39 +4301,39 @@
           "words": [
             {
               "word": "이",
-              "offsetSec": 0.3
+              "offsetSec": 0.0
             },
             {
               "word": "제",
-              "offsetSec": 0.5
+              "offsetSec": 0.444
             },
             {
               "word": "우",
-              "offsetSec": 0.72
+              "offsetSec": 0.889
             },
             {
               "word": "리",
-              "offsetSec": 1.0
+              "offsetSec": 1.333
             },
             {
               "word": "함",
-              "offsetSec": 1.54
+              "offsetSec": 1.778
             },
             {
               "word": "께",
-              "offsetSec": 1.78
+              "offsetSec": 2.222
             },
             {
               "word": "집",
-              "offsetSec": 2.54
+              "offsetSec": 2.667
             },
             {
               "word": "으",
-              "offsetSec": 3.14
+              "offsetSec": 3.111
             },
             {
               "word": "로",
-              "offsetSec": 3.34
+              "offsetSec": 3.556
             }
           ],
           "transitionSec": 1.2,

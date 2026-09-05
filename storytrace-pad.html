@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>副控 iPad | Storytrace</title>
+<script src="storytrace-gate.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --bg: #0D0D0D; --surface: #141414; --surface2: #1C1C1C; --border: rgba(255,255,255,0.08);
+  --gold: #C9A84C; --gold-light: #E8C97A; --gold-dim: rgba(201,168,76,0.15);
+  --text: #F0EBE0; --muted: rgba(240,235,224,0.4); --live: #C9A84C; --danger: #C45C5C;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", sans-serif; overflow: hidden; user-select: none; -webkit-user-select: none; }
+
+.topbar { height: 46px; display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--border); background: rgba(13,13,13,0.95); }
+.topbar-title { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--gold); }
+.topbar-ver { font-size: 10px; color: rgba(255,255,255,0.25); }
+.pill { font-size: 11px; color: var(--muted); padding: 3px 9px; border: 1px solid var(--border); border-radius: 12px; white-space: nowrap; }
+.pill.ok { color: var(--gold); border-color: rgba(201,168,76,0.5); }
+.pill.bad { color: #e08a8a; border-color: rgba(196,92,92,0.6); }
+.room-wrap { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+.room-input { width: 130px; padding: 6px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; }
+.room-btn { padding: 6px 12px; background: var(--gold); color: #0D0D0D; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; }
+
+.toast { position: fixed; top: 54px; left: 50%; transform: translateX(-50%); z-index: 50; max-width: 90vw; padding: 10px 18px; border-radius: 10px; font-size: 14px; line-height: 1.4; background: #1a1a1a; border: 1px solid var(--border); color: var(--text); opacity: 0; transition: opacity 0.2s; pointer-events: none; text-align: center; }
+.toast.show { opacity: 1; }
+.toast.ok { border-color: rgba(201,168,76,0.6); color: var(--gold-light); }
+.toast.bad { border-color: rgba(196,92,92,0.7); color: #f0a0a0; background: #2a1214; }
+
+.lock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 12px 16px; background: #2a1214; color: #f0a0a0; font-size: 14px; text-align: center; border-top: 1px solid rgba(196,92,92,0.6); }
+.lock.warn { background: #33280a; color: var(--gold); border-top-color: rgba(201,168,76,0.5); }
+.lock[hidden] { display: none; }
+
+.stage { height: calc(100% - 46px); display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px; padding: 14px; }
+@media (orientation: portrait) { .stage { grid-template-columns: 1fr; grid-template-rows: auto 1fr; overflow: auto; } body { overflow: auto; } }
+
+.left { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.now-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+.state-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+.badge-stopped { background: rgba(196,92,92,0.18); color: #e08a8a; }
+.badge-playing { background: rgba(201,168,76,0.2); color: var(--gold-light); }
+.badge-paused  { background: rgba(240,235,224,0.1); color: var(--text); }
+.badge-cued    { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px dashed rgba(201,168,76,0.5); }
+.badge-unknown { background: rgba(255,255,255,0.06); color: var(--muted); }
+.now-title { font-size: 26px; font-weight: 800; line-height: 1.2; margin: 4px 0 6px; }
+.now-next { font-size: 13px; color: var(--muted); }
+.progress { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-top: 14px; overflow: hidden; }
+.progress > div { height: 100%; width: 0; background: var(--gold); transition: width 0.5s linear; }
+.time-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.host-row { font-size: 12px; color: var(--muted); margin-top: 10px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+.song-list { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+.song-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; font-size: 16px; }
+.song-item.active { border-color: var(--gold); background: var(--gold-dim); }
+.song-item .num { font-size: 12px; color: var(--muted); width: 20px; text-align: center; }
+.song-item .title { flex: 1; font-weight: 600; }
+.song-item .audio { font-size: 12px; color: var(--muted); }
+.song-item .audio.ok { color: var(--gold); }
+.song-item .audio.missing { color: var(--danger); }
+
+.right { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.big { flex: 1; display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; min-height: 180px; }
+.btn { border: none; border-radius: 16px; font-weight: 800; cursor: pointer; color: var(--text); background: var(--surface2); border: 1px solid var(--border); font-size: 18px; transition: opacity 0.15s, transform 0.05s; }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+.btn.go { background: var(--gold); color: #0D0D0D; font-size: 34px; letter-spacing: 3px; }
+.btn.go small { display: block; font-size: 14px; letter-spacing: 0; font-weight: 600; margin-top: 8px; opacity: 0.8; }
+.btn.hold { font-size: 26px; }
+.row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.row .btn { padding: 18px 8px; font-size: 15px; }
+.btn.stop { border-color: rgba(196,92,92,0.6); color: var(--danger); }
+.btn.stop.armed { background: var(--danger); color: #fff; }
+.btn.take { border-color: rgba(201,168,76,0.5); color: var(--gold); }
+.colors { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.colors .btn { padding: 16px 4px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.hint { font-size: 12px; color: var(--muted); text-align: center; min-height: 16px; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-title">STORYTRACE PAD</div>
+  <div class="topbar-ver" id="verTag">v2026-09-05.3</div>
+  <div class="pill" id="connPill">連線中…</div>
+  <div class="pill" id="hostPill">主控：—</div>
+  <div class="pill" id="holderPill">操作權：—</div>
+  <div class="room-wrap">
+    <input class="room-input" id="roomInput" value="test01" placeholder="room">
+    <button class="room-btn" id="roomBtn">確認</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="lock" id="lock" hidden></div>
+
+<div class="stage">
+  <div class="left">
+    <div class="now-card">
+      <div class="state-row">
+        <span class="badge badge-unknown" id="stateBadge">—</span>
+        <span id="stateText" style="font-size:12px;color:var(--muted);">等待主控狀態</span>
+      </div>
+      <div class="now-title" id="nowTitle">—</div>
+      <div class="now-next" id="nextTitle"></div>
+      <div class="progress"><div id="progressFill"></div></div>
+      <div class="time-row"><span id="timeNow">0:00</span><span id="timeTotal">0:00</span></div>
+      <div class="host-row"><span id="hostBeat">主控心跳：—</span><span id="hostVer"></span><span id="lastSync"></span></div>
+    </div>
+    <div class="song-list" id="songList"><div style="font-size:13px;color:var(--muted);padding:12px;">主控載入演出資料後這裡會列出曲目</div></div>
+  </div>
+  <div class="right">
+    <div class="big">
+      <button class="btn go" id="goBtn">GO<small id="goSub">開始演出</small></button>
+      <button class="btn hold" id="holdBtn">⏸ HOLD</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="prevBtn">← 上一首</button>
+      <button class="btn" id="nextBtn">下一首 →</button>
+      <button class="btn" id="offBtn">⬛ 關燈</button>
+      <button class="btn stop" id="stopBtn">■ STOP</button>
+    </div>
+    <div class="colors">
+      <button class="btn" data-color="hsl(340,100%,50%)">● 玫瑰紅</button>
+      <button class="btn" data-color="hsl(45,100%,50%)">● 金色</button>
+      <button class="btn" data-color="hsl(0,0%,100%)">● 純白</button>
+      <button class="btn" data-color="hsl(325,100%,55%)">● 粉紅</button>
+      <button class="btn" data-color="hsl(270,60%,28%)">● 紫</button>
+    </div>
+    <div class="row" style="grid-template-columns:1fr 1fr;">
+      <button class="btn take" id="takeBtn">申請接管</button>
+      <button class="btn" id="releaseBtn">交回主控</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  Storytrace 副控（iPad）— 不是第二套引擎：只送命令給主控、鏡像主控狀態
+//  rooms/{room}/show  主控狀態（變化才寫）   rooms/{room}/host  主控心跳＋播放位置（每秒）
+//  rooms/{room}/commands/{id}  副控寫命令，主控寫回 result
+// ============================================================
+(function () {
+'use strict';
+const VERSION = 'v2026-09-05.3';
+const firebaseConfig = {
+  apiKey: "AIzaSyDAiYEuJtBppTJWrl90OBS7_vcCtrSI3jk",
+  authDomain: "storytrace-wedding.firebaseapp.com",
+  databaseURL: "https://storytrace-wedding-default-rtdb.firebaseio.com",
+  projectId: "storytrace-wedding",
+  storageBucket: "storytrace-wedding.firebasestorage.app",
+  messagingSenderId: "865058497448",
+  appId: "1:865058497448:web:f604e62c4c7407f464b39d"
+};
+const $ = (id) => document.getElementById(id);
+const padId = 'pad-' + Math.random().toString(36).slice(2, 8);
+const HOST_TIMEOUT_MS = 8000;
+let fb = null, fbReady = false;
+let currentRoom = 'test01';
+let online = false, serverOffset = 0;
+let show = null, host = null;
+let lastSyncAt = 0;
+let unsubs = [];
+let stopArmedUntil = 0;
+let pendingCount = 0;
+
+// ── toast ──
+let toastTimer = null;
+function toast(msg, kind) {
+  const el = $('toast'); el.textContent = msg; el.className = 'toast show ' + (kind || '');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), kind === 'bad' ? 5000 : 2500);
+}
+function fmtSec(s) { s = Number(s); if (!isFinite(s) || s < 0) s = 0; return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0'); }
+function fmtClock(ts) { return ts ? new Date(ts).toLocaleTimeString('zh-TW', { hour12: false }) : '—'; }
+function serverNow() { return Date.now() + serverOffset; }
+
+// ── Firebase ──
+async function connect() {
+  try {
+    const [appMod, dbMod] = await Promise.all([
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js'),
+    ]);
+    const app = appMod.initializeApp(firebaseConfig);
+    fb = { db: dbMod.getDatabase(app), ref: dbMod.ref, set: dbMod.set, push: dbMod.push, onValue: dbMod.onValue, goOffline: dbMod.goOffline, goOnline: dbMod.goOnline, off: dbMod.off };
+    fbReady = true;
+    fb.onValue(fb.ref(fb.db, '.info/connected'), (snap) => { online = !!snap.val(); if (online) lastSyncAt = Date.now(); render(); });
+    fb.onValue(fb.ref(fb.db, '.info/serverTimeOffset'), (snap) => { serverOffset = Number(snap.val()) || 0; });
+    attachRoom();
+  } catch (err) {
+    $('connPill').textContent = 'Firebase 載入失敗'; $('connPill').className = 'pill bad';
+    showLock('Firebase 載入失敗：' + ((err && err.message) || err) + '。檢查網路後重新整理。', 'bad');
+  }
+}
+function roomRef(p) { return fb.ref(fb.db, 'rooms/' + currentRoom + '/' + p); }
+function attachRoom() {
+  if (!fbReady) return;
+  unsubs.forEach(u => { try { u(); } catch (e) {} }); unsubs = [];
+  show = null; host = null;
+  unsubs.push(fb.onValue(roomRef('show'), (snap) => { show = snap.val(); lastSyncAt = Date.now(); render(); }));
+  unsubs.push(fb.onValue(roomRef('host'), (snap) => { host = snap.val(); lastSyncAt = Date.now(); render(); }));
+}
+function setRoom() {
+  currentRoom = $('roomInput').value.trim().replace(/\s+/g, '_') || 'test01';
+  $('roomInput').value = currentRoom;
+  attachRoom(); render();
+}
+
+// ── 狀態判定 ──
+function hostAlive() { return !!(host && host.heartbeat && (serverNow() - host.heartbeat) < HOST_TIMEOUT_MS); }
+function holder() { return show ? (show.controlHolder || 'host') : 'host'; }
+function epoch() { return show ? (show.controlEpoch || 1) : 1; }
+function canCommand() { return online && hostAlive() && holder() === 'pad'; }
+function lockReason() {
+  if (!fbReady) return null;
+  if (!online) return { text: '失聯：命令不會送出。最後同步 ' + fmtClock(lastSyncAt), kind: 'bad' };
+  if (!host) return { text: '還沒收到主控狀態：主控（Mac）要先開控台、設同一個 room「' + currentRoom + '」', kind: 'warn' };
+  if (!hostAlive()) return { text: '主控失聯（最後心跳 ' + fmtClock(host.heartbeat) + '）：引擎在主控電腦，iPad 不能自己播', kind: 'bad' };
+  if (holder() !== 'pad') return { text: '操作權在主控。按「申請接管」後這台才能 GO／HOLD／STOP', kind: 'warn' };
+  return null;
+}
+function showLock(text, kind) { const el = $('lock'); el.textContent = text; el.className = 'lock ' + (kind || ''); el.hidden = false; }
+function hideLock() { $('lock').hidden = true; }
+
+// ── 命令 ──
+function send(action, extra) {
+  if (!fbReady || !online) { toast('失聯，命令未送出。最後同步 ' + fmtClock(lastSyncAt), 'bad'); return Promise.resolve({ ok: false }); }
+  if (!hostAlive()) { toast('主控失聯，命令未送出', 'bad'); return Promise.resolve({ ok: false }); }
+  if (action !== 'TAKE' && action !== 'RELEASE' && holder() !== 'pad') { toast('操作權在主控，先按「申請接管」', 'bad'); return Promise.resolve({ ok: false }); }
+  const cmd = Object.assign({ action: action, clientId: 'pad', padId: padId, controlEpoch: epoch(), ts: Date.now() }, extra || {});
+  const newRef = fb.push(roomRef('commands'));
+  pendingCount += 1; render();
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = (r) => { if (done) return; done = true; pendingCount -= 1; try { off(); } catch (e) {} render(); resolve(r); };
+    const off = fb.onValue(newRef, (snap) => {
+      const v = snap.val();
+      if (v && v.result) {
+        if (v.result.ok) toast('主控已接受 ' + action + (v.result.already ? '（已在播放）' : ''), 'ok');
+        else toast('主控拒絕 ' + action + '：' + (v.result.reason || ''), 'bad');
+        finish(v.result);
+      }
+    });
+    fb.set(newRef, cmd).catch(err => { toast('送出失敗：' + err.message, 'bad'); finish({ ok: false, reason: err.message }); });
+    setTimeout(() => { if (!done) { toast('主控 4 秒沒有回應（' + action + '），請看主控電腦', 'bad'); finish({ ok: false, reason: 'timeout' }); } }, 4000);
+  });
+}
+
+// ── render ──
+function render() {
+  $('connPill').textContent = online ? '已連線' : (fbReady ? '失聯' : '連線中…');
+  $('connPill').className = 'pill ' + (online ? 'ok' : 'bad');
+  const alive = hostAlive();
+  $('hostPill').textContent = host ? ('主控：' + (alive ? '在線' : '失聯')) : '主控：未開';
+  $('hostPill').className = 'pill ' + (alive ? 'ok' : 'bad');
+  const h = holder();
+  $('holderPill').textContent = '操作權：' + (h === 'pad' ? 'iPad（這台）' : '主控') + ' · epoch ' + epoch();
+  $('holderPill').className = 'pill ' + (h === 'pad' ? 'ok' : '');
+  $('hostBeat').textContent = '主控心跳：' + (host ? fmtClock(host.heartbeat) : '—');
+  $('hostVer').textContent = show && show.version ? '主控 ' + show.version : '';
+  $('lastSync').textContent = '最後同步 ' + fmtClock(lastSyncAt);
+
+  const st = show ? show.state : null;
+  const badge = $('stateBadge');
+  badge.className = 'badge badge-' + (st || 'unknown'); badge.textContent = st ? st.toUpperCase() : '—';
+  $('stateText').textContent = !show ? '等待主控狀態' : (st === 'playing' ? (show.usingAudio ? '🔊 音檔播放中' : '純燈光模式') : st === 'cued' ? '上一首播完，等 GO' : st === 'paused' ? '暫停中' : '停止');
+  $('nowTitle').textContent = show && show.songTitle ? show.songTitle : (show && show.showId ? show.showId : '—');
+  $('nextTitle').textContent = show && show.nextSongTitle ? '下一首：' + show.nextSongTitle : (show && show.songs && show.songs.length ? '（最後一首）' : '');
+  const dur = show ? Number(show.durationSec) || 0 : 0;
+  const pos = host && typeof host.position === 'number' ? host.position : (show ? Number(show.pausedAtSec) || 0 : 0);
+  $('progressFill').style.width = (dur ? Math.min(100, pos / dur * 100) : 0) + '%';
+  $('timeNow').textContent = fmtSec(pos); $('timeTotal').textContent = fmtSec(dur);
+
+  const songs = show && Array.isArray(show.songs) ? show.songs : [];
+  if (songs.length) {
+    $('songList').innerHTML = songs.map((s, i) => `<div class="song-item${i === show.songIdx ? ' active' : ''}" data-idx="${i}"><div class="num">${i + 1}</div><div class="title">${esc(s.title)}</div><div class="audio ${s.audioReady ? 'ok' : 'missing'}">${s.audioReady ? '✅ 音檔' : '⚠️ 缺音檔'}</div><div style="font-size:12px;color:var(--muted)">${(s.trigger || 'manual') === 'auto' ? '自動接' : '等 GO'} · ${fmtSec(s.durationSec)}</div></div>`).join('');
+  } else $('songList').innerHTML = '<div style="font-size:13px;color:var(--muted);padding:12px;">主控載入演出資料後這裡會列出曲目</div>';
+
+  const ok = canCommand() && pendingCount === 0;
+  const goLabel = st === 'cued' ? 'GO' : st === 'paused' ? '續播' : st === 'playing' ? '播放中' : 'GO';
+  $('goBtn').innerHTML = goLabel + '<small id="goSub">' + esc(st === 'cued' ? '下一首：' + (show.songTitle || '') : st === 'paused' ? '從 ' + fmtSec(pos) + ' 繼續' : st === 'playing' ? (show.songTitle || '') : (show && show.songTitle ? show.songTitle : '開始演出')) + '</small>';
+  $('goBtn').disabled = !ok || st === 'playing';
+  $('holdBtn').disabled = !ok || st !== 'playing';
+  $('stopBtn').disabled = !ok; $('offBtn').disabled = !ok; $('prevBtn').disabled = !ok; $('nextBtn').disabled = !ok;
+  document.querySelectorAll('.colors .btn').forEach(b => b.disabled = !ok);
+  $('takeBtn').disabled = !(online && alive && h !== 'pad');
+  $('releaseBtn').disabled = !(online && alive && h === 'pad');
+  if (Date.now() > stopArmedUntil) { $('stopBtn').classList.remove('armed'); $('stopBtn').textContent = '■ STOP'; }
+  const lk = lockReason();
+  if (lk) showLock(lk.text, lk.kind); else hideLock();
+  $('hint').textContent = ok ? '這台可以推進。GO＝開始／續播／下一首等 GO；HOLD＝暫停；STOP 要按兩次。' : (pendingCount ? '等主控回應…' : '');
+}
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+// ── init ──
+function init() {
+  $('roomBtn').addEventListener('click', setRoom);
+  $('roomInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') setRoom(); });
+  currentRoom = $('roomInput').value.trim() || 'test01';
+  $('goBtn').addEventListener('click', () => send('GO'));
+  $('holdBtn').addEventListener('click', () => send('HOLD'));
+  $('stopBtn').addEventListener('click', () => {
+    if (Date.now() < stopArmedUntil) { stopArmedUntil = 0; send('STOP'); return; }
+    stopArmedUntil = Date.now() + 3000; $('stopBtn').classList.add('armed'); $('stopBtn').textContent = '再按一次確認 STOP';
+    setTimeout(render, 3100);
+  });
+  $('offBtn').addEventListener('click', () => send('OFF'));
+  $('prevBtn').addEventListener('click', () => send('PREV'));
+  $('nextBtn').addEventListener('click', () => send('NEXT'));
+  document.querySelectorAll('.colors .btn').forEach(b => b.addEventListener('click', () => send('COLOR', { color: b.dataset.color })));
+  $('takeBtn').addEventListener('click', () => send('TAKE'));
+  $('releaseBtn').addEventListener('click', () => send('RELEASE'));
+  $('songList').addEventListener('click', (e) => { const it = e.target.closest('.song-item[data-idx]'); if (it) send('SELECT', { songIdx: Number(it.dataset.idx) }); });
+  setInterval(render, 1000);
+  if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(() => {});
+  window.storytracePad = {
+    send, setRoom,
+    simulateOffline() { if (fb) fb.goOffline(fb.db); },
+    simulateOnline() { if (fb) fb.goOnline(fb.db); },
+    get state() { return { version: VERSION, padId, currentRoom, online, hostAlive: hostAlive(), holder: holder(), epoch: epoch(), showState: show && show.state, songTitle: show && show.songTitle, canCommand: canCommand(), lock: $('lock').hidden ? '' : $('lock').textContent, goDisabled: $('goBtn').disabled, holdDisabled: $('holdBtn').disabled, takeDisabled: $('takeBtn').disabled, pendingCount, toast: $('toast').textContent }; }
+  };
+  console.log('Storytrace pad ' + VERSION);
+  connect();
+}
+function boot() { if (!$('goBtn')) return; try { init(); } catch (err) { console.error(err); } }
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+</body>
+</html>
