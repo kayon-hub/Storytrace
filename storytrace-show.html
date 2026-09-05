@@ -40,6 +40,7 @@ body {
 }
 .topbar-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--gold); flex: 1; }
 .topbar-room { font-size: 11px; color: var(--muted); }
+.topbar-ver { font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 1px; margin-right: 10px; }
 .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
 .conn-dot.on { background: var(--green); }
 
@@ -205,6 +206,7 @@ body {
 <div class="topbar">
   <div class="conn-dot" id="connDot"></div>
   <div class="topbar-title">STORYTRACE SHOW</div>
+  <div class="topbar-ver" id="verTag">v2026-09-05.2</div>
   <div class="topbar-room" id="topbarRoom">Room: —</div>
 </div>
 <div id="banner" class="banner" hidden></div>
@@ -239,7 +241,9 @@ body {
           🎵 選擇音樂檔案
         </button>
         <div id="audioFileName" style="font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">未選擇</div>
+        <button id="toneBtn" title="播 1 秒嗶聲，確認瀏覽器跟喇叭這條路通不通" style="padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;cursor:pointer;white-space:nowrap;">🔔 測試音</button>
       </div>
+      <audio id="testTone" style="display:none"></audio>
       <div class="audio-meta" id="audioMeta"></div>
       <input type="file" id="audioFileInput" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg,audio/*" style="display:none">
     </div>
@@ -267,6 +271,9 @@ body {
     <div class="player-controls mt8">
       <button class="ctrl-btn ctrl-skip" id="prevBtn" style="flex:1">← 上一首</button>
       <button class="ctrl-btn ctrl-skip" id="nextBtn" style="flex:1">下一首 →</button>
+    </div>
+    <div class="player-controls mt8">
+      <button class="ctrl-btn ctrl-skip" id="lightsOnlyBtn" style="flex:1;font-weight:400;color:var(--muted);font-size:12px;">沒有音樂檔？純燈光播放（不放音樂，用系統時鐘計時）</button>
     </div>
   </div>
 </div>
@@ -345,7 +352,10 @@ let startedAt = null;        // 純燈光模式的時鐘基準（Date.now()）
 let pausedAtSec = 0;         // 暫停／定位點（秒）
 let timerId = null;
 let lastCueFired = {};       // { cueId: true }
-let audioReady = false;      // 目前這首有可播的音檔
+let audioReady = false;      // 目前這首有可播的音檔（metadata 已讀到）
+let usingAudio = false;      // 這次播放是不是用音檔當時鐘（播放開始時決定，中途不變）
+let lightsOnlyOptIn = false; // 使用者明確按了「純燈光播放」
+let audioStallWarned = false;
 const songAudio = {};        // { songId: { src, label, kind } } 每首各自記住選過的音檔
 let audio = null;
 
@@ -407,9 +417,10 @@ function setRoom() {
 function currentSong() { return showData ? showData.songs[currentSongIdx] : null; }
 
 function effectiveDuration() {
-  const song = currentSong();
-  if (audioReady && isFinite(audio.duration) && audio.duration > 0) return audio.duration;
-  return song ? (Number(song.durationSec) || 0) : 0;
+  const song = currentSong(); if (!song) return 0;
+  const audioDur = (audioReady && isFinite(audio.duration) && audio.duration > 0) ? audio.duration : 0;
+  const useAudio = playState === 'stopped' ? audioReady : usingAudio;
+  return (useAudio && audioDur) ? audioDur : (Number(song.durationSec) || 0);
 }
 
 function isHttpUrl(s) { return typeof s === 'string' && /^https?:\/\//i.test(s); }
@@ -579,14 +590,30 @@ function renderTime(sec) {
 }
 
 // ── PLAYBACK ──
-async function playShow() {
+async function playShow(opts) {
+  opts = opts || {};
   if (!showData) { showBanner('請先載入演出資料（show.json）', 'warn'); return; }
   if (playState === 'playing') return;
   const song = currentSong();
   const resuming = playState === 'paused';
-  if (!resuming) { pausedAtSec = 0; lastCueFired = {}; }
+  if (!resuming) {
+    pausedAtSec = 0; lastCueFired = {};
+    lightsOnlyOptIn = !!opts.lightsOnly;
+    // 沒載到音檔就按「開始演出」→ 直接擋下講清楚，不要靜靜跑成沒音樂的演出
+    if (!audioReady && !lightsOnlyOptIn) {
+      if (audio.getAttribute('src') && !audio.error) {
+        showBanner('音檔還在讀取中（' + $('audioFileName').textContent + '）：等下面出現「音檔長度」再按「開始演出」', 'warn');
+      } else {
+        showBanner('沒有載到音樂：請先按「🎵 選擇音樂檔案」選『' + (song.filename || '這首的音檔') + '』，再按「開始演出」。只跑燈光不放音樂，請按「純燈光播放」。', 'error');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    usingAudio = audioReady && !lightsOnlyOptIn;
+    audioStallWarned = false;
+  }
 
-  if (audioReady) {
+  if (usingAudio) {
     try { audio.currentTime = pausedAtSec; } catch (e) {}
     try { await audio.play(); }
     catch (e) {
@@ -598,7 +625,7 @@ async function playShow() {
   }
 
   playState = 'playing';
-  updateStatus('playing', '▶ ' + song.title + (audioReady ? '' : '（純燈光模式：沒有音樂檔，用系統時鐘計時）'));
+  updateStatus('playing', '▶ ' + song.title + (usingAudio ? '　🔊 音檔播放中' : '（純燈光模式：不放音樂，用系統時鐘計時）'));
   writeShow({
     state: 'playing',
     showId: showData.showId || '',
@@ -615,7 +642,7 @@ function pauseShow() {
   if (playState !== 'playing') return;
   pausedAtSec = getElapsedSec();
   playState = 'paused';
-  if (audioReady) audio.pause();
+  if (usingAudio) audio.pause();
   stopLoop();
   renderTime(pausedAtSec);
   updateStatus('paused', '⏸ ' + fmtSec(pausedAtSec) + ' 暫停');
@@ -629,6 +656,7 @@ function stopShow(opts) {
   pausedAtSec = 0;
   lastCueFired = {};
   if (audioReady) { audio.pause(); try { audio.currentTime = 0; } catch (e) {} }
+  usingAudio = false; lightsOnlyOptIn = false;
   stopLoop();
   updateStatus('stopped', opts.text || '已停止');
   writeShow({ state: 'stopped' });
@@ -707,7 +735,8 @@ function stopLoop() {
 }
 
 function getElapsedSec() {
-  if (audioReady) return audio.currentTime;                 // 有音檔：唯一基準
+  if (usingAudio) return audio.currentTime;                 // 用音檔播放：唯一基準
+  if (playState === 'stopped' && audioReady) return audio.currentTime;
   if (playState === 'playing' && startedAt) return (Date.now() - startedAt) / 1000;
   return pausedAtSec;
 }
@@ -726,8 +755,13 @@ function tick() {
   }
   highlightActiveCue(elapsed);
 
-  // 純燈光模式才用 durationSec 判斷結束；有音檔靠 ended 事件
-  if (!audioReady && elapsed >= effectiveDuration()) onSongEnd();
+  // 用音檔播放時若瀏覽器把音檔停住（被系統打斷等），警告一次
+  if (usingAudio && audio.paused && !audio.ended && !audioStallWarned) {
+    audioStallWarned = true;
+    showBanner('音檔被瀏覽器暫停了（' + fmtSec(elapsed) + '），請按「暫停」再按「開始演出」續播', 'warn');
+  }
+  // 純燈光模式才用 durationSec 判斷結束；用音檔靠 ended 事件
+  if (!usingAudio && elapsed >= effectiveDuration()) onSongEnd();
 }
 
 function highlightActiveCue(elapsed) {
@@ -796,6 +830,23 @@ function exportShow() {
 }
 
 // ── UTILS ──
+function buildToneWav(freq, seconds) {
+  const sr = 44100, n = Math.floor(sr * seconds);
+  const buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+  const str = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+  str(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); str(8, 'WAVE'); str(12, 'fmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  str(36, 'data'); v.setUint32(40, n * 2, true);
+  for (let i = 0; i < n; i++) {
+    const env = Math.min(1, i / 2000, (n - i) / 2000);       // 淡入淡出避免爆音
+    v.setInt16(44 + i * 2, Math.round(Math.sin(2 * Math.PI * freq * i / sr) * 0.35 * env * 32767), true);
+  }
+  let bin = ''; const bytes = new Uint8Array(buf);
+  for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
+  return 'data:audio/wav;base64,' + btoa(bin);
+}
+
 function fmtSec(s) {
   s = Number(s); if (!isFinite(s) || s < 0) s = 0;
   const m = Math.floor(s / 60);
@@ -863,11 +914,22 @@ function init() {
     $('audioFileName').textContent = '載入失敗';
     showBanner('音樂檔載入失敗（格式不支援、檔案損壞或網址錯誤），目前為純燈光模式', 'error');
   });
-  audio.addEventListener('ended', () => { if (playState === 'playing') onSongEnd(); });
+  audio.addEventListener('ended', () => { if (playState === 'playing' && usingAudio) onSongEnd(); });
   audio.addEventListener('timeupdate', () => { if (playState === 'playing') tick(); });
 
   // 播放控制
-  $('playBtn').addEventListener('click', playShow);
+  $('playBtn').addEventListener('click', () => playShow());
+  $('lightsOnlyBtn').addEventListener('click', () => playShow({ lightsOnly: true }));
+
+  // 測試音：1 秒 440Hz 嗶聲走同一個瀏覽器輸出路徑（跟音檔無關）
+  $('toneBtn').addEventListener('click', () => {
+    const tone = $('testTone');
+    if (!tone.getAttribute('src')) tone.src = buildToneWav(440, 1.0);
+    tone.currentTime = 0;
+    tone.play()
+      .then(() => showBanner('正在播 1 秒嗶聲。聽得到＝瀏覽器跟喇叭這條路正常，問題在音檔；聽不到＝檢查這台電腦的輸出裝置與音量（Safari 分頁有沒有被靜音）。', 'info'))
+      .catch(e => showBanner('測試音被擋下：' + e.message, 'error'));
+  });
   $('pauseBtn').addEventListener('click', pauseShow);
   $('stopBtn').addEventListener('click', () => stopShow());
   $('prevBtn').addEventListener('click', prevSong);
@@ -887,9 +949,10 @@ function init() {
   // 給 console／測試用
   window.storytraceShow = {
     playShow, pauseShow, stopShow, seekTo, selectSong, loadShow, setRoom,
-    get state() { return { playState, currentRoom, currentSongIdx, pausedAtSec, audioReady, fbReady, elapsed: getElapsedSec(), fired: Object.keys(lastCueFired).length, showId: showData && showData.showId }; }
+    get state() { return { playState, currentRoom, currentSongIdx, pausedAtSec, audioReady, usingAudio, lightsOnlyOptIn, audioSrc: audio.getAttribute('src') ? (audio.getAttribute('src').slice(0, 30)) : '', audioPaused: audio.paused, audioError: audio.error && audio.error.code, fbReady, elapsed: getElapsedSec(), fired: Object.keys(lastCueFired).length, showId: showData && showData.showId }; }
   };
 
+  console.log('Storytrace show console ' + $('verTag').textContent);
   connectFirebase();
 }
 
