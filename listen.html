@@ -470,7 +470,7 @@
 
   window.onload = async () => {
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id") || "yaochi0011";
+    const id = params.get("id") || "shanghao";
     try {
       const res = await fetch("projects.json?v=" + Date.now());
       projects = await res.json();
