@@ -140,14 +140,8 @@
   .beat p { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
   .works { display: grid; gap: 12px; padding-bottom: 12px; }
-  .work {
-    display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center;
-    background: var(--surface); border: 1px solid var(--line);
-    padding: 10px 12px; text-decoration: none; color: inherit;
-  }
-  .work img { width: 72px; height: 72px; object-fit: cover; display: block; }
-  .work .t { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-  .work .s { font-size: 11px; letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; }
+  .work { background: var(--surface); border: 1px solid var(--line); }
+  .work img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
 
   .moment {
     position: relative;
@@ -180,8 +174,6 @@
     .mark-wrap { width: 88px; height: 88px; border-radius: 20px; }
     .hero-photo { background-image: url(hero-wide.jpg); background-position: center 46%; }
     .beats, .works { grid-template-columns: 1fr 1fr 1fr; max-width: 980px; margin: 0 auto; }
-    .work { grid-template-columns: 1fr; padding: 0 0 14px; }
-    .work img { width: 100%; height: auto; aspect-ratio: 1; }
     section { padding-left: 40px; padding-right: 40px; }
     .moment { height: 88vh; }
     .moment .cap { left: 40px; bottom: 36px; font-size: 28px; }
@@ -237,27 +229,9 @@
   <div class="kicker">Works</div>
   <h2>作品</h2>
   <div class="works">
-    <a class="work" href="listen.html?id=shanghao">
-      <img src="shanghao.jpg" alt="上好的代誌">
-      <div>
-        <div class="t">上好的代誌</div>
-        <div class="s">Listen</div>
-      </div>
-    </a>
-    <a class="work" href="listen.html?id=candy_sugar">
-      <img src="naxernew.jpg" alt="Candy & Sugar">
-      <div>
-        <div class="t">Candy &amp; Sugar</div>
-        <div class="s">Listen</div>
-      </div>
-    </a>
-    <a class="work" href="listen.html?id=oscar_insync">
-      <img src="insync.jpg" alt="合拍 In Sync">
-      <div>
-        <div class="t">合拍 In Sync</div>
-        <div class="s">Listen</div>
-      </div>
-    </a>
+    <figure class="work"><img src="shanghao.jpg" alt="上好的代誌"></figure>
+    <figure class="work"><img src="naxernew.jpg" alt="Candy &amp; Sugar"></figure>
+    <figure class="work"><img src="insync.jpg" alt="合拍 In Sync"></figure>
   </div>
 </section>
 
