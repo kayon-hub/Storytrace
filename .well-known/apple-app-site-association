@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["PHRYDW5299.com.obarai.storytrace"],
+        "components": [
+          { "/": "/wedding-guest.html", "comment": "STORYTRACE 賓客 App：NFC 小物與 QR 的網址，裝了 App 直接開 App，沒裝開網頁" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.obarai.storytrace",
+      "sha256_cert_fingerprints": [
+        "4D:71:72:80:23:52:A3:2E:F8:12:E3:D5:04:24:D4:1C:8F:39:ED:84:D7:D7:93:D2:A7:77:4E:B2:F7:AD:83:15"
+      ]
+    }
+  }
+]
