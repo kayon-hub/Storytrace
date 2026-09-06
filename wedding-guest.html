@@ -237,6 +237,10 @@
       });
   }
   createOrbs();
+  if (window.StorytraceFX && window.StorytraceFX.ambient) {
+    StorytraceFX.ambient();
+    setTimeout(function () { StorytraceFX.onColor('hsl(45,80%,52%)'); }, 800);
+  }
 
   // ── 核心：localStorage 記憶身份 ──
   let guestKey = null;

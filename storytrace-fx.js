@@ -5,8 +5,10 @@
   var canvas, ctx, w = 0, h = 0, dpr = 1, raf = 0, lastTs = 0;
   var sparks = [];
   var jets = [];
+  var motes = [];
   var lastColorAt = 0, lastLyricAt = 0;
   var reduced = false;
+  var ambientOn = false;
 
   function boot() {
     if (canvas) return;
@@ -37,6 +39,32 @@
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (ambientOn) seedMotes();
+  }
+
+  function seedMotes() {
+    motes = [];
+    var n = Math.min(96, Math.max(36, Math.floor((w * h) / 16000)));
+    var i;
+    for (i = 0; i < n; i++) {
+      motes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        s: 0.35 + Math.random() * 1.45,
+        vy: -0.07 - Math.random() * 0.18,
+        vx: (Math.random() - 0.5) * 0.1,
+        a: 0.12 + Math.random() * 0.4,
+        tw: Math.random() * Math.PI * 2,
+        ts: 0.7 + Math.random() * 1.5
+      });
+    }
+  }
+
+  function ambient() {
+    boot();
+    if (!canvas) return;
+    ambientOn = true;
+    if (!motes.length) seedMotes();
   }
 
   function hueOf(color) {
@@ -147,6 +175,25 @@
       ctx.arc(p.x, p.y, p.s * 0.55, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    if (ambientOn) {
+      for (i = 0; i < motes.length; i++) {
+        p = motes[i];
+        p.tw += 0.018 * p.ts;
+        p.x += p.vx + Math.sin(p.tw) * 0.14;
+        p.y += p.vy;
+        if (p.y < -8) { p.y = h + 6; p.x = Math.random() * w; }
+        if (p.x < -8) p.x = w + 6;
+        if (p.x > w + 8) p.x = -6;
+        a = p.a * (0.6 + 0.4 * Math.sin(p.tw));
+        ctx.globalAlpha = a;
+        ctx.fillStyle = sparkColor('gold');
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
   }
@@ -181,5 +228,5 @@
     for (i = 0; i < sparks.length; i++) sparks[i].life *= 0.35;
   }
 
-  global.StorytraceFX = { onColor: onColor, onLyric: onLyric, onWin: onWin, off: off };
+  global.StorytraceFX = { onColor: onColor, onLyric: onLyric, onWin: onWin, off: off, ambient: ambient };
 })(window);

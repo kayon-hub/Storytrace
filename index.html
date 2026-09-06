@@ -1,668 +1,268 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storytrace | KAYON STUDIO</title>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<meta property="og:title" content="點擊收聽『上好的代誌』">
-<meta property="og:description" content="Storytrace × KAYON STUDIO">
-<meta property="og:image" content="https://storytrace.karbonxgaiaentertainment.com/shanghao.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Storytrace</title>
+<meta name="description" content="手機，成為現場的光。Every cue tells a story.">
+<meta property="og:title" content="Storytrace">
+<meta property="og:description" content="手機，成為現場的光。Every cue tells a story.">
+<meta property="og:image" content="https://storytrace.karbonxgaiaentertainment.com/storytrace-mark.jpg">
 <meta property="og:url" content="https://storytrace.karbonxgaiaentertainment.com/">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="點擊收聽『上好的代誌』">
-<meta name="twitter:description" content="Storytrace × KAYON STUDIO">
-<meta name="twitter:image" content="https://storytrace.karbonxgaiaentertainment.com/shanghao.jpg">
-<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0D0D0D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="KAYON STUDIO">
-<link rel="apple-touch-icon" href="ICON.png">
-<meta name="theme-color" content="#000000">
+<link rel="apple-touch-icon" href="storytrace-mark.jpg">
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    if (q.has('id')) location.replace('listen.html' + location.search + location.hash);
+  })();
+</script>
+<script src="storytrace-fx.js"></script>
 <style>
   :root {
-    --accent: #00E5FF;
-    --glass: rgba(255, 255, 255, 0.08);
+    --black: #0D0D0D;
+    --surface: #141414;
+    --gold: #C9A84C;
+    --gold-lt: #E8C97A;
+    --cream: #F0EBE0;
+    --muted: rgba(240,235,224,0.45);
+    --line: rgba(201,168,76,0.22);
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: var(--black); color: var(--cream); }
   body {
-    margin: 0;
-    background: #000;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: white;
-    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif;
+    min-height: 100svh;
+    overflow-x: hidden;
   }
-  .bg-cover {
-    position: fixed;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    filter: blur(60px) brightness(0.3) saturate(1.5);
-    transform: scale(1.1);
-    z-index: 0;
-  }
-  .player {
-    width: 88%;
-    max-width: 380px;
-    background: var(--glass);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 40px;
-    padding: 35px 30px;
-    text-align: center;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-    z-index: 1;
+  .hero {
     position: relative;
-  }
-  .brand {
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.3);
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-  .cover-box { width: 100%; aspect-ratio: 1/1; margin-bottom: 25px; }
-  .cover {
-    width: 100%; height: 100%;
-    border-radius: 20px;
-    object-fit: cover;
-    box-shadow: 0 15px 45px rgba(0, 229, 255, 0.15);
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-  }
-  .playing .cover {
-    transform: scale(1.04);
-    box-shadow: 0 20px 60px rgba(0, 229, 255, 0.35);
-  }
-  .info { margin-bottom: 20px; }
-  .title { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: 1px; }
-  .artist { color: rgba(255,255,255,0.45); font-size: 13px; margin-top: 8px; line-height: 1.7; white-space: pre-wrap; }
-  .progress-area { width: 100%; cursor: pointer; margin-top: 18px; padding: 6px 0; }
-  .bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
-  .bar-fill {
-    width: 0%; height: 100%;
-    background: linear-gradient(90deg, #00E5FF, #0066FF);
-    border-radius: 10px;
-    transition: width 0.5s linear;
-  }
-  .time-labels { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 7px; }
-  .controls { display: flex; justify-content: space-around; align-items: center; margin-top: 22px; }
-  button {
-    background: none; border: none; color: rgba(255,255,255,0.6);
-    cursor: pointer; transition: color 0.2s, transform 0.15s;
-    font-size: 22px; display: flex; align-items: center; justify-content: center; padding: 8px;
-  }
-  button:hover { color: white; }
-  .play-btn {
-    width: 68px; height: 68px;
-    background: white; color: black;
-    border-radius: 50%; font-size: 28px;
-    box-shadow: 0 8px 24px rgba(255,255,255,0.12);
-  }
-  button:active { transform: scale(0.92); }
-  .lyrics-panel {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.94);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 100; display: none; flex-direction: column; box-sizing: border-box;
-  }
-  .lyrics-header {
-    padding: 50px 36px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .lyrics-song-title { font-size: 18px; font-weight: 700; }
-  .lyrics-song-artist { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
-  .lyrics-body { flex: 1; overflow-y: auto; padding: 30px 36px 80px; }
-  .lyrics-body::-webkit-scrollbar { width: 0; }
-  .lyric-line {
-    font-size: 20px; line-height: 2.4; font-weight: 600;
-    color: rgba(255,255,255,0.25);
-    transition: color 0.4s ease, font-size 0.3s ease;
-    cursor: pointer;
-  }
-  .lyric-line.active { color: #fff; font-size: 24px; }
-  .lyric-line.passed { color: rgba(255,255,255,0.45); }
-
-  /* 爸爸 SOLO 高光行 */
-  .solo-line {
-    font-size: 28px; line-height: 2.4; font-weight: 800;
-    color: rgba(255,255,255,0.2);
+    min-height: 100svh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    letter-spacing: 0.15em;
-    transition: color 0.4s ease, font-size 0.3s ease, text-shadow 0.4s ease;
+    padding: calc(28px + env(safe-area-inset-top)) 24px calc(36px + env(safe-area-inset-bottom));
     cursor: pointer;
   }
-  .solo-line.active {
-    color: #FFD700;
-    font-size: 36px;
-    text-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.4);
+  .hero-copy { position: relative; z-index: 50; }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 42% at 50% 0%, rgba(201,168,76,0.16) 0%, transparent 58%),
+      radial-gradient(ellipse 40% 28% at 50% 100%, rgba(201,168,76,0.08) 0%, transparent 55%);
   }
-  .solo-line.passed { color: rgba(255,255,255,0.4); }
-  .breath-line {
-    display: flex; justify-content: center; align-items: center;
-    height: 48px; cursor: pointer;
-  }
-  .breath-circle {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    transition: background 0.4s ease, transform 0.4s ease;
-  }
-  .breath-line.active .breath-circle {
-    background: rgba(255,255,255,0.9);
-    transform: scale(2);
-  }
-  .breath-line.passed .breath-circle {
-    background: rgba(255,255,255,0.4);
-    transform: scale(1);
-  }
-  .close-lyrics {
-    position: absolute; top: 48px; right: 28px;
-    font-size: 28px; color: rgba(255,255,255,0.4); padding: 8px;
-  }
-  .close-lyrics:hover { color: white; }
-
-  /* 倒數 3.2.1 呼吸燈號（4/30 上傳時遺失，補回並改成呼吸燈） */
-  .countdown-line {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 64px;
-    cursor: pointer;
-  }
-  .countdown-num {
-    width: 44px; height: 44px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 50%;
-    font-size: 20px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.18);
-    border: 1.5px solid rgba(255,255,255,0.12);
-    transition: color 0.4s ease, border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
-  }
-  .countdown-line.active .countdown-num {
-    color: #00E5FF;
-    border-color: rgba(0,229,255,0.7);
-    transform: scale(1.25);
-    animation: countdownBreathe 1s ease-in-out infinite;
-  }
-  .countdown-line.passed .countdown-num {
-    color: rgba(255,255,255,0.3);
-    border-color: rgba(255,255,255,0.15);
-    transform: scale(1);
-    box-shadow: none;
-    animation: none;
-  }
-  @keyframes countdownBreathe {
-    0%, 100% { box-shadow: 0 0 6px rgba(0,229,255,0.25), 0 0 14px rgba(0,229,255,0.1); }
-    50%      { box-shadow: 0 0 18px rgba(0,229,255,0.7), 0 0 40px rgba(0,229,255,0.3); }
-  }
-
-  /* 樂器段落 */
-  .instrumental-line {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 52px;
-    cursor: pointer;
-  }
-  .instrumental-text {
-    font-size: 13px;
-    letter-spacing: 0.25em;
-    color: rgba(255,255,255,0.2);
-    transition: color 0.4s ease;
-  }
-  .instrumental-line.active .instrumental-text { color: rgba(255,255,255,0.55); }
-  .instrumental-line.passed .instrumental-text { color: rgba(255,255,255,0.3); }
-
-  /* 歌詞頁底部播放列 */
-  .lyrics-player-bar {
+  .cue {
     position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(0,0,0,0.95);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding: 12px 24px 16px;
+    left: 50%; top: 6%;
+    width: 1px; height: 28%;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, transparent, rgba(232,201,122,0.85), transparent);
+    opacity: 0.55;
+    animation: cuePulse 4.8s ease-in-out infinite;
+    pointer-events: none;
   }
-  .lyrics-progress-area {
-    width: 100%;
-    cursor: pointer;
-    padding: 4px 0;
-    margin-bottom: 10px;
+  @keyframes cuePulse {
+    0%, 100% { opacity: 0.18; transform: translateX(-50%) scaleY(0.92); }
+    50% { opacity: 0.8; transform: translateX(-50%) scaleY(1); }
   }
-  .lyrics-bar-bg {
-    width: 100%;
-    height: 3px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
+  .mark-wrap {
+    position: relative;
+    width: 108px; height: 108px;
+    margin-bottom: 22px;
+    border-radius: 24px;
     overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 40px rgba(201,168,76,0.12);
   }
-  .lyrics-bar-fill {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #00E5FF, #0066FF);
-    border-radius: 10px;
-    transition: width 0.5s linear;
+  .mark-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mark-wrap::after {
+    content: '';
+    position: absolute; inset: -60% -20%;
+    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,0.22) 50%, transparent 58%);
+    animation: sheen 5.8s ease-in-out infinite;
   }
-  .lyrics-time-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: rgba(255,255,255,0.3);
-    margin-top: 5px;
+  @keyframes sheen {
+    0% { transform: translateX(-40%) rotate(18deg); }
+    100% { transform: translateX(40%) rotate(18deg); }
   }
-  .lyrics-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 28px;
+  .wordmark {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 42px; font-style: italic; font-weight: 400;
+    color: #fff; letter-spacing: 0.01em; line-height: 1;
   }
-  .lyrics-ctrl-btn {
-    background: none; border: none;
-    color: rgba(255,255,255,0.5);
-    cursor: pointer;
-    display: flex; align-items: center;
-    transition: color 0.2s;
-    padding: 4px;
+  .rule { width: 36px; height: 1px; background: var(--gold); margin: 18px auto 16px; }
+  .tag {
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--gold-lt); margin-bottom: 14px;
   }
-  .lyrics-ctrl-btn:hover { color: white; }
-  .lyrics-play-btn {
-    width: 48px; height: 48px;
-    background: white; color: black;
-    border: none; border-radius: 50%;
-    font-size: 20px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(255,255,255,0.1);
-    transition: transform 0.15s;
+  .line {
+    font-size: 16px; color: var(--cream); letter-spacing: 0.08em; line-height: 1.7;
   }
-  .lyrics-play-btn:active { transform: scale(0.92); }
+  .hint {
+    position: absolute;
+    z-index: 50;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    left: 0; right: 0;
+    font-size: 10px; letter-spacing: 0.22em; color: var(--muted);
+    text-transform: uppercase;
+    animation: hintFade 2.4s ease-in-out infinite;
+  }
+  @keyframes hintFade {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.85; }
+  }
+  .rise { opacity: 0; transform: translateY(18px); animation: rise 0.9s ease forwards; }
+  .d1 { animation-delay: 0.12s; }
+  .d2 { animation-delay: 0.28s; }
+  .d3 { animation-delay: 0.44s; }
+  .d4 { animation-delay: 0.6s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
 
-  /* 歌詞 body 底部留空間給播放列 */
-  .lyrics-body { padding-bottom: 130px !important; }
+  section { position: relative; z-index: 2; padding: 8px 22px 8px; }
+  .kicker {
+    font-size: 11px; letter-spacing: 0.28em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  h2 {
+    font-family: "Songti TC", "Songti SC", Georgia, serif;
+    font-weight: 400; font-size: 26px; color: #fff; margin-bottom: 22px;
+  }
+  .beats { display: grid; gap: 10px; }
+  .beat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 18px 16px 16px;
+  }
+  .beat .n {
+    font-family: Georgia, serif; font-size: 12px; color: var(--gold);
+    letter-spacing: 0.16em; margin-bottom: 8px;
+  }
+  .beat h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.06em; }
+  .beat p { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
-  /* 呼吸燈模式 */
-  .breathe-mode .lyric-line {
-    opacity: 0;
-    transition: opacity 1.6s ease, color 1.2s ease, text-shadow 1.6s ease;
+  .works { display: grid; gap: 12px; padding-bottom: 12px; }
+  .work {
+    display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line);
+    padding: 10px 12px; text-decoration: none; color: inherit;
   }
-  .breathe-mode .lyric-line.active {
-    opacity: 1;
-    color: #fff;
-    font-size: 20px;
-    animation: breatheGlow 3.5s ease-in-out infinite;
-  }
-  .breathe-mode .lyric-line.passed {
-    opacity: 1;
-    color: rgba(255,255,255,0.28);
-    text-shadow: none;
-    animation: none;
-  }
-  .breathe-mode .breath-line,
-  .breathe-mode .solo-line,
-  .breathe-mode .instrumental-line,
-  .breathe-mode .countdown-line {
-    opacity: 0;
-    transition: opacity 1.6s ease;
-  }
-  .breathe-mode .breath-line.active,
-  .breathe-mode .breath-line.passed,
-  .breathe-mode .solo-line.passed,
-  .breathe-mode .instrumental-line.passed,
-  .breathe-mode .countdown-line.passed {
-    opacity: 1;
-  }
-  .breathe-mode .solo-line.active {
-    opacity: 1;
-    animation: breatheGlowGold 3.5s ease-in-out infinite;
-  }
-  .breathe-mode .instrumental-line.active,
-  .breathe-mode .countdown-line.active {
-    opacity: 1;
-  }
+  .work img { width: 72px; height: 72px; object-fit: cover; display: block; }
+  .work .t { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .work .s { font-size: 11px; letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; }
 
-  .breathe-mode .credit-line {
-    opacity: 1 !important;
-    animation: none !important;
-    color: rgba(255,255,255,0.25);
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 2;
-    letter-spacing: 0.5px;
+  footer {
+    padding: 36px 22px calc(40px + env(safe-area-inset-bottom));
+    text-align: center;
+  }
+  footer .brands {
+    font-size: 9px; letter-spacing: 0.16em; color: var(--muted);
+    text-transform: uppercase; line-height: 1.8;
+  }
+  footer a { color: var(--gold); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; }
+
+  @media (min-width: 720px) {
+    .wordmark { font-size: 64px; }
+    .mark-wrap { width: 132px; height: 132px; border-radius: 28px; }
+    .beats, .works { grid-template-columns: 1fr 1fr 1fr; max-width: 980px; margin: 0 auto; }
+    .work { grid-template-columns: 1fr; padding: 0 0 14px; }
+    .work img { width: 100%; height: auto; aspect-ratio: 1; }
+    section { padding-left: 40px; padding-right: 40px; }
   }
 
-  @keyframes breatheGlow {
-    0%, 100% {
-      text-shadow: 0 0 8px rgba(255,255,255,0.25), 0 0 20px rgba(0,229,255,0.1);
-    }
-    50% {
-      text-shadow: 0 0 20px rgba(255,255,255,0.7), 0 0 45px rgba(0,229,255,0.35), 0 0 90px rgba(0,229,255,0.12);
-    }
-  }
-  @keyframes breatheGlowGold {
-    0%, 100% {
-      text-shadow: 0 0 10px rgba(255,215,0,0.4), 0 0 25px rgba(255,215,0,0.15);
-    }
-    50% {
-      text-shadow: 0 0 25px rgba(255,215,0,0.8), 0 0 50px rgba(255,215,0,0.4), 0 0 100px rgba(255,215,0,0.15);
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .rise, .mark-wrap::after, .cue, .hint { animation: none; }
+    .rise { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
-
-<div class="bg-cover" id="bgCover"></div>
-
-<div class="player" id="mainPlayer">
-  <div class="brand">Storytrace × KAYON STUDIO</div>
-  <div class="cover-box">
-    <img id="coverImg" class="cover" src="" alt="專輯封面">
-  </div>
-  <div class="info">
-    <p id="trackTitle" class="title"></p>
-    <p id="trackArtist" class="artist"></p>
-  </div>
-  <div class="progress-area" onclick="seek(event)">
-    <div class="bar-bg"><div id="barFill" class="bar-fill"></div></div>
-    <div class="time-labels">
-      <span id="currentTime">0:00</span>
-      <span id="durationTime">0:00</span>
+<section class="hero" id="hero" aria-label="Storytrace">
+  <div class="cue" aria-hidden="true"></div>
+  <div class="hero-copy">
+    <div class="mark-wrap rise d1">
+      <img src="storytrace-mark.jpg" alt="STORYTRACE">
     </div>
+    <div class="wordmark rise d2">Storytrace</div>
+    <div class="rule rise d3"></div>
+    <div class="tag rise d3">Every cue tells a story</div>
+    <div class="line rise d4">手機，成為現場的光。</div>
   </div>
-  <div class="controls">
-    <button onclick="openLyrics()" style="font-size:14px; letter-spacing:1px;">歌詞</button>
-    <button onclick="restart()" title="重新開始">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="19 20 9 12 19 4 19 20"></polygon>
-        <line x1="5" y1="19" x2="5" y2="5"></line>
-      </svg>
-    </button>
-    <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-    <button onclick="toggleRepeat()" id="repeatBtn" title="重複播放">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="17 1 21 5 17 9"></polyline>
-        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-        <polyline points="7 23 3 19 7 15"></polyline>
-        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-      </svg>
-    </button>
-    <button onclick="share()" title="分享">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-        <polyline points="16 6 12 2 8 6"></polyline>
-        <line x1="12" y1="2" x2="12" y2="15"></line>
-      </svg>
-    </button>
-  </div>
-</div>
+  <div class="hint">點畫面再看一輪光</div>
+</section>
 
-<div id="lyricsPanel" class="lyrics-panel">
-  <div class="lyrics-header">
-    <p id="lyricsSongTitle" class="lyrics-song-title"></p>
-    <p id="lyricsSongArtist" class="lyrics-song-artist"></p>
+<section>
+  <div class="kicker">Live</div>
+  <h2>現場三件事</h2>
+  <div class="beats">
+    <article class="beat">
+      <div class="n">01</div>
+      <h3>燈光</h3>
+      <p>全場手機跟著音樂換色，成為舞台的一部分。</p>
+    </article>
+    <article class="beat">
+      <div class="n">02</div>
+      <h3>歌詞</h3>
+      <p>逐字點亮，跟現場同一拍。</p>
+    </article>
+    <article class="beat">
+      <div class="n">03</div>
+      <h3>入場</h3>
+      <p>桌上小物一碰，手機自己進來。網頁就能用。</p>
+    </article>
   </div>
-  <div class="lyrics-body">
-    <div id="lyricsContent"></div>
-  </div>
-  <button class="close-lyrics" onclick="closeLyrics()">✕</button>
+</section>
 
-  <!-- 歌詞頁固定播放列 -->
-  <div class="lyrics-player-bar">
-    <div class="lyrics-progress-area" onclick="seekFromLyrics(event)">
-      <div class="lyrics-bar-bg">
-        <div id="lyricsBarFill" class="lyrics-bar-fill"></div>
+<section style="padding-top: 48px;">
+  <div class="kicker">Works</div>
+  <h2>作品</h2>
+  <div class="works">
+    <a class="work" href="listen.html?id=shanghao">
+      <img src="shanghao.jpg" alt="上好的代誌">
+      <div>
+        <div class="t">上好的代誌</div>
+        <div class="s">Listen</div>
       </div>
-      <div class="lyrics-time-labels">
-        <span id="lyricsCurrentTime">0:00</span>
-        <span id="lyricsDurationTime">0:00</span>
+    </a>
+    <a class="work" href="listen.html?id=yaochi0011">
+      <img src="yaochi0011cover.png" alt="瑤池之光">
+      <div>
+        <div class="t">瑤池之光</div>
+        <div class="s">Listen</div>
       </div>
-    </div>
-    <div class="lyrics-controls">
-      <button onclick="restart()" class="lyrics-ctrl-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="19 20 9 12 19 4 19 20"></polygon>
-          <line x1="5" y1="19" x2="5" y2="5"></line>
-        </svg>
-      </button>
-      <button onclick="togglePlay()" class="lyrics-play-btn" id="lyricsPlayBtn">▶</button>
-      <button onclick="toggleRepeat()" class="lyrics-ctrl-btn" id="lyricsRepeatBtn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="17 1 21 5 17 9"></polyline>
-          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-          <polyline points="7 23 3 19 7 15"></polyline>
-          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-        </svg>
-      </button>
-      <button onclick="share()" class="lyrics-ctrl-btn" title="分享">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-          <polyline points="16 6 12 2 8 6"></polyline>
-          <line x1="12" y1="2" x2="12" y2="15"></line>
-        </svg>
-      </button>
-    </div>
+    </a>
+    <a class="work" href="listen.html?id=oscar_insync">
+      <img src="insync.jpg" alt="合拍 In Sync">
+      <div>
+        <div class="t">合拍 In Sync</div>
+        <div class="s">Listen</div>
+      </div>
+    </a>
   </div>
-</div>
+</section>
 
-<audio id="audioMain" preload="metadata"></audio>
+<footer>
+  <p><a href="privacy.html">隱私權政策</a></p>
+  <p class="brands" style="margin-top: 18px;">Storytrace<br>OBARAI · KAYON STUDIO · KARBØN X GAIA ENTERTAINMENT</p>
+</footer>
 
 <script>
-  const audio = document.getElementById("audioMain");
-  const playBtn = document.getElementById("playBtn");
-  const barFill = document.getElementById("barFill");
-  const player = document.getElementById("mainPlayer");
-  const bgCover = document.getElementById("bgCover");
-
-  let lyricsData = [];
-  let activeLine = -1;
-  let isRepeat = false;
-
-  let projects = {};
-  let currentId = null;
-  let currentData = null;
-
-  window.onload = async () => {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id") || "yaochi0011";
-    try {
-      const res = await fetch("projects.json?v=" + Date.now());
-      projects = await res.json();
-      // ?autoplay=1：從 EP 頁的 PLAY CTA 進來，能自動播就播；被瀏覽器擋（iOS）就留著封面上的 PLAY CTA
-      const wantAuto = params.get("autoplay") === "1";
-      loadSong(projects[id] ? id : Object.keys(projects)[0], wantAuto);
-    } catch (e) {
-      console.error("載入失敗", e);
-    }
-  };
-
-  // 載入一首歌到同一個播放器（autoplay=true 用於專輯自動接播）
-  function loadSong(id, autoplay) {
-    const data = projects[id];
-    if (!data) return;
-    currentId = id;
-    currentData = data;
-    activeLine = -1;
-
-    document.getElementById("trackTitle").innerText = data.title;
-    document.getElementById("trackArtist").innerText = data.artist;
-    document.getElementById("coverImg").src = data.cover;
-    document.getElementById("lyricsSongTitle").innerText = data.title;
-    document.getElementById("lyricsSongArtist").innerText = data.artist.replace(/\n/g, "　");
-    bgCover.style.backgroundImage = `url(${data.cover})`;
-    audio.src = data.music;
-    lyricsData = data.lyrics;
-
-    barFill.style.width = "0%";
-    document.getElementById("lyricsBarFill").style.width = "0%";
-    ["currentTime", "durationTime", "lyricsCurrentTime", "lyricsDurationTime"].forEach(k => {
-      document.getElementById(k).innerText = "0:00";
-    });
-
-    const container = document.getElementById("lyricsContent");
-    container.innerHTML = "";
-    container.classList.toggle("breathe-mode", data.lyricsStyle === "breathe");
-    lyricsData.forEach((line, i) => {
-      const div = document.createElement("div");
-      div.id = "line-" + i;
-      if (line.type === "breath") {
-        div.className = "breath-line";
-        const circle = document.createElement("div");
-        circle.className = "breath-circle";
-        div.appendChild(circle);
-      } else if (line.type === "countdown") {
-        div.className = "countdown-line";
-        const num = document.createElement("div");
-        num.className = "countdown-num";
-        num.innerText = line.text;
-        div.appendChild(num);
-      } else if (line.type === "instrumental") {
-        div.className = "instrumental-line";
-        const txt = document.createElement("div");
-        txt.className = "instrumental-text";
-        txt.innerText = line.text;
-        div.appendChild(txt);
-      } else if (line.text && line.text.includes('爸爸 SOLO')) {
-        div.className = "solo-line";
-        div.innerText = line.text;
-      } else {
-        div.className = "lyric-line";
-        div.innerText = line.text;
-      }
-      if (line.time >= 9999) {
-        div.classList.add("credit-line");
-      }
-      div.onclick = () => { audio.currentTime = line.time; };
-      container.appendChild(div);
-    });
-    const body = document.querySelector(".lyrics-body");
-    if (body) body.scrollTop = 0;
-
-    document.title = data.title + " | Storytrace";
-    try { history.replaceState(null, "", "?id=" + encodeURIComponent(id)); } catch (e) {}
-
-    if (autoplay) {
-      audio.play().then(() => {
-        playBtn.innerText = "⏸";
-        document.getElementById("lyricsPlayBtn").innerText = "⏸";
-        player.classList.add("playing");
-      }).catch(() => {
-        playBtn.innerText = "▶";
-        document.getElementById("lyricsPlayBtn").innerText = "▶";
-        player.classList.remove("playing");
-      });
-    }
+  function playEntrance() {
+    if (!window.StorytraceFX) return;
+    StorytraceFX.onColor('hsl(45,100%,50%)');
+    setTimeout(function () { StorytraceFX.onLyric(); }, 1600);
   }
-
-  function togglePlay() {
-    if (audio.paused) {
-      audio.play().catch(() => alert("請先點擊頁面後再播放"));
-      playBtn.innerText = "⏸";
-      document.getElementById("lyricsPlayBtn").innerText = "⏸";
-      player.classList.add("playing");
-    } else {
-      audio.pause();
-      playBtn.innerText = "▶";
-      document.getElementById("lyricsPlayBtn").innerText = "▶";
-      player.classList.remove("playing");
-    }
+  if (window.StorytraceFX) {
+    StorytraceFX.ambient();
+    setTimeout(playEntrance, 700);
   }
-
-  function toggleRepeat() {
-    isRepeat = !isRepeat;
-    audio.loop = isRepeat;
-    const color = isRepeat ? "#00E5FF" : "rgba(255,255,255,0.6)";
-    document.getElementById("repeatBtn").style.color = color;
-    const lyricsRepeat = document.getElementById("lyricsRepeatBtn");
-    if (lyricsRepeat) lyricsRepeat.style.color = color;
-  }
-
-  audio.ontimeupdate = () => {
-    if (audio.duration) {
-      const pct = (audio.currentTime / audio.duration * 100) + "%";
-      barFill.style.width = pct;
-      document.getElementById("lyricsBarFill").style.width = pct;
-      const cur = fmt(audio.currentTime);
-      const dur = fmt(audio.duration);
-      document.getElementById("currentTime").innerText = cur;
-      document.getElementById("durationTime").innerText = dur;
-      document.getElementById("lyricsCurrentTime").innerText = cur;
-      document.getElementById("lyricsDurationTime").innerText = dur;
-      updateLyrics(audio.currentTime);
-    }
-  };
-
-  function updateLyrics(t) {
-    let newActive = -1;
-    for (let i = lyricsData.length - 1; i >= 0; i--) {
-      if (t >= lyricsData[i].time) { newActive = i; break; }
-    }
-    if (newActive === activeLine) return;
-    activeLine = newActive;
-    document.querySelectorAll(".lyric-line, .breath-line, .countdown-line, .instrumental-line, .solo-line").forEach((el, i) => {
-      let base;
-      if (lyricsData[i].type === "breath") base = "breath-line";
-      else if (lyricsData[i].type === "countdown") base = "countdown-line";
-      else if (lyricsData[i].type === "instrumental") base = "instrumental-line";
-      else if (lyricsData[i].text && lyricsData[i].text.includes('爸爸 SOLO')) base = "solo-line";
-      else base = "lyric-line";
-      let cls = base + (i === activeLine ? " active" : i < activeLine ? " passed" : "");
-      if (lyricsData[i].time >= 9999) cls += " credit-line";
-      el.className = cls;
-    });
-    if (activeLine >= 0) {
-      const el = document.getElementById("line-" + activeLine);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }
-
-  audio.onended = () => {
-    // 專輯自動接播：projects.json 的 next 指向下一首（重複播放開啟時 loop 會接管，不會走到這裡）
-    if (!isRepeat && currentData && currentData.next && projects[currentData.next]) {
-      loadSong(currentData.next, true);
-      return;
-    }
-    playBtn.innerText = "▶";
-    document.getElementById("lyricsPlayBtn").innerText = "▶";
-    player.classList.remove("playing");
-  };
-
-  function fmt(sec) {
-    let m = Math.floor(sec / 60), s = Math.floor(sec % 60);
-    return m + ":" + (s < 10 ? "0" : "") + s;
-  }
-
-  function seek(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-  }
-
-  function seekFromLyrics(e) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-  }
-
-  function restart() { audio.currentTime = 0; }
-  function openLyrics() { document.getElementById("lyricsPanel").style.display = "flex"; }
-  function closeLyrics() { document.getElementById("lyricsPanel").style.display = "none"; }
-
-  async function share() {
-    const title = document.getElementById("trackTitle").innerText;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: title + " - Storytrace", url: window.location.href });
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        alert("網址已複製");
-      }
-    } catch(e) {}
-  }
+  document.getElementById('hero').addEventListener('click', playEntrance);
 </script>
 </body>
 </html>
