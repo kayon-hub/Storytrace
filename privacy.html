@@ -5,28 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>隱私權政策｜Storytrace</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="theme-color" content="#0D0D0D">
+<meta name="theme-color" content="#F4EFE4">
 <style>
-  body { margin: 0; background: #0D0D0D; color: #F0EBE0; font-family: "PingFang TC", -apple-system, sans-serif; line-height: 1.7; }
-  main { max-width: 640px; margin: 0 auto; padding: 40px 22px 80px; }
-  a { color: #C9A84C; text-decoration: none; }
-  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 400; font-size: 22px; color: #fff; margin: 8px 0 6px; }
-  h2 { font-size: 12px; color: #E8C97A; margin: 22px 0 6px; font-weight: 600; letter-spacing: 0.06em; }
-  p, li { font-size: 12px; color: rgba(240,235,224,0.72); margin: 0 0 8px; }
-  .muted { font-size: 10px; color: rgba(240,235,224,0.4); letter-spacing: 0.08em; }
+  body { margin: 0; background: #F4EFE4; color: #1A1814; font-family: "PingFang TC", -apple-system, sans-serif; line-height: 1.7; }
+  .bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: #F4EFE4 url(hero-aisle.jpg) center 40% / cover no-repeat;
+    opacity: 0.6;
+  }
+  main { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding: 40px 22px 80px; }
+  a { color: #8A7040; text-decoration: none; }
+  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 400; font-size: 22px; color: #1A1814; margin: 8px 0 6px; }
+  h2 { font-size: 12px; color: #8A7040; margin: 22px 0 6px; font-weight: 600; letter-spacing: 0.06em; }
+  p, li { font-size: 12px; color: #3A352C; margin: 0 0 8px; }
+  .muted { font-size: 10px; color: #8A8374; letter-spacing: 0.08em; }
   .co {
     margin-top: 36px; padding-top: 22px;
-    border-top: 1px solid rgba(201,168,76,0.22);
+    border-top: 1px solid rgba(26,24,20,0.16);
   }
   .co .name {
-    font-size: 13px; letter-spacing: 0.14em; color: #fff;
+    font-size: 13px; letter-spacing: 0.14em; color: #1A1814;
     margin-bottom: 4px;
   }
-  .co .legal { font-size: 11px; color: #E8C97A; margin-bottom: 12px; }
-  .co p { font-size: 11px; color: rgba(240,235,224,0.7); margin: 0 0 4px; }
+  .co .legal { font-size: 11px; color: #8A7040; margin-bottom: 12px; }
+  .co p { font-size: 11px; color: #3A352C; margin: 0 0 4px; }
+  @media (min-width: 720px) {
+    .bg { background-image: url(hero-wide.jpg); background-position: center 46%; }
+  }
 </style>
 </head>
 <body>
+<div class="bg" aria-hidden="true"></div>
 <main>
   <p class="muted"><a href="./">STORYTRACE</a></p>
   <h1>隱私權政策</h1>
