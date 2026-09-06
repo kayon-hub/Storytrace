@@ -7,7 +7,11 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="theme-color" content="#F4EFE4">
 <style>
-  body { margin: 0; background: #F4EFE4; color: #1A1814; font-family: "PingFang TC", -apple-system, sans-serif; line-height: 1.7; }
+  body {
+    margin: 0; background: #F4EFE4; color: #000;
+    font-family: "PingFang TC", "Noto Sans TC", -apple-system, sans-serif;
+    line-height: 1.75; -webkit-font-smoothing: auto;
+  }
   .bg {
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background: #F4EFE4 url(hero-aisle.jpg) center 40% / cover no-repeat;
@@ -16,24 +20,24 @@
   main {
     position: relative; z-index: 1; max-width: 640px; margin: 0 auto;
     padding: 32px 22px 48px;
-    background: rgba(255,252,247,0.88);
-    box-shadow: 0 12px 40px rgba(26,24,20,0.08);
+    background: #FFFCF7;
+    box-shadow: 0 12px 40px rgba(26,24,20,0.12);
   }
-  a { color: #7A6228; text-decoration: none; font-weight: 600; }
-  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 400; font-size: 22px; color: #111; margin: 8px 0 6px; }
-  h2 { font-size: 12px; color: #7A6228; margin: 22px 0 6px; font-weight: 700; letter-spacing: 0.06em; }
-  p, li { font-size: 12px; color: #1A1814; margin: 0 0 8px; font-weight: 500; }
-  .muted { font-size: 10px; color: #5C574C; letter-spacing: 0.08em; }
+  a { color: #6B5210; text-decoration: underline; font-weight: 700; }
+  h1 { font-family: Georgia, serif; font-style: italic; font-weight: 700; font-size: 26px; color: #000; margin: 8px 0 6px; }
+  h2 { font-size: 15px; color: #000; margin: 22px 0 6px; font-weight: 700; letter-spacing: 0.04em; }
+  p, li { font-size: 15px; color: #000; margin: 0 0 10px; font-weight: 600; }
+  .muted { font-size: 12px; color: #333; letter-spacing: 0.06em; font-weight: 600; }
   .co {
     margin-top: 36px; padding-top: 22px;
-    border-top: 1px solid rgba(26,24,20,0.16);
+    border-top: 1px solid #000;
   }
   .co .name {
-    font-size: 13px; letter-spacing: 0.14em; color: #111;
-    margin-bottom: 4px; font-weight: 600;
+    font-size: 16px; letter-spacing: 0.12em; color: #000;
+    margin-bottom: 4px; font-weight: 700;
   }
-  .co .legal { font-size: 11px; color: #7A6228; margin-bottom: 12px; }
-  .co p { font-size: 11px; color: #1A1814; margin: 0 0 4px; }
+  .co .legal { font-size: 14px; color: #000; margin-bottom: 12px; font-weight: 700; }
+  .co p { font-size: 14px; color: #000; margin: 0 0 4px; font-weight: 600; }
   @media (min-width: 720px) {
     .bg { background-image: url(hero-wide.jpg); background-position: center 46%; }
   }
