@@ -7,7 +7,7 @@
 <meta name="description" content="手機，成為現場的光。Every cue tells a story.">
 <meta property="og:title" content="Storytrace">
 <meta property="og:description" content="手機，成為現場的光。Every cue tells a story.">
-<meta property="og:image" content="https://storytrace.karbonxgaiaentertainment.com/storytrace-mark.jpg">
+<meta property="og:image" content="https://storytrace.karbonxgaiaentertainment.com/hero-wide.jpg">
 <meta property="og:url" content="https://storytrace.karbonxgaiaentertainment.com/">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0D0D0D">
@@ -45,41 +45,37 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     text-align: center;
-    padding: calc(28px + env(safe-area-inset-top)) 24px calc(36px + env(safe-area-inset-bottom));
+    padding: calc(24px + env(safe-area-inset-top)) 24px calc(56px + env(safe-area-inset-bottom));
     cursor: pointer;
+    overflow: hidden;
   }
-  .hero-copy { position: relative; z-index: 50; }
-  .hero::before {
+  .hero-photo {
+    position: absolute; inset: 0; z-index: 0;
+    background: #0D0D0D url(hero-aisle.jpg) center 42% / cover no-repeat;
+    transform: scale(1.06);
+    animation: ken 24s ease-in-out infinite alternate;
+  }
+  @keyframes ken {
+    from { transform: scale(1.06) translate3d(0,0,0); }
+    to { transform: scale(1.14) translate3d(0,-1.6%,0); }
+  }
+  .hero-copy { position: relative; z-index: 50; margin-top: auto; }
+  .hero::after {
     content: '';
-    position: absolute; inset: 0; pointer-events: none;
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-      radial-gradient(ellipse 70% 42% at 50% 0%, rgba(201,168,76,0.16) 0%, transparent 58%),
-      radial-gradient(ellipse 40% 28% at 50% 100%, rgba(201,168,76,0.08) 0%, transparent 55%);
-  }
-  .cue {
-    position: absolute;
-    left: 50%; top: 6%;
-    width: 1px; height: 28%;
-    transform: translateX(-50%);
-    background: linear-gradient(180deg, transparent, rgba(232,201,122,0.85), transparent);
-    opacity: 0.55;
-    animation: cuePulse 4.8s ease-in-out infinite;
-    pointer-events: none;
-  }
-  @keyframes cuePulse {
-    0%, 100% { opacity: 0.18; transform: translateX(-50%) scaleY(0.92); }
-    50% { opacity: 0.8; transform: translateX(-50%) scaleY(1); }
+      linear-gradient(180deg, rgba(13,13,13,0.18) 0%, rgba(13,13,13,0.04) 32%, rgba(13,13,13,0.22) 62%, rgba(13,13,13,0.78) 100%);
   }
   .mark-wrap {
     position: relative;
-    width: 108px; height: 108px;
-    margin-bottom: 22px;
-    border-radius: 24px;
+    width: 72px; height: 72px;
+    margin-bottom: 14px;
+    border-radius: 16px;
     overflow: hidden;
     border: 1px solid var(--line);
-    box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 40px rgba(201,168,76,0.12);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
   }
   .mark-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .mark-wrap::after {
@@ -94,10 +90,11 @@
   }
   .wordmark {
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 42px; font-style: italic; font-weight: 400;
+    font-size: 32px; font-style: italic; font-weight: 400;
     color: #fff; letter-spacing: 0.01em; line-height: 1;
+    text-shadow: 0 8px 28px rgba(0,0,0,0.45);
   }
-  .rule { width: 36px; height: 1px; background: var(--gold); margin: 18px auto 16px; }
+  .rule { width: 36px; height: 1px; background: var(--gold); margin: 14px auto 12px; }
   .tag {
     font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
     color: var(--gold-lt); margin-bottom: 14px;
@@ -118,12 +115,7 @@
     0%, 100% { opacity: 0.35; }
     50% { opacity: 0.85; }
   }
-  .rise { opacity: 0; transform: translateY(18px); animation: rise 0.9s ease forwards; }
-  .d1 { animation-delay: 0.12s; }
-  .d2 { animation-delay: 0.28s; }
-  .d3 { animation-delay: 0.44s; }
-  .d4 { animation-delay: 0.6s; }
-  @keyframes rise { to { opacity: 1; transform: none; } }
+  .rise { opacity: 1; }
 
   section { position: relative; z-index: 2; padding: 8px 22px 8px; }
   .kicker {
@@ -157,6 +149,22 @@
   .work .t { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
   .work .s { font-size: 11px; letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; }
 
+  .moment {
+    position: relative;
+    height: 78vh; min-height: 420px;
+    margin: 28px 0 8px;
+    overflow: hidden;
+  }
+  .moment img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center 42%;
+    display: block; transform: scale(1.04);
+  }
+  .moment .cap {
+    position: absolute; left: 22px; right: 22px; bottom: 22px;
+    font-family: "Songti TC", Georgia, serif; font-size: 20px; color: #fff;
+    text-shadow: 0 8px 24px rgba(0,0,0,0.55);
+  }
+
   footer {
     padding: 36px 22px calc(40px + env(safe-area-inset-bottom));
     text-align: center;
@@ -168,34 +176,40 @@
   footer a { color: var(--gold); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; }
 
   @media (min-width: 720px) {
-    .wordmark { font-size: 64px; }
-    .mark-wrap { width: 132px; height: 132px; border-radius: 28px; }
+    .wordmark { font-size: 48px; }
+    .mark-wrap { width: 88px; height: 88px; border-radius: 20px; }
+    .hero-photo { background-image: url(hero-wide.jpg); background-position: center 46%; }
     .beats, .works { grid-template-columns: 1fr 1fr 1fr; max-width: 980px; margin: 0 auto; }
     .work { grid-template-columns: 1fr; padding: 0 0 14px; }
     .work img { width: 100%; height: auto; aspect-ratio: 1; }
     section { padding-left: 40px; padding-right: 40px; }
+    .moment { height: 88vh; }
+    .moment .cap { left: 40px; bottom: 36px; font-size: 28px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .rise, .mark-wrap::after, .cue, .hint { animation: none; }
-    .rise { opacity: 1; transform: none; }
+    .rise, .mark-wrap::after, .hint, .hero-photo { animation: none; }
+    .hero-photo { transform: none; }
+    .rise { opacity: 1; }
   }
 </style>
 </head>
 <body>
 <section class="hero" id="hero" aria-label="Storytrace">
-  <div class="cue" aria-hidden="true"></div>
+  <div class="hero-photo" aria-hidden="true"></div>
   <div class="hero-copy">
-    <div class="mark-wrap rise d1">
-      <img src="storytrace-mark.jpg" alt="STORYTRACE">
-    </div>
-    <div class="wordmark rise d2">Storytrace</div>
-    <div class="rule rise d3"></div>
-    <div class="tag rise d3">Every cue tells a story</div>
-    <div class="line rise d4">手機，成為現場的光。</div>
+    <div class="wordmark">Storytrace</div>
+    <div class="rule"></div>
+    <div class="tag">Every cue tells a story</div>
+    <div class="line">手機，成為現場的光。</div>
   </div>
   <div class="hint">點畫面再看一輪光</div>
 </section>
+
+<figure class="moment">
+  <img src="hero-bliss.jpg" alt="新人背影，靠在一起看著現場">
+  <figcaption class="cap">這一刻，剛剛好。</figcaption>
+</figure>
 
 <section>
   <div class="kicker">Live</div>
