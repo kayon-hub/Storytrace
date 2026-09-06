@@ -108,29 +108,50 @@
         until: now + dur,
         h: height * (0.88 + Math.random() * 0.14),
         kind: kind,
-        rate: opts.rate || 14
+        rate: opts.rate || 14,
+        gentle: !!opts.gentle
       });
     }
   }
 
   function emitFrom(jet, dt) {
-    var n = Math.max(1, Math.round(jet.rate * (dt / 16)));
+    var n = jet.gentle
+      ? (Math.random() < jet.rate * (dt / 16) ? 1 : 0)
+      : Math.max(1, Math.round(jet.rate * (dt / 16)));
     var i, speed, spread, life;
     for (i = 0; i < n; i++) {
-      speed = 4.2 + Math.random() * 5.5;
-      spread = (Math.random() - 0.5) * 0.55;
-      life = 0.55 + Math.random() * 0.45;
-      sparks.push({
-        x: jet.x + (Math.random() - 0.5) * 6,
-        y: h - 2,
-        vx: spread * speed * 0.35,
-        vy: -speed * (0.85 + Math.random() * 0.45) * (jet.h / (h * 0.55)),
-        g: 0.085 + Math.random() * 0.03,
-        life: life,
-        max: life,
-        s: 0.7 + Math.random() * 1.6,
-        col: sparkColor(jet.kind)
-      });
+      if (jet.gentle) {
+        speed = 1.05 + Math.random() * 1.35;
+        spread = (Math.random() - 0.5) * 0.32;
+        life = 1.8 + Math.random() * 1.6;
+        sparks.push({
+          x: jet.x + (Math.random() - 0.5) * 10,
+          y: h - 2,
+          vx: spread * speed * 0.55,
+          vy: -speed * (0.7 + Math.random() * 0.35) * (jet.h / (h * 0.55)),
+          g: 0.016 + Math.random() * 0.012,
+          life: life,
+          max: life,
+          s: 0.45 + Math.random() * 0.9,
+          col: sparkColor(jet.kind),
+          gentle: true
+        });
+      } else {
+        speed = 4.2 + Math.random() * 5.5;
+        spread = (Math.random() - 0.5) * 0.55;
+        life = 0.55 + Math.random() * 0.45;
+        sparks.push({
+          x: jet.x + (Math.random() - 0.5) * 6,
+          y: h - 2,
+          vx: spread * speed * 0.35,
+          vy: -speed * (0.85 + Math.random() * 0.45) * (jet.h / (h * 0.55)),
+          g: 0.085 + Math.random() * 0.03,
+          life: life,
+          max: life,
+          s: 0.7 + Math.random() * 1.6,
+          col: sparkColor(jet.kind)
+        });
+      }
     }
     if (sparks.length > 520) sparks.splice(0, sparks.length - 520);
   }
@@ -153,14 +174,14 @@
 
     for (i = sparks.length - 1; i >= 0; i--) {
       p = sparks[i];
-      p.life -= dt / 900;
+      p.life -= dt / (p.gentle ? 2100 : 900);
       if (p.life <= 0 || p.y > h + 8) { sparks.splice(i, 1); continue; }
       p.vy += p.g * (dt / 16);
-      p.x += p.vx * (dt / 16);
+      p.x += p.vx * (dt / 16) + (p.gentle ? Math.sin(p.life * 2.2) * 0.12 : 0);
       p.y += p.vy * (dt / 16);
-      p.vx *= 0.995;
+      p.vx *= p.gentle ? 0.997 : 0.995;
       a = Math.max(0, p.life / p.max);
-      tail = Math.max(4, -p.vy * 1.6);
+      tail = Math.max(p.gentle ? 6 : 4, -p.vy * (p.gentle ? 2.4 : 1.6));
       ctx.strokeStyle = p.col;
       ctx.globalAlpha = a * 0.85;
       ctx.lineWidth = p.s;
@@ -222,11 +243,22 @@
     startJets({ kind: 'gold', count: 7, height: 0.82, ms: 4200, rate: 18 });
   }
 
+  function romance() {
+    startJets({
+      kind: 'gold',
+      count: 3,
+      height: 0.46,
+      ms: 7800,
+      rate: 0.28,
+      gentle: true
+    });
+  }
+
   function off() {
     jets = [];
     var i;
     for (i = 0; i < sparks.length; i++) sparks[i].life *= 0.35;
   }
 
-  global.StorytraceFX = { onColor: onColor, onLyric: onLyric, onWin: onWin, off: off, ambient: ambient };
+  global.StorytraceFX = { onColor: onColor, onLyric: onLyric, onWin: onWin, off: off, ambient: ambient, romance: romance };
 })(window);

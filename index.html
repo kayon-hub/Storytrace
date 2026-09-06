@@ -208,7 +208,7 @@
 
 <figure class="moment">
   <img src="hero-bliss.jpg" alt="新人背影，靠在一起看著現場">
-  <figcaption class="cap">這一刻，剛剛好。</figcaption>
+  <figcaption class="cap">夜晚的派對，剛剛好。</figcaption>
 </figure>
 
 <section>
@@ -268,13 +268,12 @@
 
 <script>
   function playEntrance() {
-    if (!window.StorytraceFX) return;
-    StorytraceFX.onColor('hsl(45,100%,50%)');
-    setTimeout(function () { StorytraceFX.onLyric(); }, 1600);
+    if (window.StorytraceFX && window.StorytraceFX.romance) StorytraceFX.romance();
   }
   if (window.StorytraceFX) {
     StorytraceFX.ambient();
-    setTimeout(playEntrance, 700);
+    setTimeout(playEntrance, 1400);
+    setInterval(playEntrance, 11000);
   }
   document.getElementById('hero').addEventListener('click', playEntrance);
 </script>
