@@ -143,8 +143,15 @@
   .beat p { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
   .works { display: grid; gap: 12px; padding-bottom: 12px; }
-  .work { background: var(--surface); border: 1px solid var(--line); }
+  .work { background: var(--surface); border: 1px solid var(--line); margin: 0; }
   .work img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+  .work figcaption {
+    padding: 10px 12px 12px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--cream);
+    text-align: center;
+  }
 
   .moment {
     position: relative;
@@ -232,9 +239,18 @@
   <div class="kicker">Works</div>
   <h2>作品</h2>
   <div class="works">
-    <figure class="work"><img src="shanghao.jpg" alt="上好的代誌"></figure>
-    <figure class="work"><img src="naxernew.jpg" alt="Candy &amp; Sugar"></figure>
-    <figure class="work"><img src="insync.jpg" alt="合拍 In Sync"></figure>
+    <figure class="work">
+      <img src="shanghao.jpg" alt="上好的代誌">
+      <figcaption>上好的代誌</figcaption>
+    </figure>
+    <figure class="work">
+      <img src="naxernew.jpg" alt="Candy &amp; Sugar">
+      <figcaption>Candy &amp; Sugar</figcaption>
+    </figure>
+    <figure class="work">
+      <img src="insync.jpg" alt="合拍 In Sync">
+      <figcaption>合拍 In Sync</figcaption>
+    </figure>
   </div>
 </section>
 
